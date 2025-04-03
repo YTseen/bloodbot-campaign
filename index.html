@@ -20,21 +20,34 @@
     <!-- Quest Editor -->
     <div class="md:col-span-2 hidden" id="editorSection">
       <h2 class="text-xl mb-4 border-b border-green-700 pb-1">✏️ Edit Quest</h2>
+
       <div class="mb-4">
         <label class="block mb-1 text-green-300">Title (key)</label>
-        <input id="questKey" class="w-full bg-gray-900 p-2 rounded text-gray-200" readonly />
+        <input id="questKey" class="w-full bg-gray-900 p-2 rounded text-gray-200" />
       </div>
+
       <div class="mb-4">
         <label class="block mb-1 text-green-300">Intro</label>
-        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="3"></textarea>
+        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="5"></textarea>
       </div>
+
       <div class="mb-4">
         <label class="block mb-1 text-green-300">Wrap-Up</label>
-        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="3"></textarea>
+        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="5"></textarea>
       </div>
+
+      <div class="mb-4">
+        <label class="block mb-1 text-green-300">Paths (raw JSON)</label>
+        <textarea id="questPaths" class="w-full bg-gray-900 p-2 rounded text-green-200 text-sm" rows="12"></textarea>
+      </div>
+
       <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save</button>
     </div>
   </div>
+
+  <button id="saveBtn" style="position: fixed; top: 10px; right: 10px;" class="bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
+    💾 Save to GitHub
+  </button>
 
   <script src="./script.js"></script>
 </body>
