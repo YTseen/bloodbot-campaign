@@ -1,5 +1,4 @@
 // ========== 🔐 GITHUB SAVE SYSTEM ==========
-
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
   githubToken = prompt("Enter GitHub Token:");
@@ -12,9 +11,7 @@ async function saveQuestData(updatedJson) {
 
   try {
     const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-      headers: {
-        Authorization: `token ${githubToken}`,
-      },
+      headers: { Authorization: `token ${githubToken}` },
     });
 
     if (!metaRes.ok) {
@@ -24,7 +21,6 @@ async function saveQuestData(updatedJson) {
 
     const meta = await metaRes.json();
     const sha = meta.sha;
-
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedJson, null, 2))));
 
     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
@@ -59,9 +55,7 @@ document.getElementById("saveBtn")?.addEventListener("click", () => {
   saveQuestData(window.currentQuestData);
 });
 
-
 // ========== 🧠 QUEST LOADER & EDITOR ==========
-
 let questData = {};
 const questList = document.getElementById("questList");
 const editorSection = document.getElementById("editorSection");
@@ -71,21 +65,24 @@ const questWrapInput = document.getElementById("questWrap");
 
 window.currentQuestData = questData;
 
-// ✅ Detect environment and fetch correct path
-const questDataPath = location.hostname.includes("github.io")
-  ? "https://ytseen.github.io/bloodbot-campaign/BBB-campaign/dashboard/data/quest_data.json"
-  : "./data/quest_data.json";
-
 async function loadQuestData() {
+  const fetchUrl = location.hostname.includes("github.io")
+    ? "https://ytseen.github.io/bloodbot-campaign/BBB-campaign/dashboard/data/quest_data.json"
+    : "./data/quest_data.json";
+
   try {
-    const res = await fetch(questDataPath);
-    if (!res.ok) throw new Error("File fetch failed");
-    questData = await res.json();
+    const res = await fetch(fetchUrl);
+    const raw = await res.text();
+    console.log("🧪 Raw fetched data:", raw);
+
+    if (!res.ok) throw new Error(`Fetch error: ${res.status}`);
+    questData = JSON.parse(raw);
+
     window.currentQuestData = questData;
     renderQuestList();
   } catch (err) {
     alert("❌ Failed to load quest_data.json");
-    console.error(err);
+    console.error("Load error:", err);
   }
 }
 
@@ -122,5 +119,5 @@ function saveQuest() {
   alert("✅ Quest saved locally. Now click 💾 Save to GitHub!");
 }
 
-// 🔁 Load quests on page load
+// Auto-load on page load
 loadQuestData();
