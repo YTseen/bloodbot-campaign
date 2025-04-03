@@ -1,19 +1,16 @@
 // ========== 🔐 GITHUB SAVE SYSTEM ==========
 
-// Prompt once and store token
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
-  githubToken = prompt("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");
+  githubToken = prompt("Enter GitHub Token:");
   localStorage.setItem("githubToken", githubToken);
 }
 
-// Save to GitHub
 async function saveQuestData(updatedJson) {
-  const repo = "YTseen/bloodbot-campaign"; // your repo
-  const path = "BBB-campaign/dashboard/data/quest_data.json"; // path in repo
+  const repo = "YTseen/bloodbot-campaign";
+  const path = "BBB-campaign/dashboard/data/quest_data.json";
 
   try {
-    // Step 1: Fetch file metadata (to get SHA)
     const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
       headers: {
         Authorization: `token ${githubToken}`,
@@ -28,10 +25,8 @@ async function saveQuestData(updatedJson) {
     const meta = await metaRes.json();
     const sha = meta.sha;
 
-    // Step 2: Encode updated JSON
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedJson, null, 2))));
 
-    // Step 3: Push update to GitHub
     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
       method: "PUT",
       headers: {
@@ -56,7 +51,6 @@ async function saveQuestData(updatedJson) {
   }
 }
 
-// OPTIONAL: Call this from a "Save" button
 document.getElementById("saveBtn")?.addEventListener("click", () => {
   if (!window.currentQuestData) {
     alert("No quest data loaded!");
@@ -64,3 +58,64 @@ document.getElementById("saveBtn")?.addEventListener("click", () => {
   }
   saveQuestData(window.currentQuestData);
 });
+
+
+// ========== 🧠 QUEST LOADER & EDITOR ==========
+
+let questData = {};
+const questList = document.getElementById("questList");
+const editorSection = document.getElementById("editorSection");
+const questKeyInput = document.getElementById("questKey");
+const questIntroInput = document.getElementById("questIntro");
+const questWrapInput = document.getElementById("questWrap");
+
+window.currentQuestData = questData;
+
+async function loadQuestData() {
+  try {
+    const res = await fetch("./data/quest_data.json");
+    if (!res.ok) throw new Error("File fetch failed");
+    questData = await res.json();
+    window.currentQuestData = questData;
+    renderQuestList();
+  } catch (err) {
+    alert("❌ Failed to load quest_data.json");
+    console.error(err);
+  }
+}
+
+function renderQuestList() {
+  questList.innerHTML = "";
+  Object.keys(questData).forEach((key) => {
+    const li = document.createElement("li");
+    li.textContent = key;
+    li.className = "cursor-pointer hover:text-red-400";
+    li.onclick = () => editQuest(key);
+    questList.appendChild(li);
+  });
+}
+
+function editQuest(key) {
+  const quest = questData[key];
+  questKeyInput.value = key;
+  questIntroInput.value = quest.intro || "";
+  questWrapInput.value = quest.wrapup?.text || "";
+  editorSection.classList.remove("hidden");
+}
+
+function saveQuest() {
+  const key = questKeyInput.value;
+  if (!key) return;
+
+  const editedIntro = questIntroInput.value;
+  const editedWrap = questWrapInput.value;
+
+  questData[key].intro = editedIntro;
+  questData[key].wrapup = { text: editedWrap };
+
+  window.currentQuestData = questData;
+  alert("✅ Quest saved locally. Now click 💾 Save to GitHub!");
+}
+
+// Load quests on page load
+loadQuestData();
