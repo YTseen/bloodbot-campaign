@@ -1,45 +1,66 @@
+// ========== 🔐 GITHUB SAVE SYSTEM ==========
 
-let questData = {};
-let selectedKey = "";
+// Prompt once and store token
+let githubToken = localStorage.getItem("githubToken") || "";
+if (!githubToken) {
+  githubToken = prompt("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");
+  localStorage.setItem("githubToken", githubToken);
+}
 
-async function loadQuests() {
+// Save to GitHub
+async function saveQuestData(updatedJson) {
+  const repo = "YTseen/bloodbot-campaign"; // your repo
+  const path = "BBB-campaign/dashboard/data/quest_data.json"; // path in repo
+
   try {
-    const res = await fetch("./data/quest_data.json");
-    questData = await res.json();
-    const questList = document.getElementById("questList");
-    questList.innerHTML = "";
-    Object.entries(questData).forEach(([key, data]) => {
-      const btn = document.createElement("button");
-      btn.className = "block w-full text-left bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded";
-      btn.textContent = key;
-      btn.onclick = () => loadEditor(key);
-      questList.appendChild(btn);
+    // Step 1: Fetch file metadata (to get SHA)
+    const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      headers: {
+        Authorization: `token ${githubToken}`,
+      },
     });
+
+    if (!metaRes.ok) {
+      alert("❌ Failed to fetch quest_data.json metadata.");
+      return;
+    }
+
+    const meta = await metaRes.json();
+    const sha = meta.sha;
+
+    // Step 2: Encode updated JSON
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedJson, null, 2))));
+
+    // Step 3: Push update to GitHub
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "🩸 BloodBot Dashboard update: quest_data.json",
+        content,
+        sha,
+      }),
+    });
+
+    if (res.ok) {
+      alert("✅ Saved to GitHub successfully!");
+    } else {
+      alert("❌ Save failed. Check your token and permissions.");
+    }
   } catch (err) {
-    alert("Failed to load quest_data.json");
+    console.error("Save error:", err);
+    alert("❌ Unexpected error while saving to GitHub.");
   }
 }
 
-function loadEditor(key) {
-  selectedKey = key;
-  const quest = questData[key];
-  document.getElementById("questKey").value = key;
-  document.getElementById("questIntro").value = quest.intro || "";
-  document.getElementById("questWrap").value = quest.wrapup?.text || "";
-  document.getElementById("editorSection").classList.remove("hidden");
-}
-
-function saveQuest() {
-  const intro = document.getElementById("questIntro").value;
-  const wrap = document.getElementById("questWrap").value;
-  if (!questData[selectedKey]) return;
-  questData[selectedKey].intro = intro;
-  questData[selectedKey].wrapup = { text: wrap };
-  const blob = new Blob([JSON.stringify(questData, null, 2)], { type: 'application/json' });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "quest_data.json";
-  link.click();
-}
-
-window.onload = loadQuests;
+// OPTIONAL: Call this from a "Save" button
+document.getElementById("saveBtn")?.addEventListener("click", () => {
+  if (!window.currentQuestData) {
+    alert("No quest data loaded!");
+    return;
+  }
+  saveQuestData(window.currentQuestData);
+});
