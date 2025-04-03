@@ -1,4 +1,4 @@
-// ========== 🔐 GITHUB SAVE SYSTEM ==========
+// ========== 🔐 HARDCODED GITHUB TOKEN ==========
 const githubToken = "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";
 
 const repo = "YTseen/bloodbot-campaign";
@@ -124,67 +124,98 @@ function saveQuest() {
   renderQuestList(selectedType);
 }
 
-// ========== GITHUB PUSH ==========
 document.getElementById("saveBtn").addEventListener("click", async () => {
   for (const type of ["main", "side"]) {
-    const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${paths[type]}`, {
-      headers: { Authorization: `token ${githubToken}` }
-    });
+    try {
+      const fileUrl = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
 
-    if (!metaRes.ok) return alert(`❌ Failed to fetch ${type} metadata.`);
-    const meta = await metaRes.json();
-    const sha = meta.sha;
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(questData[type], null, 2))));
+      const metaRes = await fetch(fileUrl, {
+        headers: { Authorization: `token ${githubToken}` }
+      });
 
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${paths[type]}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${githubToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: `Update ${type} quests`, content, sha })
-    });
+      if (!metaRes.ok) throw new Error(`Failed to fetch ${type} metadata.`);
+      const meta = await metaRes.json();
+      const sha = meta.sha;
 
-    if (!res.ok) alert(`❌ Failed to push ${type}`);
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(questData[type], null, 2))));
+
+      const res = await fetch(fileUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${githubToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: `Update ${type} quests`,
+          content,
+          sha
+        })
+      });
+
+      if (!res.ok) throw new Error(`❌ Failed to push ${type}`);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
   }
+
   alert("✅ Both quest files pushed to GitHub.");
 });
 
-// ========== OUTCOME INJECTOR ==========
+
+// ========== OUTCOME INJECTOR (IMPROVED) ==========
+
 function populateOutcomeTargetDropdown(type, key) {
   const quest = questData[type][key];
   const select = document.getElementById("ob_target");
   select.innerHTML = '<option disabled selected>Choose a Path & Outcome Type…</option>';
-  for (const pathKey of Object.keys(quest.paths || {})) {
-    select.innerHTML += `
-      <option value="${pathKey}::midHigh">${pathKey} – Midweek High</option>
-      <option value="${pathKey}::midLow">${pathKey} – Midweek Low</option>
-      <option value="${pathKey}::finalSuccess">${pathKey} – Final Success</option>
-      <option value="${pathKey}::finalFail">${pathKey} – Final Failure</option>
-    `;
+
+  if (!quest?.paths) return;
+
+  for (const pathKey of Object.keys(quest.paths)) {
+    const outcomeTypes = [
+      { code: "midHigh", label: "Midweek High" },
+      { code: "midLow", label: "Midweek Low" },
+      { code: "finalSuccess", label: "Final Success" },
+      { code: "finalFail", label: "Final Failure" }
+    ];
+    for (const { code, label } of outcomeTypes) {
+      const option = document.createElement("option");
+      option.value = `${pathKey}::${code}`;
+      option.textContent = `${pathKey} – ${label}`;
+      select.appendChild(option);
+    }
   }
 }
 
 function injectOutcome() {
   const target = document.getElementById("ob_target").value;
   if (!target || !target.includes("::")) return alert("❌ Invalid outcome target.");
+
   const [pathKey, field] = target.split("::");
   const quest = questData[selectedType][selectedKey];
   const path = quest.paths[pathKey];
+
   const block = field.includes("mid") ? (path.midweek = path.midweek || {}) : (path.final = path.final || {});
-  const slot = field.includes("High") ? "High" : field.includes("Low") ? "Low" : field.includes("Success") ? "Success" : "Failure";
+  const slot = field.includes("High") ? "High" :
+               field.includes("Low") ? "Low" :
+               field.includes("Success") ? "Success" : "Failure";
 
-  const out = {
-    text: document.getElementById("ob_text").value.trim()
-  };
-  if (document.getElementById("ob_death").checked) out.death = true;
-  const title = document.getElementById("ob_title").value.trim();
-  if (title) out.title = title;
-  const status = document.getElementById("ob_status").value.trim();
-  if (status) out.status = status.includes(",") ? status.split(",").map(x => x.trim()) : status;
-  const items = document.getElementById("ob_items").value.trim();
-  if (items) out.items = items.split(",").map(x => x.trim());
+  const outcome = {};
+  const get = (id) => document.getElementById(id)?.value?.trim();
 
-  block[slot] = out;
-  alert(`✅ Outcome injected into ${pathKey} – ${slot}`);
-}
+  outcome.text = get("ob_text") || "";
+  outcome.title = get("ob_title") || "";
+  outcome.death = document.getElementById("ob_death")?.checked || false;
+
+  const items = get("ob_items");
+  if (items) outcome.items = items.split(",").map(s => s.trim());
+
+  const status = get("ob_status");
+  if (status) outcome.status = status.split(",").map(s => s.trim());
+
+  block[slot] = outcome;
+
+  alert(`✅ Injected into "${pathKey}" – ${slot}`);
+  populateOutcomeTargetDropdown(selected
+
