@@ -80,6 +80,24 @@ function renderQuestList() {
     li.onclick = () => openQuestEditor(key);
     questList.appendChild(li);
   });
+
+  // Add new quest button
+  const addBtn = document.createElement("button");
+  addBtn.textContent = "➕ New Quest";
+  addBtn.className = "mt-3 bg-blue-600 px-3 py-2 rounded text-white hover:bg-blue-500";
+  addBtn.onclick = () => {
+    const newKey = prompt("Enter a new quest title:");
+    if (!newKey || questData[newKey]) return alert("⚠️ Invalid or duplicate quest name.");
+    questData[newKey] = {
+      intro: "",
+      wrapup: { text: "" },
+      paths: {}
+    };
+    window.questData = questData;
+    renderQuestList();
+    openQuestEditor(newKey);
+  };
+  questList.appendChild(addBtn);
 }
 
 function openQuestEditor(key) {
@@ -93,26 +111,23 @@ function openQuestEditor(key) {
   const paths = quest.paths || {};
   for (const [pathKey, pathData] of Object.entries(paths)) {
     const wrapper = document.createElement("div");
-    wrapper.className = "bg-gray-800 p-4 rounded";
+    wrapper.className = "bg-gray-800 p-4 rounded mb-4";
 
     wrapper.innerHTML = `
-      <h3 class="text-lg font-bold text-yellow-400 mb-2">${pathKey}</h3>
-
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-bold text-yellow-400">${pathKey}</h3>
+        <button class="text-red-500" onclick="removePath('${pathKey}')">🗑 Remove</button>
+      </div>
       <label class="text-green-300 text-sm block">📝 Title</label>
       <input class="w-full bg-gray-900 p-2 rounded mb-2 text-white" data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
-
       <label class="text-green-300 text-sm block">📜 Description</label>
       <textarea class="w-full bg-gray-900 p-2 rounded mb-2 text-white" data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
-
       <label class="text-green-300 text-sm block">🔥 Midweek High</label>
       <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
-
       <label class="text-green-300 text-sm block">💀 Midweek Low</label>
       <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
-
       <label class="text-green-300 text-sm block">🏆 Final Success</label>
       <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
-
       <label class="text-green-300 text-sm block">☠️ Final Failure</label>
       <textarea class="w-full bg-gray-900 p-2 rounded text-white" data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
     `;
@@ -120,7 +135,30 @@ function openQuestEditor(key) {
     pathsContainer.appendChild(wrapper);
   }
 
+  const addPathBtn = document.createElement("button");
+  addPathBtn.textContent = "➕ Add New Path";
+  addPathBtn.className = "mt-4 bg-yellow-600 px-3 py-2 rounded text-white hover:bg-yellow-500";
+  addPathBtn.onclick = () => {
+    const pathKey = prompt("Enter new path key:");
+    if (!pathKey || quest.paths[pathKey]) return alert("⚠️ Invalid or duplicate path name.");
+    quest.paths[pathKey] = {
+      title: "",
+      description: "",
+      midweek: { High: { text: "" }, Low: { text: "" } },
+      final: { Success: { text: "" }, Failure: { text: "" } }
+    };
+    openQuestEditor(selectedKey); // re-render
+  };
+
+  pathsContainer.appendChild(addPathBtn);
+  populateOutcomeTargetDropdown(key);
   editorSection.classList.remove("hidden");
+}
+
+function removePath(pathKey) {
+  if (!confirm(`Remove path "${pathKey}"?`)) return;
+  delete questData[selectedKey].paths[pathKey];
+  openQuestEditor(selectedKey);
 }
 
 function saveQuest() {
@@ -128,7 +166,6 @@ function saveQuest() {
   const intro = questIntroInput.value;
   const wrap = questWrapInput.value;
 
-  // Delete old key if title changed
   if (newKey !== selectedKey) {
     delete questData[selectedKey];
   }
@@ -179,100 +216,3 @@ function saveQuest() {
 
 // INIT
 loadQuestData();
-
-// ========== 🧪 OUTCOME BUILDER ==========
-function injectOutcome() {
-  const target = document.getElementById("ob_target").value;
-  if (!target || !target.includes("::")) return alert("Select a valid target!");
-
-  const [pathKey, field] = target.split("::");
-  const quest = questData[selectedKey];
-  const path = quest.paths?.[pathKey];
-  if (!path) return alert("Path not found");
-
-  const outcomeBlock = field.includes("mid")
-    ? (path.midweek = path.midweek || {})
-    : (path.final = path.final || {});
-
-  const slot = field.includes("High")
-    ? "High"
-    : field.includes("Low")
-    ? "Low"
-    : field.includes("Success")
-    ? "Success"
-    : "Failure";
-
-  const newOutcome = {
-    text: document.getElementById("ob_text").value.trim()
-  };
-
-  if (document.getElementById("ob_death").checked) newOutcome.death = true;
-
-  const title = document.getElementById("ob_title").value.trim();
-  if (title) newOutcome.title = title;
-
-  const status = document.getElementById("ob_status").value.trim();
-  if (status) newOutcome.status = status.includes(",") ? status.split(",").map(s => s.trim()) : status;
-
-  const items = document.getElementById("ob_items").value.trim();
-  if (items) newOutcome.items = items.split(",").map(s => s.trim());
-
-  outcomeBlock[slot] = newOutcome;
-
-  window.questData = questData;
-  alert(`✅ Injected into ${pathKey} – ${slot}`);
-  renderQuestList();
-}
-
-// Dynamically fill the dropdown when a quest is opened
-function populateOutcomeTargetDropdown(key) {
-  const quest = questData[key];
-  const select = document.getElementById("ob_target");
-  select.innerHTML = '<option disabled selected>Choose a Path & Outcome Type…</option>';
-
-  for (const pathKey of Object.keys(quest.paths)) {
-    select.innerHTML += `
-      <option value="${pathKey}::midHigh">${pathKey} – Midweek High</option>
-      <option value="${pathKey}::midLow">${pathKey} – Midweek Low</option>
-      <option value="${pathKey}::finalSuccess">${pathKey} – Final Success</option>
-      <option value="${pathKey}::finalFailure">${pathKey} – Final Failure</option>
-    `;
-  }
-}
-
-// Hook into quest editor
-function openQuestEditor(key) {
-  selectedKey = key;
-  const quest = questData[key];
-  questKeyInput.value = key;
-  questIntroInput.value = quest.intro || "";
-  questWrapInput.value = quest.wrapup?.text || "";
-  pathsContainer.innerHTML = "";
-  populateOutcomeTargetDropdown(key);
-
-  const paths = quest.paths || {};
-  for (const [pathKey, pathData] of Object.entries(paths)) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "bg-gray-800 p-4 rounded";
-
-    wrapper.innerHTML = `
-      <h3 class="text-lg font-bold text-yellow-400 mb-2">${pathKey}</h3>
-      <label class="text-green-300 text-sm block">📝 Title</label>
-      <input class="w-full bg-gray-900 p-2 rounded mb-2 text-white" data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
-      <label class="text-green-300 text-sm block">📜 Description</label>
-      <textarea class="w-full bg-gray-900 p-2 rounded mb-2 text-white" data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
-      <label class="text-green-300 text-sm block">🔥 Midweek High</label>
-      <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
-      <label class="text-green-300 text-sm block">💀 Midweek Low</label>
-      <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
-      <label class="text-green-300 text-sm block">🏆 Final Success</label>
-      <textarea class="w-full bg-gray-900 p-2 rounded mb-1 text-white" data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
-      <label class="text-green-300 text-sm block">☠️ Final Failure</label>
-      <textarea class="w-full bg-gray-900 p-2 rounded text-white" data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
-    `;
-    pathsContainer.appendChild(wrapper);
-  }
-
-  editorSection.classList.remove("hidden");
-}
-
