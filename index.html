@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🩸 BloodBot Architect – Auto-Fetch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white font-mono p-6">
+  <h1 class="text-4xl text-red-500 font-bold mb-4">🩸 BloodBot Architect</h1>
+  <p class="text-sm text-gray-400 mb-6">Auto-loaded from <code>/data/quest_data.json</code></p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Quest List -->
+    <div>
+      <h2 class="text-xl mb-2 border-b border-red-700 pb-1">🎯 Quests</h2>
+      <ul id="questList" class="space-y-1"></ul>
+    </div>
+
+    <!-- Quest Editor -->
+    <div class="md:col-span-2 hidden" id="editorSection">
+      <h2 class="text-xl mb-4 border-b border-green-700 pb-1">✏️ Edit Quest</h2>
+      <div class="mb-4">
+        <label class="block mb-1 text-green-300">Title (key)</label>
+        <input id="questKey" class="w-full bg-gray-900 p-2 rounded text-gray-200" readonly />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1 text-green-300">Intro</label>
+        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="3"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1 text-green-300">Wrap-Up</label>
+        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="3"></textarea>
+      </div>
+      <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save</button>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
