@@ -41,6 +41,40 @@
         <div id="pathsContainer" class="space-y-4"></div>
       </div>
 
+      <!-- Outcome Builder -->
+<div class="mt-10">
+  <h2 class="text-xl text-yellow-300 mb-3">🧪 Outcome Builder</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-sm text-green-300 mb-1">📜 Narrative Text</label>
+      <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white" rows="3"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm text-green-300">⚔️ Optional Effects</label>
+      <div class="space-y-1">
+        <label class="flex items-center">
+          <input type="checkbox" id="ob_death" class="mr-2" />
+          ☠️ Death
+        </label>
+        <input id="ob_title" placeholder="🏷️ Title (optional)" class="w-full bg-gray-900 p-2 rounded text-white" />
+        <input id="ob_status" placeholder="🧠 Status (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
+        <input id="ob_items" placeholder="📦 Items (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <label class="block text-sm text-green-300 mb-1">🧩 Target Outcome</label>
+    <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded">
+      <option disabled selected>Choose a Path & Outcome Type…</option>
+    </select>
+  </div>
+
+  <button onclick="injectOutcome()" class="mt-4 bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black font-bold">💉 Inject Outcome</button>
+</div>
+
       <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save Quest</button>
     </div>
   </div>
