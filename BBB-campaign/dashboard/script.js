@@ -71,9 +71,14 @@ const questWrapInput = document.getElementById("questWrap");
 
 window.currentQuestData = questData;
 
+// ✅ Detect environment and fetch correct path
+const questDataPath = location.hostname.includes("github.io")
+  ? "https://ytseen.github.io/bloodbot-campaign/BBB-campaign/dashboard/data/quest_data.json"
+  : "./data/quest_data.json";
+
 async function loadQuestData() {
   try {
-    const res = await fetch("./data/quest_data.json");
+    const res = await fetch(questDataPath);
     if (!res.ok) throw new Error("File fetch failed");
     questData = await res.json();
     window.currentQuestData = questData;
@@ -117,5 +122,5 @@ function saveQuest() {
   alert("✅ Quest saved locally. Now click 💾 Save to GitHub!");
 }
 
-// Load quests on page load
+// 🔁 Load quests on page load
 loadQuestData();
