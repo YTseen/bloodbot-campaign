@@ -1,6 +1,11 @@
+// ========== 🔐 GITHUB TOKEN SETUP ==========
+let githubToken = localStorage.getItem("githubToken");
+if (!githubToken || githubToken.length < 30) {
+  githubToken = prompt("Enter your GitHub Token:");
+  if (githubToken) localStorage.setItem("githubToken", githubToken);
+}
 
-// [FULL SCRIPT INCLUDES ENHANCED FIELDS AND AUTO GITHUB TOKEN INJECTION]
-
+// ========== QUEST EDITOR ==========
 function openQuestEditor(type, key) {
   selectedType = type;
   selectedKey = key;
@@ -80,9 +85,7 @@ function openQuestEditor(type, key) {
   }
 }
 
-
 // ========== SAVE QUEST ==========
-
 function saveQuest() {
   const newKey = document.getElementById("questKey").value;
   const intro = document.getElementById("questIntro").value;
@@ -130,4 +133,3 @@ function saveQuest() {
   alert("✅ Quest saved locally. Push to GitHub to commit.");
   renderQuestList(selectedType);
 }
-
