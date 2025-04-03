@@ -1,11 +1,9 @@
-// ========== 🔐 HARDCODED GITHUB TOKEN ==========
-const githubToken = "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";
-
-const repo = "YTseen/bloodbot-campaign";
-const paths = {
-  main: "data/quest_data.json",
-  side: "data/side_quest_template.json"
-};
+// ========== 🔐 GITHUB TOKEN ==========
+let githubToken = localStorage.getItem("githubToken");
+if (!githubToken) {
+  githubToken = prompt("Enter your GitHub Token:");
+  localStorage.setItem("githubToken", githubToken);
+}
 
 let questData = { main: {}, side: {} };
 let selectedType = "main";
