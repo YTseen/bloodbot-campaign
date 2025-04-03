@@ -2,51 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>🩸 BloodBot Architect – Auto-Fetch</title>
+  <title>🩸 BloodBot Architect</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white font-mono p-6">
-  <h1 class="text-4xl text-red-500 font-bold mb-4">🩸 BloodBot Architect</h1>
-  <p class="text-sm text-gray-400 mb-6">Auto-loaded from <code>/data/quest_data.json</code></p>
+  <h1 class="text-3xl text-red-500 font-bold mb-4">🩸 BloodBot Architect</h1>
+  <p class="text-sm text-gray-400 mb-6">Live editing from <code>/data/quest_data.json</code> using your GitHub token.</p>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Quest List -->
+    <!-- Sidebar: Quest List -->
     <div>
-      <h2 class="text-xl mb-2 border-b border-red-700 pb-1">🎯 Quests</h2>
+      <h2 class="text-xl border-b border-red-700 mb-2 pb-1">📘 Quests</h2>
       <ul id="questList" class="space-y-1"></ul>
     </div>
 
-    <!-- Quest Editor -->
+    <!-- Editor -->
     <div class="md:col-span-2 hidden" id="editorSection">
-      <h2 class="text-xl mb-4 border-b border-green-700 pb-1">✏️ Edit Quest</h2>
+      <h2 class="text-xl text-green-400 font-bold mb-4">✏️ Edit Quest</h2>
 
-      <div class="mb-4">
-        <label class="block mb-1 text-green-300">Title (key)</label>
-        <input id="questKey" class="w-full bg-gray-900 p-2 rounded text-gray-200" />
+      <div class="mb-3">
+        <label class="block text-green-300 text-sm">Quest Title (key)</label>
+        <input id="questKey" class="w-full bg-gray-900 p-2 rounded" />
       </div>
 
-      <div class="mb-4">
-        <label class="block mb-1 text-green-300">Intro</label>
-        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="5"></textarea>
+      <div class="mb-3">
+        <label class="block text-green-300 text-sm">Intro</label>
+        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
       </div>
 
-      <div class="mb-4">
-        <label class="block mb-1 text-green-300">Wrap-Up</label>
-        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded text-gray-200" rows="5"></textarea>
+      <div class="mb-3">
+        <label class="block text-green-300 text-sm">Wrap-Up</label>
+        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
       </div>
 
-      <div class="mb-4">
-        <label class="block mb-1 text-green-300">Paths (raw JSON)</label>
-        <textarea id="questPaths" class="w-full bg-gray-900 p-2 rounded text-green-200 text-sm" rows="12"></textarea>
+      <div class="mb-3">
+        <label class="block text-green-300 text-sm">Quest Paths</label>
+        <div id="pathsContainer" class="space-y-4"></div>
       </div>
 
-      <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save</button>
+      <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save Quest</button>
     </div>
   </div>
 
-  <button id="saveBtn" style="position: fixed; top: 10px; right: 10px;" class="bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
-    💾 Save to GitHub
+  <button id="saveBtn" class="fixed top-4 right-4 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
+    💾 Push to GitHub
   </button>
 
   <script src="./script.js"></script>
