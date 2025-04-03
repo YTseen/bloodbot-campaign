@@ -14,68 +14,70 @@
     <!-- Sidebar: Quest List -->
     <div>
       <h2 class="text-xl border-b border-red-700 mb-2 pb-1">📘 Quests</h2>
-      <ul id="questList" class="space-y-1"></ul>
+      <ul id="questList" class="space-y-1 mb-3"></ul>
     </div>
 
-    <!-- Editor -->
+    <!-- Main Editor -->
     <div class="md:col-span-2 hidden" id="editorSection">
       <h2 class="text-xl text-green-400 font-bold mb-4">✏️ Edit Quest</h2>
 
       <div class="mb-3">
         <label class="block text-green-300 text-sm">Quest Title (key)</label>
-        <input id="questKey" class="w-full bg-gray-900 p-2 rounded" />
+        <input id="questKey" class="w-full bg-gray-900 p-2 rounded text-white" />
       </div>
 
       <div class="mb-3">
         <label class="block text-green-300 text-sm">Intro</label>
-        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
+        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded text-white" rows="4"></textarea>
       </div>
 
       <div class="mb-3">
         <label class="block text-green-300 text-sm">Wrap-Up</label>
-        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
+        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded text-white" rows="4"></textarea>
       </div>
 
-      <div class="mb-3">
-        <label class="block text-green-300 text-sm">Quest Paths</label>
+      <div class="mb-6">
+        <label class="block text-green-300 text-sm mb-2">Quest Paths</label>
         <div id="pathsContainer" class="space-y-4"></div>
       </div>
 
       <!-- Outcome Builder -->
-<div class="mt-10">
-  <h2 class="text-xl text-yellow-300 mb-3">🧪 Outcome Builder</h2>
+      <div class="mt-10">
+        <h2 class="text-xl text-yellow-300 mb-3">🧪 Outcome Builder</h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label class="block text-sm text-green-300 mb-1">📜 Narrative Text</label>
-      <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white" rows="3"></textarea>
-    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-green-300 mb-1">📜 Narrative Text</label>
+            <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white" rows="3"></textarea>
+          </div>
 
-    <div>
-      <label class="block text-sm text-green-300">⚔️ Optional Effects</label>
-      <div class="space-y-1">
-        <label class="flex items-center">
-          <input type="checkbox" id="ob_death" class="mr-2" />
-          ☠️ Death
-        </label>
-        <input id="ob_title" placeholder="🏷️ Title (optional)" class="w-full bg-gray-900 p-2 rounded text-white" />
-        <input id="ob_status" placeholder="🧠 Status (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
-        <input id="ob_items" placeholder="📦 Items (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
+          <div>
+            <label class="block text-sm text-green-300">⚔️ Optional Effects</label>
+            <div class="space-y-1">
+              <label class="flex items-center">
+                <input type="checkbox" id="ob_death" class="mr-2" />
+                ☠️ Death
+              </label>
+              <input id="ob_title" placeholder="🏷️ Title (optional)" class="w-full bg-gray-900 p-2 rounded text-white" />
+              <input id="ob_status" placeholder="🧠 Status (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
+              <input id="ob_items" placeholder="📦 Items (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="block text-sm text-green-300 mb-1">🧩 Target Outcome</label>
+          <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded">
+            <option disabled selected>Choose a Path & Outcome Type…</option>
+          </select>
+        </div>
+
+        <button onclick="injectOutcome()" class="mt-4 bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black font-bold">💉 Inject Outcome</button>
       </div>
-    </div>
-  </div>
 
-  <div class="mt-4">
-    <label class="block text-sm text-green-300 mb-1">🧩 Target Outcome</label>
-    <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded">
-      <option disabled selected>Choose a Path & Outcome Type…</option>
-    </select>
-  </div>
-
-  <button onclick="injectOutcome()" class="mt-4 bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black font-bold">💉 Inject Outcome</button>
-</div>
-
-      <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save Quest</button>
+      <div class="mt-6 flex gap-3">
+        <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-white">💾 Save Quest</button>
+      </div>
     </div>
   </div>
 
