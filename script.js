@@ -72,20 +72,26 @@ function openQuestEditor(type, key) {
 
     div.innerHTML = `
       <h3 class="text-lg font-bold text-yellow-400 mb-2">${pathKey}</h3>
-      <input placeholder="📝 Title" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
-      <textarea placeholder="📜 Description" class="w-full bg-gray-900 p-2 rounded mb-4" data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
+      <input placeholder="📝 Title" class="w-full bg-gray-900 p-2 rounded mb-2"
+        data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
+      <textarea placeholder="📜 Description" class="w-full bg-gray-900 p-2 rounded mb-4"
+        data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
 
-      <h4 class="text-yellow-300 font-semibold mt-4 mb-1">⏳ Midweek Outcomes</h4>
+      <h4 class="text-yellow-300 font-semibold mt-4 mb-2">⏳ Midweek Outcomes</h4>
       <label class="text-green-400 text-sm font-semibold block mb-1">🔵 High Outcome</label>
-      <textarea placeholder="🔥 Midweek High" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
+      <textarea placeholder="🔥 Midweek High" class="w-full bg-gray-900 p-2 rounded mb-2"
+        data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
       <label class="text-red-400 text-sm font-semibold block mb-1">🔴 Low Outcome</label>
-      <textarea placeholder="💀 Midweek Low" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
+      <textarea placeholder="💀 Midweek Low" class="w-full bg-gray-900 p-2 rounded mb-2"
+        data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
 
-      <h4 class="text-yellow-300 font-semibold mt-4 mb-1">🏁 Final Outcomes</h4>
+      <h4 class="text-yellow-300 font-semibold mt-4 mb-2">🏁 Final Outcomes</h4>
       <label class="text-green-400 text-sm font-semibold block mb-1">🟢 Success</label>
-      <textarea placeholder="🏆 Final Success" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
+      <textarea placeholder="🏆 Final Success" class="w-full bg-gray-900 p-2 rounded mb-2"
+        data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
       <label class="text-red-400 text-sm font-semibold block mb-1">🔻 Failure</label>
-      <textarea placeholder="☠️ Final Failure" class="w-full bg-gray-900 p-2 rounded" data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
+      <textarea placeholder="☠️ Final Failure" class="w-full bg-gray-900 p-2 rounded"
+        data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
     `;
     pathsContainer.appendChild(div);
   }
