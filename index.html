@@ -40,36 +40,46 @@
   </div>
 
   <!-- Outcome Builder -->
-  <hr class="my-10 border-gray-700" />
-  <h2 class="text-xl text-yellow-300 mb-3">🔬 Outcome Builder</h2>
-  <label class="block text-green-300 text-sm">📜 Narrative Text</label>
-  <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white mb-4" rows="3"></textarea>
+<hr class="my-10 border-gray-700" />
+<h2 class="text-xl text-yellow-300 mb-3">🔬 Outcome Builder</h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-    <div>
-      <label class="block text-sm text-green-300">☠️ Death</label>
-      <input type="checkbox" id="ob_death" class="mr-2" />
-    </div>
-    <div>
-      <label class="block text-sm text-green-300">🏷️ Title</label>
-      <input id="ob_title" class="w-full bg-gray-900 p-2 rounded text-white" />
-    </div>
-    <div>
-      <label class="block text-sm text-green-300">🧠 Status</label>
-      <input id="ob_status" class="w-full bg-gray-900 p-2 rounded text-white" />
-    </div>
-    <div>
-      <label class="block text-sm text-green-300">📦 Items</label>
-      <input id="ob_items" class="w-full bg-gray-900 p-2 rounded text-white" />
-    </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div>
+    <label class="block text-green-300 text-sm mb-1">📜 Narrative Text</label>
+    <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white mb-4" rows="4" placeholder="Outcome description..."></textarea>
+
+    <label class="block text-green-300 text-sm mb-1">🎯 Target Outcome</label>
+    <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded mb-4">
+      <option disabled selected>Choose a Path & Outcome Type…</option>
+    </select>
+
+    <button onclick="injectOutcome()" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded text-black font-bold w-full">
+      🧬 Inject Outcome
+    </button>
   </div>
 
-  <label class="block text-sm text-green-300 mb-1">🎯 Target Outcome</label>
-  <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded mb-4">
-    <option disabled selected>Choose a Path & Outcome Type…</option>
-  </select>
+  <div class="space-y-3">
+    <div>
+      <label class="block text-green-300 text-sm mb-1">🏷️ Title</label>
+      <input id="ob_title" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="Optional outcome title..." />
+    </div>
 
-  <button onclick="injectOutcome()" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded text-black font-bold">🧬 Inject Outcome</button>
+    <div>
+      <label class="block text-green-300 text-sm mb-1">📦 Items (comma-separated)</label>
+      <input id="ob_items" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="e.g. Sword, Shield" />
+    </div>
+
+    <div>
+      <label class="block text-green-300 text-sm mb-1">🧠 Status Effects (comma-separated)</label>
+      <input id="ob_status" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="e.g. Stunned, Poisoned" />
+    </div>
+
+    <div class="flex items-center space-x-2 mt-2">
+      <input type="checkbox" id="ob_death" class="w-5 h-5" />
+      <label for="ob_death" class="text-sm text-red-400 font-semibold">☠️ Causes Death</label>
+    </div>
+  </div>
+</div>
 
   <!-- GitHub Push -->
   <button id="saveBtn" class="fixed top-4 right-4 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
