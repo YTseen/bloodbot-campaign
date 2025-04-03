@@ -50,71 +50,6 @@ function createQuest(type) {
   openQuestEditor(type, key);
 }
 
-// ========== RENDER LABELED PATH ==========
-function renderPathEditor(pathKey, pathData) {
-  const pathDiv = document.createElement("div");
-  pathDiv.className = "bg-gray-900 p-4 rounded mb-4";
-
-  const title = document.createElement("h3");
-  title.textContent = pathKey;
-  title.className = "text-xl text-yellow-300 font-bold mb-2";
-  pathDiv.appendChild(title);
-
-  // Midweek Outcomes
-  const midweekHeading = document.createElement("h4");
-  midweekHeading.textContent = "⏳ Midweek Outcomes";
-  midweekHeading.className = "text-yellow-400 font-semibold mt-3";
-  pathDiv.appendChild(midweekHeading);
-
-  const highLabel = document.createElement("p");
-  highLabel.textContent = "🔵 High:";
-  highLabel.className = "text-green-400 font-semibold mt-2";
-  pathDiv.appendChild(highLabel);
-
-  const highText = document.createElement("p");
-  highText.textContent = pathData.midweek?.High?.text || "None";
-  highText.className = "mb-2";
-  pathDiv.appendChild(highText);
-
-  const lowLabel = document.createElement("p");
-  lowLabel.textContent = "🔴 Low:";
-  lowLabel.className = "text-red-400 font-semibold mt-2";
-  pathDiv.appendChild(lowLabel);
-
-  const lowText = document.createElement("p");
-  lowText.textContent = pathData.midweek?.Low?.text || "None";
-  lowText.className = "mb-2";
-  pathDiv.appendChild(lowText);
-
-  // Final Outcomes
-  const finalHeading = document.createElement("h4");
-  finalHeading.textContent = "🏁 Final Outcomes";
-  finalHeading.className = "text-yellow-400 font-semibold mt-4";
-  pathDiv.appendChild(finalHeading);
-
-  const successLabel = document.createElement("p");
-  successLabel.textContent = "🟢 Success:";
-  successLabel.className = "text-green-400 font-semibold mt-2";
-  pathDiv.appendChild(successLabel);
-
-  const successText = document.createElement("p");
-  successText.textContent = pathData.final?.Success?.text || "None";
-  successText.className = "mb-2";
-  pathDiv.appendChild(successText);
-
-  const failureLabel = document.createElement("p");
-  failureLabel.textContent = "🔻 Failure:";
-  failureLabel.className = "text-red-400 font-semibold mt-2";
-  pathDiv.appendChild(failureLabel);
-
-  const failureText = document.createElement("p");
-  failureText.textContent = pathData.final?.Failure?.text || "None";
-  failureText.className = "mb-2";
-  pathDiv.appendChild(failureText);
-
-  return pathDiv;
-}
-
 // ========== QUEST EDITOR ==========
 function openQuestEditor(type, key) {
   selectedType = type;
@@ -132,7 +67,27 @@ function openQuestEditor(type, key) {
   populateOutcomeTargetDropdown(type, key);
 
   for (const [pathKey, pathData] of Object.entries(quest.paths || {})) {
-    pathsContainer.appendChild(renderPathEditor(pathKey, pathData));
+    const div = document.createElement("div");
+    div.className = "bg-gray-800 p-4 rounded mb-6";
+
+    div.innerHTML = `
+      <h3 class="text-lg font-bold text-yellow-400 mb-2">${pathKey}</h3>
+      <input placeholder="📝 Title" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
+      <textarea placeholder="📜 Description" class="w-full bg-gray-900 p-2 rounded mb-4" data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
+
+      <h4 class="text-yellow-300 font-semibold mt-4 mb-1">⏳ Midweek Outcomes</h4>
+      <label class="text-green-400 text-sm font-semibold block mb-1">🔵 High Outcome</label>
+      <textarea placeholder="🔥 Midweek High" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
+      <label class="text-red-400 text-sm font-semibold block mb-1">🔴 Low Outcome</label>
+      <textarea placeholder="💀 Midweek Low" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
+
+      <h4 class="text-yellow-300 font-semibold mt-4 mb-1">🏁 Final Outcomes</h4>
+      <label class="text-green-400 text-sm font-semibold block mb-1">🟢 Success</label>
+      <textarea placeholder="🏆 Final Success" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
+      <label class="text-red-400 text-sm font-semibold block mb-1">🔻 Failure</label>
+      <textarea placeholder="☠️ Final Failure" class="w-full bg-gray-900 p-2 rounded" data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
+    `;
+    pathsContainer.appendChild(div);
   }
 }
 
