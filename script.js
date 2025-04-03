@@ -1,45 +1,136 @@
+// ========== 🔐 GITHUB SAVE SYSTEM ==========
+let githubToken = localStorage.getItem("githubToken") || "";
+if (!githubToken) {
+  githubToken = prompt("Enter GitHub Token:");
+  localStorage.setItem("githubToken", githubToken);
+}
 
-let questData = {};
-let selectedKey = "";
+async function saveQuestData(updatedJson) {
+  const repo = "YTseen/bloodbot-campaign";
+  const path = "data/quest_data.json";
 
-async function loadQuests() {
   try {
-    const res = await fetch("https://raw.githubusercontent.com/YTseen/bloodbot-campaign/main/data/quest_data.json");
-    questData = await res.json();
-    const questList = document.getElementById("questList");
-    questList.innerHTML = "";
-    Object.entries(questData).forEach(([key, data]) => {
-      const btn = document.createElement("button");
-      btn.className = "block w-full text-left bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded";
-      btn.textContent = key;
-      btn.onclick = () => loadEditor(key);
-      questList.appendChild(btn);
+    const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      headers: {
+        Authorization: `token ${githubToken}`,
+      },
     });
+
+    if (!metaRes.ok) {
+      alert("❌ Failed to fetch quest_data.json metadata.");
+      return;
+    }
+
+    const meta = await metaRes.json();
+    const sha = meta.sha;
+
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedJson, null, 2))));
+
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "🩸 BloodBot Dashboard update: quest_data.json",
+        content,
+        sha,
+      }),
+    });
+
+    if (res.ok) {
+      alert("✅ Saved to GitHub successfully!");
+    } else {
+      alert("❌ Save failed. Check your token and permissions.");
+    }
   } catch (err) {
-    alert("Failed to load quest_data.json");
+    console.error("Save error:", err);
+    alert("❌ Unexpected error while saving to GitHub.");
   }
 }
 
-function loadEditor(key) {
-  selectedKey = key;
+document.getElementById("saveBtn")?.addEventListener("click", () => {
+  if (!window.currentQuestData) {
+    alert("No quest data loaded!");
+    return;
+  }
+  saveQuestData(window.currentQuestData);
+});
+
+// ========== 🧠 QUEST LOADER & EDITOR ==========
+let questData = {};
+const questList = document.getElementById("questList");
+const editorSection = document.getElementById("editorSection");
+const questKeyInput = document.getElementById("questKey");
+const questIntroInput = document.getElementById("questIntro");
+const questWrapInput = document.getElementById("questWrap");
+const questPathsInput = document.getElementById("questPaths");
+
+window.currentQuestData = questData;
+
+async function loadQuestData() {
+  try {
+    const res = await fetch("./data/quest_data.json");
+    if (!res.ok) throw new Error("File fetch failed");
+    questData = await res.json();
+    window.currentQuestData = questData;
+    renderQuestList();
+  } catch (err) {
+    alert("❌ Failed to load quest_data.json");
+    console.error(err);
+  }
+}
+
+function renderQuestList() {
+  questList.innerHTML = "";
+  Object.keys(questData).forEach((key) => {
+    const li = document.createElement("li");
+    li.textContent = key;
+    li.className = "cursor-pointer hover:text-red-400 px-2 py-1 bg-gray-800 rounded";
+    li.onclick = () => editQuest(key);
+    questList.appendChild(li);
+  });
+}
+
+function editQuest(key) {
   const quest = questData[key];
-  document.getElementById("questKey").value = key;
-  document.getElementById("questIntro").value = quest.intro || "";
-  document.getElementById("questWrap").value = quest.wrapup?.text || "";
-  document.getElementById("editorSection").classList.remove("hidden");
+  questKeyInput.value = key;
+  questIntroInput.value = quest.intro || "";
+  questWrapInput.value = quest.wrapup?.text || "";
+  questPathsInput.value = JSON.stringify(quest.paths || {}, null, 2);
+  editorSection.classList.remove("hidden");
 }
 
 function saveQuest() {
-  const intro = document.getElementById("questIntro").value;
-  const wrap = document.getElementById("questWrap").value;
-  if (!questData[selectedKey]) return;
-  questData[selectedKey].intro = intro;
-  questData[selectedKey].wrapup = { text: wrap };
-  const blob = new Blob([JSON.stringify(questData, null, 2)], { type: 'application/json' });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "quest_data.json";
-  link.click();
+  const oldKey = questKeyInput.getAttribute("data-original-key") || questKeyInput.value;
+  const newKey = questKeyInput.value;
+  const intro = questIntroInput.value;
+  const wrapup = questWrapInput.value;
+  let parsedPaths;
+
+  try {
+    parsedPaths = JSON.parse(questPathsInput.value);
+  } catch (e) {
+    alert("❌ Invalid JSON in Paths section.");
+    return;
+  }
+
+  // Handle title/key change
+  if (oldKey !== newKey) {
+    delete questData[oldKey];
+  }
+
+  questData[newKey] = {
+    intro,
+    paths: parsedPaths,
+    wrapup: { text: wrapup },
+  };
+
+  window.currentQuestData = questData;
+  renderQuestList();
+  alert("✅ Quest saved locally. Click 💾 Save to GitHub to commit.");
 }
 
-window.onload = loadQuests;
+// Load quests on page load
+loadQuestData();
