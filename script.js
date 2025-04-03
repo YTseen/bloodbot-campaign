@@ -1,9 +1,5 @@
 // ========== 🔐 GITHUB SAVE SYSTEM ==========
-let githubToken = localStorage.getItem("githubToken") || "";
-if (!githubToken) {
-  githubToken = prompt("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");
-  localStorage.setItem("githubToken", githubToken);
-}
+const githubToken = "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";
 
 const repo = "YTseen/bloodbot-campaign";
 const paths = {
@@ -14,6 +10,7 @@ const paths = {
 let questData = { main: {}, side: {} };
 let selectedType = "main";
 let selectedKey = null;
+
 
 // ========== LOAD & INIT ==========
 async function loadQuestFile(type) {
