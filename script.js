@@ -1,5 +1,5 @@
 // ========== 🔐 HARDCODED GITHUB TOKEN ==========
-const githubToken = "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";
+const githubToken = "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";
 
 const repo = "YTseen/bloodbot-campaign";
 const paths = {
