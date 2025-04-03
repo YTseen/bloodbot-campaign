@@ -2,87 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>🍗 BloodBot Architect</title>
+  <title>🩸 BloodBot Architect</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white font-mono p-6">
-  <h1 class="text-3xl text-red-500 font-bold mb-4">🍗 BloodBot Architect</h1>
+  <h1 class="text-3xl text-red-500 font-bold mb-2">🍗 BloodBot Architect</h1>
   <p class="text-sm text-gray-400 mb-6">Live editing from <code>/data/quest_data.json</code> and <code>/data/side_quest_template.json</code> using your GitHub token.</p>
 
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-    <!-- Sidebar: Quests + Side Quests -->
-    <div>
-      <h2 class="text-xl border-b border-red-700 mb-2 pb-1">📘 Main Quests</h2>
-      <ul id="questList" class="space-y-1 mb-6"></ul>
-      <button onclick="createNewQuest()" class="bg-blue-700 hover:bg-blue-600 px-2 py-1 text-sm rounded">➕ Add Quest</button>
+  <!-- Quest Management -->
+  <div class="mb-6">
+    <h2 class="text-xl text-white mb-1">📘 Main Quests</h2>
+    <button onclick="createQuest('main')" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 text-sm rounded mb-2">➕ Add Quest</button>
+    <ul id="mainQuestList" class="space-y-1 mb-4"></ul>
 
-      <h2 class="text-xl border-b border-yellow-600 mt-6 mb-2 pb-1">🌲 Side Quests</h2>
-      <ul id="sideQuestList" class="space-y-1"></ul>
-      <button onclick="createNewSideQuest()" class="bg-yellow-600 hover:bg-yellow-500 px-2 py-1 text-sm rounded text-black font-bold mt-2">➕ Add Side Quest</button>
-    </div>
+    <h2 class="text-xl text-white mt-6">🌲 Side Quests</h2>
+    <button onclick="createQuest('side')" class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 text-sm rounded mb-2">➕ Add Side Quest</button>
+    <ul id="sideQuestList" class="space-y-1"></ul>
+  </div>
 
-    <!-- Main Quest Editor -->
-    <div class="md:col-span-3 hidden" id="editorSection">
-      <h2 class="text-xl text-green-400 font-bold mb-4">✏️ Edit Quest</h2>
+  <!-- Quest Editor -->
+  <div id="editorSection" class="hidden">
+    <h2 class="text-xl text-green-400 mb-4">✏️ Edit Quest</h2>
+    <label class="block text-green-300 text-sm">Quest Title (key)</label>
+    <input id="questKey" class="w-full bg-gray-900 p-2 rounded mb-3" />
 
-      <div class="mb-3">
-        <label class="block text-green-300 text-sm">Quest Title (key)</label>
-        <input id="questKey" class="w-full bg-gray-900 p-2 rounded" />
-      </div>
+    <label class="block text-green-300 text-sm">Intro</label>
+    <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded mb-3" rows="3"></textarea>
 
-      <div class="mb-3">
-        <label class="block text-green-300 text-sm">Intro</label>
-        <textarea id="questIntro" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
-      </div>
+    <label class="block text-green-300 text-sm">Wrap-Up</label>
+    <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded mb-4" rows="3"></textarea>
 
-      <div class="mb-3">
-        <label class="block text-green-300 text-sm">Wrap-Up</label>
-        <textarea id="questWrap" class="w-full bg-gray-900 p-2 rounded" rows="4"></textarea>
-      </div>
+    <label class="block text-green-300 text-sm mb-1">Paths</label>
+    <div id="pathsContainer" class="space-y-4 mb-6"></div>
 
-      <div class="mb-3">
-        <label class="block text-green-300 text-sm">Quest Paths</label>
-        <div id="pathsContainer" class="space-y-4"></div>
-      </div>
-
-      <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save Quest</button>
-    </div>
+    <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">💾 Save Quest</button>
   </div>
 
   <!-- Outcome Builder -->
-  <div class="mt-12 border-t border-gray-700 pt-6">
-    <h2 class="text-xl text-yellow-300 mb-3">🧪 Outcome Builder</h2>
+  <hr class="my-10 border-gray-700" />
+  <h2 class="text-xl text-yellow-300 mb-3">🔬 Outcome Builder</h2>
+  <label class="block text-green-300 text-sm">📜 Narrative Text</label>
+  <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white mb-4" rows="3"></textarea>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm text-green-300 mb-1">📜 Narrative Text</label>
-        <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white" rows="3"></textarea>
-      </div>
-
-      <div>
-        <label class="block text-sm text-green-300">⚔️ Optional Effects</label>
-        <div class="space-y-1">
-          <label class="flex items-center">
-            <input type="checkbox" id="ob_death" class="mr-2" /> ☠️ Death
-          </label>
-          <input id="ob_title" placeholder="🏷️ Title (optional)" class="w-full bg-gray-900 p-2 rounded text-white" />
-          <input id="ob_status" placeholder="🧠 Status (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
-          <input id="ob_items" placeholder="📦 Items (comma-separated)" class="w-full bg-gray-900 p-2 rounded text-white" />
-        </div>
-      </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div>
+      <label class="block text-sm text-green-300">☠️ Death</label>
+      <input type="checkbox" id="ob_death" class="mr-2" />
     </div>
-
-    <div class="mt-4">
-      <label class="block text-sm text-green-300 mb-1">🧩 Target Outcome</label>
-      <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded">
-        <option disabled selected>Choose a Path & Outcome Type…</option>
-      </select>
+    <div>
+      <label class="block text-sm text-green-300">🏷️ Title</label>
+      <input id="ob_title" class="w-full bg-gray-900 p-2 rounded text-white" />
     </div>
-
-    <button onclick="injectOutcome()" class="mt-4 bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black font-bold">💉 Inject Outcome</button>
+    <div>
+      <label class="block text-sm text-green-300">🧠 Status</label>
+      <input id="ob_status" class="w-full bg-gray-900 p-2 rounded text-white" />
+    </div>
+    <div>
+      <label class="block text-sm text-green-300">📦 Items</label>
+      <input id="ob_items" class="w-full bg-gray-900 p-2 rounded text-white" />
+    </div>
   </div>
 
+  <label class="block text-sm text-green-300 mb-1">🎯 Target Outcome</label>
+  <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded mb-4">
+    <option disabled selected>Choose a Path & Outcome Type…</option>
+  </select>
+
+  <button onclick="injectOutcome()" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded text-black font-bold">🧬 Inject Outcome</button>
+
+  <!-- GitHub Push -->
   <button id="saveBtn" class="fixed top-4 right-4 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
     💾 Push to GitHub
   </button>
