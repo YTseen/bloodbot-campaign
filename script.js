@@ -11,7 +11,6 @@ let questData = { main: {}, side: {} };
 let selectedType = "main";
 let selectedKey = null;
 
-
 // ========== LOAD & INIT ==========
 async function loadQuestFile(type) {
   try {
@@ -124,11 +123,11 @@ function saveQuest() {
   renderQuestList(selectedType);
 }
 
+// ========== PUSH TO GITHUB ==========
 document.getElementById("saveBtn").addEventListener("click", async () => {
   for (const type of ["main", "side"]) {
     try {
       const fileUrl = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
-
       const metaRes = await fetch(fileUrl, {
         headers: { Authorization: `token ${githubToken}` }
       });
@@ -162,9 +161,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   alert("✅ Both quest files pushed to GitHub.");
 });
 
-
-// ========== OUTCOME INJECTOR (IMPROVED) ==========
-
+// ========== OUTCOME INJECTOR ==========
 function populateOutcomeTargetDropdown(type, key) {
   const quest = questData[type][key];
   const select = document.getElementById("ob_target");
@@ -217,5 +214,5 @@ function injectOutcome() {
   block[slot] = outcome;
 
   alert(`✅ Injected into "${pathKey}" – ${slot}`);
-  populateOutcomeTargetDropdown(selected
-
+  populateOutcomeTargetDropdown(selectedType, selectedKey);
+}
