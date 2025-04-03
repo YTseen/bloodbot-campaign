@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BloodBot Quest Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white p-6 font-mono">
+  <h1 class="text-3xl font-bold mb-6 text-red-500">🩸 BloodBot Quest Preview</h1>
+
+  <!-- QUEST TITLE -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold text-white mb-2">Quest: The Haunted Grove</h2>
+    <p class="text-gray-300">A cursed forest whispers promises to a lone traveler. Will you take the risk and step into its shadows?</p>
+  </section>
+
+  <!-- VOTING OPTIONS -->
+  <section class="mb-8">
+    <h3 class="text-xl mb-2 border-b border-gray-700 pb-1">🗳️ Choose Your Path</h3>
+    <div class="space-y-2">
+      <button class="block w-full text-left bg-gray-800 p-3 rounded hover:bg-gray-700">✅ Accept the challenge</button>
+      <button class="block w-full text-left bg-gray-800 p-3 rounded hover:bg-gray-700">❌ Ignore the whispers</button>
+    </div>
+  </section>
+
+  <!-- OUTCOME PREVIEW -->
+  <section>
+    <h3 class="text-xl mb-2 border-b border-gray-700 pb-1">🔮 Possible Outcomes</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-gray-900 p-4 rounded">
+        <h4 class="text-green-400 font-semibold mb-1">Success</h4>
+        <p class="text-sm">You return with a glowing feather and an unshakable chill.</p>
+        <ul class="mt-2 text-sm text-gray-300 list-disc pl-5">
+          <li>Item Gained: Ghostly Feather</li>
+          <li>Status Effect: Haunted</li>
+          <li>Title Earned: Touched by the Void</li>
+        </ul>
+      </div>
+      <div class="bg-gray-900 p-4 rounded">
+        <h4 class="text-red-400 font-semibold mb-1">Failure</h4>
+        <p class="text-sm">You vanish for hours. When you return, something is... missing.</p>
+        <ul class="mt-2 text-sm text-gray-300 list-disc pl-5">
+          <li>Outcome: Death</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

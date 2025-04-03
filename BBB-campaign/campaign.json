@@ -1,0 +1,14 @@
+{
+  "players": {
+    "123456789": {
+      "title": "Execution Leader",
+      "status": "active",
+      "items": [],
+      "roles": [],
+      "reputation": [],
+      "quest_path": "Execution Squad",
+      "lastQuest": null,
+      "lastResult": null
+    }
+  }
+}
