@@ -5,19 +5,35 @@ if (!githubToken) {
   localStorage.setItem("githubToken", githubToken);
 }
 
+const repo = "YTseen/bloodbot-campaign";
+const paths = {
+  main: "data/quest_data.json",
+  side: "data/side_quest_template.json"
+};
+
 let questData = { main: {}, side: {} };
 let selectedType = "main";
 let selectedKey = null;
 
 // ========== LOAD & INIT ==========
 async function loadQuestFile(type) {
+  const fileUrl = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
+
   try {
-    const res = await fetch(`./${paths[type]}`);
-    if (!res.ok) throw new Error("Failed to fetch");
-    questData[type] = await res.json();
+    const res = await fetch(fileUrl, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+
+    if (!res.ok) throw new Error(`Failed to fetch ${type} quests.`);
+
+    const data = await res.json();
+    const content = atob(data.content); // decode base64
+    questData[type] = JSON.parse(content);
     renderQuestList(type);
+
   } catch (e) {
     alert(`❌ Failed to load ${type} quests.`);
+    console.error(e);
   }
 }
 
