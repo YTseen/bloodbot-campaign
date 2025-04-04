@@ -1,5 +1,5 @@
-// ========== 🔐 GITHUB TOKEN ==========
-let githubToken = localStorage.getItem("githubToken");
+// ========== 🔐 GITHUB SAVE SYSTEM ==========
+let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
   githubToken = prompt("Enter your GitHub Token:");
   localStorage.setItem("githubToken", githubToken);
@@ -16,48 +16,40 @@ let selectedType = "main";
 let selectedKey = null;
 
 // ========== LOAD & INIT ==========
-function manualLoadQuests() {
-  if (!githubToken) {
-    githubToken = prompt("Enter your GitHub Token:");
-    if (githubToken) {
-      localStorage.setItem("githubToken", githubToken);
-    } else {
-      alert("GitHub Token is required.");
-      return;
-    }
-  }
-  loadQuestFile("main");
-  loadQuestFile("side");
-}
-
 async function loadQuestFile(type) {
   try {
-    const url = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `token ${githubToken}`
-      }
-    });
-
-    if (!res.ok) throw new Error("Failed to fetch " + type);
-
-    const data = await res.json();
-    const decoded = atob(data.content);
-    questData[type] = JSON.parse(decoded);
-
+    const res = await fetch(`./${paths[type]}`);
+    if (!res.ok) throw new Error("Failed to fetch");
+    questData[type] = await res.json();
     renderQuestList(type);
   } catch (e) {
     alert(`❌ Failed to load ${type} quests.`);
-    console.error(e);
   }
 }
 
-function searchAndLoadQuests() {
-  loadQuestFile("main");
-  loadQuestFile("side");
+loadQuestFile("main");
+loadQuestFile("side");
+
+function renderQuestList(type) {
+  const list = document.getElementById(type === "main" ? "mainQuestList" : "sideQuestList");
+  list.innerHTML = "";
+  Object.keys(questData[type]).forEach((key) => {
+    const li = document.createElement("li");
+    li.textContent = key;
+    li.className = "cursor-pointer hover:text-red-400 px-2 py-1 bg-gray-800 rounded";
+    li.onclick = () => openQuestEditor(type, key);
+    list.appendChild(li);
+  });
 }
 
-// ========== QUEST EDITOR ==========
+function createQuest(type) {
+  const key = prompt("Enter new quest name");
+  if (!key) return;
+  questData[type][key] = { intro: "", wrapup: { text: "" }, paths: {} };
+  renderQuestList(type);
+  openQuestEditor(type, key);
+}
+
 function openQuestEditor(type, key) {
   selectedType = type;
   selectedKey = key;
@@ -75,36 +67,20 @@ function openQuestEditor(type, key) {
 
   for (const [pathKey, pathData] of Object.entries(quest.paths || {})) {
     const div = document.createElement("div");
-    div.className = "bg-gray-800 p-4 rounded mb-6";
-
+    div.className = "bg-gray-800 p-4 rounded";
     div.innerHTML = `
       <h3 class="text-lg font-bold text-yellow-400 mb-2">${pathKey}</h3>
-      <input placeholder="📝 Title" class="w-full bg-gray-900 p-2 rounded mb-2"
-        data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
-      <textarea placeholder="📜 Description" class="w-full bg-gray-900 p-2 rounded mb-4"
-        data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
-
-      <h4 class="text-yellow-300 font-semibold mt-4 mb-2">⏳ Midweek Outcomes</h4>
-      <label class="text-green-400 text-sm font-semibold block mb-1">🔵 High Outcome</label>
-      <textarea placeholder="🔥 Midweek High" class="w-full bg-gray-900 p-2 rounded mb-2"
-        data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
-      <label class="text-red-400 text-sm font-semibold block mb-1">🔴 Low Outcome</label>
-      <textarea placeholder="💀 Midweek Low" class="w-full bg-gray-900 p-2 rounded mb-2"
-        data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
-
-      <h4 class="text-yellow-300 font-semibold mt-4 mb-2">🏁 Final Outcomes</h4>
-      <label class="text-green-400 text-sm font-semibold block mb-1">🟢 Success</label>
-      <textarea placeholder="🏆 Final Success" class="w-full bg-gray-900 p-2 rounded mb-2"
-        data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
-      <label class="text-red-400 text-sm font-semibold block mb-1">🔻 Failure</label>
-      <textarea placeholder="☠️ Final Failure" class="w-full bg-gray-900 p-2 rounded"
-        data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
+      <input placeholder="📝 Title" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="title" value="${pathData.title || ''}" />
+      <textarea placeholder="📜 Description" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="description">${pathData.description || ''}</textarea>
+      <textarea placeholder="🔥 Midweek High" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midHigh">${pathData.midweek?.High?.text || ''}</textarea>
+      <textarea placeholder="💀 Midweek Low" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="midLow">${pathData.midweek?.Low?.text || ''}</textarea>
+      <textarea placeholder="🏆 Final Success" class="w-full bg-gray-900 p-2 rounded mb-2" data-path="${pathKey}" data-field="finalSuccess">${pathData.final?.Success?.text || ''}</textarea>
+      <textarea placeholder="☠️ Final Failure" class="w-full bg-gray-900 p-2 rounded" data-path="${pathKey}" data-field="finalFail">${pathData.final?.Failure?.text || ''}</textarea>
     `;
     pathsContainer.appendChild(div);
   }
 }
 
-// ========== SAVE QUEST ==========
 function saveQuest() {
   const newKey = document.getElementById("questKey").value;
   const intro = document.getElementById("questIntro").value;
@@ -134,41 +110,29 @@ function saveQuest() {
   renderQuestList(selectedType);
 }
 
-// ========== PUSH TO GITHUB ==========
+// ========== GITHUB PUSH ==========
 document.getElementById("saveBtn").addEventListener("click", async () => {
   for (const type of ["main", "side"]) {
-    try {
-      const fileUrl = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
-      const metaRes = await fetch(fileUrl, {
-        headers: { Authorization: `token ${githubToken}` }
-      });
+    const metaRes = await fetch(`https://api.github.com/repos/${repo}/contents/${paths[type]}`, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
 
-      if (!metaRes.ok) throw new Error(`Failed to fetch ${type} metadata.`);
-      const meta = await metaRes.json();
-      const sha = meta.sha;
+    if (!metaRes.ok) return alert(`❌ Failed to fetch ${type} metadata.`);
+    const meta = await metaRes.json();
+    const sha = meta.sha;
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(questData[type], null, 2))));
 
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(questData[type], null, 2))));
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${paths[type]}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: `Update ${type} quests`, content, sha })
+    });
 
-      const res = await fetch(fileUrl, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${githubToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: `Update ${type} quests`,
-          content,
-          sha
-        })
-      });
-
-      if (!res.ok) throw new Error(`❌ Failed to push ${type}`);
-    } catch (err) {
-      alert(err.message);
-      return;
-    }
+    if (!res.ok) alert(`❌ Failed to push ${type}`);
   }
-
   alert("✅ Both quest files pushed to GitHub.");
 });
 
@@ -177,53 +141,62 @@ function populateOutcomeTargetDropdown(type, key) {
   const quest = questData[type][key];
   const select = document.getElementById("ob_target");
   select.innerHTML = '<option disabled selected>Choose a Path & Outcome Type…</option>';
-
-  if (!quest?.paths) return;
-
-  for (const pathKey of Object.keys(quest.paths)) {
-    const outcomeTypes = [
-      { code: "midHigh", label: "Midweek High" },
-      { code: "midLow", label: "Midweek Low" },
-      { code: "finalSuccess", label: "Final Success" },
-      { code: "finalFail", label: "Final Failure" }
-    ];
-    for (const { code, label } of outcomeTypes) {
-      const option = document.createElement("option");
-      option.value = `${pathKey}::${code}`;
-      option.textContent = `${pathKey} – ${label}`;
-      select.appendChild(option);
-    }
+  for (const pathKey of Object.keys(quest.paths || {})) {
+    select.innerHTML += `
+      <option value="${pathKey}::midHigh">${pathKey} – Midweek High</option>
+      <option value="${pathKey}::midLow">${pathKey} – Midweek Low</option>
+      <option value="${pathKey}::finalSuccess">${pathKey} – Final Success</option>
+      <option value="${pathKey}::finalFail">${pathKey} – Final Failure</option>
+    `;
   }
 }
 
 function injectOutcome() {
   const target = document.getElementById("ob_target").value;
   if (!target || !target.includes("::")) return alert("❌ Invalid outcome target.");
-
   const [pathKey, field] = target.split("::");
   const quest = questData[selectedType][selectedKey];
   const path = quest.paths[pathKey];
-
   const block = field.includes("mid") ? (path.midweek = path.midweek || {}) : (path.final = path.final || {});
-  const slot = field.includes("High") ? "High" :
-               field.includes("Low") ? "Low" :
-               field.includes("Success") ? "Success" : "Failure";
+  const slot = field.includes("High") ? "High" : field.includes("Low") ? "Low" : field.includes("Success") ? "Success" : "Failure";
 
-  const outcome = {};
-  const get = (id) => document.getElementById(id)?.value?.trim();
+  const out = {
+    text: document.getElementById("ob_text").value.trim()
+  };
+  if (document.getElementById("ob_death").checked) out.death = true;
+  const title = document.getElementById("ob_title").value.trim();
+  if (title) out.title = title;
+  const status = document.getElementById("ob_status").value.trim();
+  if (status) out.status = status.includes(",") ? status.split(",").map(x => x.trim()) : status;
+  const items = document.getElementById("ob_items").value.trim();
+  if (items) out.items = items.split(",").map(x => x.trim());
 
-  outcome.text = get("ob_text") || "";
-  outcome.title = get("ob_title") || "";
-  outcome.death = document.getElementById("ob_death")?.checked || false;
+  block[slot] = out;
+  alert(`✅ Outcome injected into ${pathKey} – ${slot}`);
+}
 
-  const items = get("ob_items");
-  if (items) outcome.items = items.split(",").map(s => s.trim());
 
-  const status = get("ob_status");
-  if (status) outcome.status = status.split(",").map(s => s.trim());
 
-  block[slot] = outcome;
+function renderQuestList(type) {
+  const listId = type === "main" ? "mainQuestList" : "sideQuestList";
+  const listElement = document.getElementById(listId);
+  listElement.innerHTML = "";
 
-  alert(`✅ Injected into "${pathKey}" – ${slot}`);
-  populateOutcomeTargetDropdown(selectedType, selectedKey);
+  Object.keys(questData[type]).forEach((key) => {
+    const li = document.createElement("li");
+    li.className = "flex items-center space-x-2";
+
+    const span = document.createElement("span");
+    span.textContent = key;
+    span.className = "text-white font-semibold";
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.className = "text-sm text-blue-400 hover:text-blue-200";
+    editBtn.onclick = () => openQuestEditor(type, key);
+
+    li.appendChild(span);
+    li.appendChild(editBtn);
+    listElement.appendChild(li);
+  });
 }
