@@ -56,6 +56,41 @@ async function loadQuestFile() {
   }
 }
 
+// ========== RENDER QUEST LIST ==========
+function renderQuestList() {
+  const mainList = document.getElementById("mainQuestList");
+  const sideList = document.getElementById("sideQuestList");
+  mainList.innerHTML = "";
+  sideList.innerHTML = "";
+
+  Object.keys(questData).forEach(key => {
+    const quest = questData[key];
+    const li = document.createElement("li");
+    li.className = "flex items-center space-x-2";
+
+    const label = document.createElement("span");
+    label.textContent = key;
+    label.className = "text-white font-semibold";
+
+    const tag = document.createElement("span");
+    if (quest.between) {
+      tag.textContent = "🌲 Side";
+      tag.className = "bg-yellow-600 text-xs text-black px-1 py-0.5 rounded";
+    }
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.className = "text-sm text-blue-400 hover:text-blue-200";
+    editBtn.onclick = () => openQuestEditor(key);
+
+    li.appendChild(label);
+    if (quest.between) li.appendChild(tag);
+    li.appendChild(editBtn);
+
+    (quest.between ? sideList : mainList).appendChild(li);
+  });
+}
+
 // ========== PREVIEW FLOW SUPPORT ==========
 function populatePreviewDropdown() {
   const select = document.getElementById("questSelect");
