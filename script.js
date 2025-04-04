@@ -143,6 +143,13 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   alert("✅ Both quest files pushed to GitHub.");
 });
 
+// Make functions accessible to inline HTML onclick calls
+window.manualLoadQuests = manualLoadQuests;
+window.saveQuest = saveQuest;
+window.injectOutcome = injectOutcome;
+window.createQuest = createQuest;
+
+
 // ========== OUTCOME INJECTOR ==========
 function populateOutcomeTargetDropdown(type, key) {
   const quest = questData[type][key];
