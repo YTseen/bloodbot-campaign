@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧸 BloodBot Architect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white font-mono p-6">
+  <h1 class="text-3xl text-red-500 font-bold mb-2">🍗 BloodBot Architect</h1>
+  <p class="text-sm text-gray-400 mb-4">
+    Live editing from <code>/data/quest_data.json</code> and <code>/data/side_quest_template.json</code> using your GitHub token.
+  </p>
+
+<!-- Manual Load Button -->
+<button onclick="manualLoadQuests()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded mb-6 text-white text-sm">
+  🔄 Load Quests from GitHub
+</button>
+
+  <!-- Quest Management -->
+  <div class="mb-6">
+    <h2 class="text-xl text-white mb-1">📘 Main Quests</h2>
+    <button onclick="createQuest('main')" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 text-sm rounded mb-2">
+      ➕ Add Quest
+    </button>
+    <ul id="mainQuestList" class="space-y-1 mb-4"></ul>
+
+    <h2 class="text-xl text-white mt-6">🌲 Side Quests</h2>
+    <button onclick="createQuest('side')" class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 text-sm rounded mb-2">
+      ➕ Add Side Quest
+    </button>
+    <ul id="sideQuestList" class="space-y-1"></ul>
+  </div>
+
+  
+<!-- Quest Editor -->
+<div id="editorSection" class="hidden mt-6">
+  <h2 class="text-xl text-green-400 mb-4">✏️ Edit/Create Quest</h2>
+  
+  <label class="block text-green-300 text-sm">Quest Key (Title)</label>
+  <input id="questKey" class="w-full text-black mb-2 p-2 rounded" />
+
+  <label class="block text-green-300 text-sm">Intro</label>
+  <textarea id="questIntro" class="w-full text-black mb-2 p-2 rounded h-32"></textarea>
+
+  <label class="block text-green-300 text-sm">Wrap-up Text</label>
+  <textarea id="questWrap" class="w-full text-black mb-2 p-2 rounded h-32"></textarea>
+
+  <label class="block text-green-300 text-sm">Side Quest? (Between quests, use pipe | to separate)</label>
+  <input id="sideQuestBetween" class="w-full text-black mb-4 p-2 rounded" placeholder="e.g. Quest 1 | Quest 2" />
+
+  <div>
+    <h3 class="text-green-400 text-lg mb-1">Paths</h3>
+    <div id="pathsContainer" class="space-y-4 bg-gray-900 p-2 rounded border border-gray-700"></div>
+    <button onclick="addPathBlock()" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 mt-2 rounded text-white">➕ Add Path</button>
+  </div>
+
+  <button onclick="saveQuestToGitHub()" class="bg-green-600 hover:bg-green-500 px-4 py-2 mt-4 rounded text-white">
+    💾 Save Quest to GitHub
+  </button>
+</div>
+
+    <button onclick="saveQuest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">
+      📀 Save Quest
+    </button>
+  </div>
+
+  <!-- Outcome Builder -->
+  <hr class="my-10 border-gray-700" />
+  <h2 class="text-xl text-yellow-300 mb-3">🔬 Outcome Builder</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <label class="block text-green-300 text-sm mb-1">📜 Narrative Text</label>
+      <textarea id="ob_text" class="w-full bg-gray-900 p-2 rounded text-white mb-4" rows="4" placeholder="Outcome description..."></textarea>
+
+      <label class="block text-green-300 text-sm mb-1">🎯 Target Outcome</label>
+      <select id="ob_target" class="w-full bg-gray-800 text-white p-2 rounded mb-4">
+        <option disabled selected>Choose a Path & Outcome Type…</option>
+      </select>
+
+      <button onclick="injectOutcome()" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded text-black font-bold w-full">
+        🧬 Inject Outcome
+      </button>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-green-300 text-sm mb-1">🏷️ Title</label>
+        <input id="ob_title" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="Optional outcome title..." />
+      </div>
+
+      <div>
+        <label class="block text-green-300 text-sm mb-1">📦 Items (comma-separated)</label>
+        <input id="ob_items" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="e.g. Sword, Shield" />
+      </div>
+
+      <div>
+        <label class="block text-green-300 text-sm mb-1">🧠 Status Effects (comma-separated)</label>
+        <input id="ob_status" class="w-full bg-gray-900 p-2 rounded text-white" placeholder="e.g. Stunned, Poisoned" />
+      </div>
+
+      <div class="flex items-center space-x-2 mt-2">
+        <input type="checkbox" id="ob_death" class="w-5 h-5" />
+        <label for="ob_death" class="text-sm text-red-400 font-semibold">☠️ Causes Death</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- GitHub Push -->
+  <button id="saveBtn" class="fixed top-4 right-4 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-white text-sm">
+    📀 Push to GitHub
+  </button>
+
+  <!-- Script -->
+  <script src="./script.js"></script>
+</body>
+</html>
