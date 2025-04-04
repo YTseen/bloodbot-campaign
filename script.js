@@ -337,6 +337,45 @@ function runPreview(key) {
   }
 }
 
+// === Enable drag-to-reorder paths ===
+let draggedPath = null;
+const pathsContainer = document.getElementById("pathsContainer");
+
+pathsContainer.addEventListener("dragstart", (e) => {
+  if (e.target.classList.contains("path-block")) {
+    draggedPath = e.target;
+    e.dataTransfer.effectAllowed = "move";
+  }
+});
+
+pathsContainer.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  const target = e.target.closest(".path-block");
+  if (target && target !== draggedPath) {
+    const blocks = [...pathsContainer.querySelectorAll(".path-block")];
+    const draggedIndex = blocks.indexOf(draggedPath);
+    const targetIndex = blocks.indexOf(target);
+    if (draggedIndex < targetIndex) {
+      pathsContainer.insertBefore(draggedPath, target.nextSibling);
+    } else {
+      pathsContainer.insertBefore(draggedPath, target);
+    }
+  }
+});
+
+pathsContainer.addEventListener("drop", (e) => {
+  e.preventDefault();
+  draggedPath = null;
+});
+
+// === Handle remove-path button ===
+pathsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("remove-path")) {
+    const block = e.target.closest(".path-block");
+    if (block) block.remove();
+  }
+});
+
 // === Export functions to global for HTML inline onclick handlers ===
 window.addPathBlock = addPathBlock;
 window.saveQuestToGitHub = saveQuestToGitHub;
