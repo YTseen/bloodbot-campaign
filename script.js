@@ -256,3 +256,11 @@ function runPreview(key) {
     });
   }
 }
+
+// === Export functions to global for HTML inline onclick handlers ===
+window.addPathBlock = addPathBlock;
+window.saveQuestToGitHub = saveQuestToGitHub;
+window.manualLoadQuests = manualLoadQuests;
+window.createNewQuest = createNewQuest;
+window.openQuestEditor = openQuestEditor;
+
