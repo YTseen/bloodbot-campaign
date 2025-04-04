@@ -1,4 +1,3 @@
-
 // ========== GITHUB CONFIG ==========
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
@@ -11,6 +10,10 @@ const questFilePath = "data/quest_data.json";
 
 let questData = {};
 let selectedKey = null;
+
+function autoGenerateKey(title) {
+  return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
+}
 
 // ========== LOAD QUESTS ==========
 function manualLoadQuests() {
@@ -108,21 +111,24 @@ function createPathBlock(pathKey = "", pathData = {}) {
       <span class="text-xs text-gray-400">↕ Drag to reorder</span>
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
     </div>
-    <input class="path-key w-full my-1 p-1 rounded" placeholder="Path Key" value="${pathKey}"/>
-    <input class="path-title w-full my-1 p-1 rounded" placeholder="Title" value="${pathData.title || ""}"/>
-    <input class="path-desc w-full my-1 p-1 rounded" placeholder="Description" value="${pathData.description || ""}"/>
+    <label class="text-xs text-gray-400">Path Key (used internally)</label>
+    <input class="path-key w-full my-1 p-1 rounded text-black" placeholder="Path Key" value="${pathKey}"/>
+    <label class="text-xs text-gray-400">Title</label>
+    <input class="path-title w-full my-1 p-1 rounded text-black" placeholder="Title" value="${pathData.title || ""}"/>
+    <label class="text-xs text-gray-400">Description</label>
+    <input class="path-desc w-full my-1 p-1 rounded text-black" placeholder="Description" value="${pathData.description || ""}"/>
     <h4 class="text-sm text-green-300 mt-2">Midweek - High</h4>
-    <textarea class="mid-high-text w-full p-1 rounded">${pathData.midweek?.High?.text || ""}</textarea>
-    <input class="mid-high-rewards w-full p-1 rounded" placeholder="Rewards (comma-separated)" value="${(pathData.midweek?.High?.rewards?.items || []).join(", ")}"/>
+    <textarea class="mid-high-text w-full p-1 rounded text-black">${pathData.midweek?.High?.text || ""}</textarea>
+    <input class="mid-high-rewards w-full p-1 rounded text-black" placeholder="Rewards (comma-separated)" value="${(pathData.midweek?.High?.rewards?.items || []).join(", ")}"/>
     <h4 class="text-sm text-green-300 mt-2">Midweek - Low</h4>
-    <textarea class="mid-low-text w-full p-1 rounded">${pathData.midweek?.Low?.text || ""}</textarea>
-    <input class="mid-low-penalties w-full p-1 rounded" placeholder="Penalties (comma-separated)" value="${(pathData.midweek?.Low?.penalties?.roles || []).join(", ")}"/>
+    <textarea class="mid-low-text w-full p-1 rounded text-black">${pathData.midweek?.Low?.text || ""}</textarea>
+    <input class="mid-low-penalties w-full p-1 rounded text-black" placeholder="Penalties (comma-separated)" value="${(pathData.midweek?.Low?.penalties?.roles || []).join(", ")}"/>
     <h4 class="text-sm text-green-300 mt-2">Final - Success</h4>
-    <textarea class="final-success-text w-full p-1 rounded">${pathData.final?.Success?.text || ""}</textarea>
-    <input class="final-success-rewards w-full p-1 rounded" placeholder="Rewards (comma-separated)" value="${(pathData.final?.Success?.rewards?.items || []).join(", ")}"/>
+    <textarea class="final-success-text w-full p-1 rounded text-black">${pathData.final?.Success?.text || ""}</textarea>
+    <input class="final-success-rewards w-full p-1 rounded text-black" placeholder="Rewards (comma-separated)" value="${(pathData.final?.Success?.rewards?.items || []).join(", ")}"/>
     <h4 class="text-sm text-green-300 mt-2">Final - Failure</h4>
-    <textarea class="final-failure-text w-full p-1 rounded">${pathData.final?.Failure?.text || ""}</textarea>
-    <input class="final-failure-penalties w-full p-1 rounded" placeholder="Penalties (comma-separated)" value="${(pathData.final?.Failure?.penalties?.roles || []).join(", ")}"/>
+    <textarea class="final-failure-text w-full p-1 rounded text-black">${pathData.final?.Failure?.text || ""}</textarea>
+    <input class="final-failure-penalties w-full p-1 rounded text-black" placeholder="Penalties (comma-separated)" value="${(pathData.final?.Failure?.penalties?.roles || []).join(", ")}"/>
   `;
   return div;
 }
@@ -150,12 +156,14 @@ async function saveQuestToGitHub() {
   const blocks = document.querySelectorAll("#pathsContainer > .path-block");
 
   blocks.forEach(block => {
-    const pathKey = block.querySelector(".path-key").value;
+    let pathKey = block.querySelector(".path-key").value.trim();
+    const pathTitle = block.querySelector(".path-title").value.trim();
+    if (!pathKey && pathTitle) pathKey = autoGenerateKey(pathTitle);
     if (!pathKey) return;
 
     paths[pathKey] = {
-      title: block.querySelector(".path-title").value,
-      description: block.querySelector(".path-desc").value,
+      title: pathTitle,
+      description: block.querySelector(".path-desc").value.trim(),
       midweek: {
         High: {
           text: block.querySelector(".mid-high-text").value,
@@ -333,3 +341,11 @@ function runPreview(key) {
     });
   }
 }
+
+// ========== BIND PREVIEW SELECT ==========
+document.addEventListener("DOMContentLoaded", () => {
+  const select = document.getElementById("questSelect");
+  if (select) {
+    select.onchange = () => runPreview(select.value);
+  }
+});
