@@ -163,8 +163,8 @@ function runPreview(key) {
   const finalResult = document.getElementById("finalResult");
   const wrap = document.getElementById("wrapupSection");
   const finalChoices = document.getElementById("finalChoices");
-  const scoreBoard = document.getElementById("scoreBoard");
   const midweekChoice = document.getElementById("midweekChoice");
+  const scoreBoard = document.getElementById("scoreBoard");
 
   let inventory = { items: [], roles: [], reputation: [], status: [] };
 
@@ -182,7 +182,7 @@ function runPreview(key) {
       " | 🧠 Status: " + inventory.status.join(", ");
   }
 
-  flow.classList.remove("hidden");
+  // Clear and reveal
   intro.textContent = quest.intro || "";
   pathBtns.innerHTML = "";
   outcomeFlow.classList.add("hidden");
@@ -192,6 +192,8 @@ function runPreview(key) {
   finalChoices.innerHTML = "";
   midweekChoice.innerHTML = "";
   scoreBoard.textContent = "";
+
+  flow.classList.remove("hidden");
 
   if (quest.paths) {
     Object.entries(quest.paths).forEach(([k, p]) => {
