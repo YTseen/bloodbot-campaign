@@ -1,4 +1,4 @@
-// ========== GITHUB CONFIG ========== 
+// ========== GITHUB CONFIG ==========
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
   githubToken = prompt("Enter your GitHub Token:");
@@ -43,6 +43,7 @@ function openQuestEditor(key) {
       container.appendChild(createPathBlock(pathKey, pathObj));
     });
   }
+}
 
 function createPathBlock(pathKey = "", pathData = {}) {
   const div = document.createElement("div");
@@ -145,7 +146,7 @@ function renderQuestList() {
   });
 }
 
-// ========== PREVIEW FLOW SUPPORT ==========
+// ========== PREVIEW FLOW ==========
 function populatePreviewDropdown() {
   const select = document.getElementById("questSelect");
   if (!select) return;
