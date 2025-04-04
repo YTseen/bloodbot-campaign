@@ -8,9 +8,14 @@
 </head>
 <body class="bg-black text-white font-mono p-6">
   <h1 class="text-3xl text-red-500 font-bold mb-2">🍗 BloodBot Architect</h1>
-  <p class="text-sm text-gray-400 mb-6">
+  <p class="text-sm text-gray-400 mb-4">
     Live editing from <code>/data/quest_data.json</code> and <code>/data/side_quest_template.json</code> using your GitHub token.
   </p>
+
+  <!-- Trigger GitHub Load -->
+  <button onclick="searchAndLoadQuests()" class="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded text-white text-sm mb-6">
+    🔍 Load Quests from GitHub
+  </button>
 
   <!-- Quest Management -->
   <div class="mb-6">
