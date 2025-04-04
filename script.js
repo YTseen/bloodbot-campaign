@@ -17,47 +17,20 @@ let selectedKey = null;
 
 // ========== LOAD & INIT ==========
 async function loadQuestFile(type) {
-  const fileUrl = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
-
   try {
-    const res = await fetch(fileUrl, {
-      headers: { Authorization: `token ${githubToken}` }
+    const url = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `token ${githubToken}`,
+        Accept: "application/vnd.github.v3.raw"
+      }
     });
-
-    if (!res.ok) throw new Error(`Failed to fetch ${type} quests.`);
-
-    const data = await res.json();
-    const content = atob(data.content); // decode base64
-    questData[type] = JSON.parse(content);
+    if (!res.ok) throw new Error("Failed to fetch " + type);
+    questData[type] = await res.json();
     renderQuestList(type);
-
   } catch (e) {
     alert(`❌ Failed to load ${type} quests.`);
-    console.error(e);
   }
-}
-
-loadQuestFile("main");
-loadQuestFile("side");
-
-function renderQuestList(type) {
-  const list = document.getElementById(type === "main" ? "mainQuestList" : "sideQuestList");
-  list.innerHTML = "";
-  Object.keys(questData[type]).forEach((key) => {
-    const li = document.createElement("li");
-    li.textContent = key;
-    li.className = "cursor-pointer hover:text-red-400 px-2 py-1 bg-gray-800 rounded";
-    li.onclick = () => openQuestEditor(type, key);
-    list.appendChild(li);
-  });
-}
-
-function createQuest(type) {
-  const key = prompt("Enter new quest name");
-  if (!key) return;
-  questData[type][key] = { intro: "", wrapup: { text: "" }, paths: {} };
-  renderQuestList(type);
-  openQuestEditor(type, key);
 }
 
 // ========== QUEST EDITOR ==========
