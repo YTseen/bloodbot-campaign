@@ -25,6 +25,30 @@ function createNewQuest(isSide = false) {
   document.getElementById("editorSection").classList.remove("hidden");
 }
 
+function openQuestEditor(key) {
+  selectedKey = key;
+  const quest = questData[key];
+
+  document.getElementById("editorSection").classList.remove("hidden");
+  document.getElementById("questKey").value = key;
+  document.getElementById("questIntro").value = quest.intro || "";
+  document.getElementById("questWrap").value = quest.wrapup?.text || "";
+  document.getElementById("sideQuestBetween").value = quest.between ? quest.between.join(" | ") : "";
+
+  const container = document.getElementById("pathsContainer");
+  container.innerHTML = "";
+
+  if (quest.paths) {
+    Object.entries(quest.paths).forEach(([pathKey, pathObj]) => {
+      container.appendChild(createPathBlock(pathKey, pathObj));
+    });
+  }
+}
+
+function addPathBlock() {
+  document.getElementById("pathsContainer").appendChild(createPathBlock());
+}
+
 // ========== LOAD QUESTS ==========
 function manualLoadQuests() {
   if (!githubToken) {
