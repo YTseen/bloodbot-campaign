@@ -48,6 +48,174 @@
             }
           }
         }
+      },
+      "Smuggler's Run": {
+        "title": "The Smuggler's Run",
+        "description": "Intercept an underground weapons exchange.",
+        "midweek": {
+          "High": {
+            "text": "You uncover a coded ledger and a secret tunnel.",
+            "rewards": {
+              "items": [
+                "Smuggler's Ledger"
+              ],
+              "reputation": [
+                "+Underground"
+              ]
+            }
+          },
+          "Low": {
+            "text": "A poison trap wounds one of you.",
+            "penalties": {
+              "roles": [
+                "Lingering Toxin"
+              ]
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "You secure a cache of rare weapons but get arrested in the aftermath.",
+            "rewards": {
+              "items": [
+                "Shadowfang Dagger",
+                "Tunnel Map"
+              ]
+            }
+          },
+          "Failure": {
+            "text": "The guards seize the goods and your reputation suffers.",
+            "penalties": {
+              "reputation": [
+                "City Trust -1"
+              ]
+            }
+          }
+        }
+      },
+      "Lost Girl": {
+        "title": "The Lost Girl",
+        "description": "Locate a missing merchant's daughter.",
+        "midweek": {
+          "High": {
+            "text": "You find a locket pointing toward an abandoned mill.",
+            "rewards": {
+              "items": [
+                "Girl's Locket"
+              ]
+            }
+          },
+          "Low": {
+            "text": "Public scuffle hurts your image.",
+            "penalties": {
+              "roles": [
+                "Black Eye"
+              ]
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "You rescue the girl and gain community favor.",
+            "rewards": {
+              "items": [
+                "Venom Sac"
+              ],
+              "reputation": [
+                "+Merchant Favor"
+              ]
+            }
+          },
+          "Failure": {
+            "text": "You find nothing and suspicion spreads.",
+            "penalties": {
+              "roles": [
+                "Doubtful"
+              ]
+            }
+          }
+        }
+      },
+      "Crypts Beneath": {
+        "title": "The Crypts Beneath",
+        "description": "Investigate strange noises under the arena.",
+        "midweek": {
+          "High": {
+            "text": "You discover occult markings and a broken seal.",
+            "rewards": {
+              "items": [
+                "Unholy Sigil"
+              ]
+            }
+          },
+          "Low": {
+            "text": "One of you flees into the dark.",
+            "penalties": {
+              "roles": [
+                "Paranoia"
+              ]
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "You slay the creature and claim the tunnels.",
+            "rewards": {
+              "items": [
+                "Mutant Claw",
+                "Crypt Base"
+              ]
+            }
+          },
+          "Failure": {
+            "text": "Ambush in the dark drains your strength.",
+            "penalties": {
+              "roles": [
+                "Blood Loss"
+              ]
+            }
+          }
+        }
+      },
+      "Tavern Whisper": {
+        "title": "The Tavern Whisper",
+        "description": "Uncover rebellion talk at the Bronze Belly Tavern.",
+        "midweek": {
+          "High": {
+            "text": "You intercept a ciphered message.",
+            "rewards": {
+              "items": [
+                "Cipher Fragment"
+              ]
+            }
+          },
+          "Low": {
+            "text": "You offend a noble. A fight breaks out.",
+            "penalties": {
+              "roles": [
+                "Shame Spiral"
+              ]
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "You gain names of rebel leaders.",
+            "rewards": {
+              "items": [
+                "Blackmail Dossier"
+              ]
+            }
+          },
+          "Failure": {
+            "text": "You're arrested. Garath is furious.",
+            "penalties": {
+              "roles": [
+                "Tension with Garath"
+              ]
+            }
+          }
+        }
       }
     },
     "wrapup": {
