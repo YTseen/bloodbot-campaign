@@ -22,15 +22,12 @@ async function loadQuestFile(type) {
     const res = await fetch(url, {
       headers: {
         Authorization: `token ${githubToken}`
-        // Remove Accept header, since GitHub will ignore it with a token
       }
     });
 
     if (!res.ok) throw new Error("Failed to fetch " + type);
 
     const data = await res.json();
-
-    // Decode Base64 content
     const decoded = atob(data.content);
     questData[type] = JSON.parse(decoded);
 
@@ -39,6 +36,11 @@ async function loadQuestFile(type) {
     alert(`❌ Failed to load ${type} quests.`);
     console.error(e);
   }
+}
+
+function searchAndLoadQuests() {
+  loadQuestFile("main");
+  loadQuestFile("side");
 }
 
 // ========== QUEST EDITOR ==========
