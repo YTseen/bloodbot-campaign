@@ -1,5 +1,5 @@
 
-// ========== 🔒 GITHUB SAVE SYSTEM ==========
+// ========== GITHUB CONFIG ==========
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
   githubToken = prompt("Enter your GitHub Token:");
@@ -12,7 +12,7 @@ const questFilePath = "data/quest_data.json";
 let questData = {};
 let selectedKey = null;
 
-// ========== LOAD ==========
+// ========== LOAD QUESTS ==========
 function manualLoadQuests() {
   if (!githubToken) {
     githubToken = prompt("Enter your GitHub Token:");
@@ -29,9 +29,7 @@ function manualLoadQuests() {
 async function loadQuestFile() {
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-      headers: {
-        Authorization: `token ${githubToken}`
-      }
+      headers: { Authorization: `token ${githubToken}` }
     });
 
     if (!res.ok) throw new Error("Failed to fetch quest file");
@@ -46,10 +44,9 @@ async function loadQuestFile() {
 }
 
 function renderQuestList() {
-  const listElement = document.getElementById("mainQuestList");
-  listElement.innerHTML = "";
-
-  Object.keys(questData).forEach((key) => {
+  const list = document.getElementById("mainQuestList");
+  list.innerHTML = "";
+  Object.keys(questData).forEach(key => {
     const li = document.createElement("li");
     li.className = "flex items-center space-x-2";
 
@@ -64,7 +61,7 @@ function renderQuestList() {
 
     li.appendChild(span);
     li.appendChild(editBtn);
-    listElement.appendChild(li);
+    list.appendChild(li);
   });
 }
 
@@ -77,58 +74,102 @@ function openQuestEditor(key) {
   document.getElementById("questKey").value = key;
   document.getElementById("questIntro").value = quest.intro || "";
   document.getElementById("questWrap").value = quest.wrapup?.text || "";
+  document.getElementById("sideQuestBetween").value = quest.between ? quest.between.join(" | ") : "";
 
-  const pathsContainer = document.getElementById("pathsContainer");
-  pathsContainer.innerHTML = "";
+  const container = document.getElementById("pathsContainer");
+  container.innerHTML = "";
 
   if (quest.paths) {
-    Object.entries(quest.paths).forEach(([pathKey, pathData]) => {
-      const pathDiv = document.createElement("div");
-      pathDiv.className = "border p-2 mb-2";
-
-      const label = document.createElement("label");
-      label.textContent = pathKey + ": " + pathData.description;
-      label.className = "text-sm text-purple-300";
-
-      pathDiv.appendChild(label);
-      pathsContainer.appendChild(pathDiv);
+    Object.entries(quest.paths).forEach(([pathKey, pathObj]) => {
+      container.appendChild(createPathBlock(pathKey, pathObj));
     });
-  }
-
-  if (quest.between) {
-    document.getElementById("sideQuestBetween").value = quest.between.join(" | ");
-  } else {
-    document.getElementById("sideQuestBetween").value = "";
   }
 }
 
-// ========== QUEST SAVE ==========
+function createPathBlock(pathKey, pathData = {}) {
+  const div = document.createElement("div");
+  div.className = "border p-2 bg-gray-800 rounded";
+  div.innerHTML = `
+    <input class="path-key w-full my-1 p-1 rounded" placeholder="Path Key" value="${pathKey || ""}"/>
+
+    <input class="path-title w-full my-1 p-1 rounded" placeholder="Title" value="${pathData.title || ""}"/>
+    <input class="path-desc w-full my-1 p-1 rounded" placeholder="Description" value="${pathData.description || ""}"/>
+
+    <h4 class="text-sm text-green-300 mt-2">Midweek - High</h4>
+    <textarea class="mid-high-text w-full p-1 rounded">${pathData.midweek?.High?.text || ""}</textarea>
+    <input class="mid-high-rewards w-full p-1 rounded" placeholder="Rewards (comma-separated)" value="${(pathData.midweek?.High?.rewards?.items || []).join(', ')}"/>
+
+    <h4 class="text-sm text-green-300 mt-2">Midweek - Low</h4>
+    <textarea class="mid-low-text w-full p-1 rounded">${pathData.midweek?.Low?.text || ""}</textarea>
+    <input class="mid-low-penalties w-full p-1 rounded" placeholder="Penalties (comma-separated)" value="${(pathData.midweek?.Low?.penalties?.roles || []).join(', ')}"/>
+
+    <h4 class="text-sm text-green-300 mt-2">Final - Success</h4>
+    <textarea class="final-success-text w-full p-1 rounded">${pathData.final?.Success?.text || ""}</textarea>
+    <input class="final-success-rewards w-full p-1 rounded" placeholder="Rewards (comma-separated)" value="${(pathData.final?.Success?.rewards?.items || []).join(', ')}"/>
+
+    <h4 class="text-sm text-green-300 mt-2">Final - Failure</h4>
+    <textarea class="final-failure-text w-full p-1 rounded">${pathData.final?.Failure?.text || ""}</textarea>
+    <input class="final-failure-penalties w-full p-1 rounded" placeholder="Penalties (comma-separated)" value="${(pathData.final?.Failure?.penalties?.roles || []).join(', ')}"/>
+  `;
+  return div;
+}
+
+function addPathBlock() {
+  const container = document.getElementById("pathsContainer");
+  container.appendChild(createPathBlock());
+}
+
+// ========== SAVE ==========
 async function saveQuestToGitHub() {
   const key = document.getElementById("questKey").value;
   const intro = document.getElementById("questIntro").value;
   const wrapup = document.getElementById("questWrap").value;
   const betweenRaw = document.getElementById("sideQuestBetween").value;
 
-  if (!key) {
-    alert("Quest key is required");
-    return;
-  }
+  const between = betweenRaw.trim() ? betweenRaw.split("|").map(x => x.trim()) : undefined;
 
-  const isSideQuest = betweenRaw.trim().length > 0;
-  const between = isSideQuest ? betweenRaw.split("|").map(x => x.trim()) : undefined;
+  const paths = {};
+  const blocks = document.querySelectorAll("#pathsContainer > div");
 
-  // Compose new quest
+  blocks.forEach(block => {
+    const pathKey = block.querySelector(".path-key").value;
+    if (!pathKey) return;
+
+    paths[pathKey] = {
+      title: block.querySelector(".path-title").value,
+      description: block.querySelector(".path-desc").value,
+      midweek: {
+        High: {
+          text: block.querySelector(".mid-high-text").value,
+          rewards: { items: block.querySelector(".mid-high-rewards").value.split(",").map(x => x.trim()) }
+        },
+        Low: {
+          text: block.querySelector(".mid-low-text").value,
+          penalties: { roles: block.querySelector(".mid-low-penalties").value.split(",").map(x => x.trim()) }
+        }
+      },
+      final: {
+        Success: {
+          text: block.querySelector(".final-success-text").value,
+          rewards: { items: block.querySelector(".final-success-rewards").value.split(",").map(x => x.trim()) }
+        },
+        Failure: {
+          text: block.querySelector(".final-failure-text").value,
+          penalties: { roles: block.querySelector(".final-failure-penalties").value.split(",").map(x => x.trim()) }
+        }
+      }
+    };
+  });
+
   const newQuest = {
-    intro: intro,
+    intro,
     wrapup: { text: wrapup },
-    ...(between ? { between } : {})
+    ...(between ? { between } : {}),
+    ...(Object.keys(paths).length ? { paths } : {})
   };
 
-  // Load latest file
   const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: {
-      Authorization: `token ${githubToken}`
-    }
+    headers: { Authorization: `token ${githubToken}` }
   });
   const data = await res.json();
   const decoded = atob(data.content);
@@ -137,7 +178,6 @@ async function saveQuestToGitHub() {
   json[key] = newQuest;
 
   const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
-
   const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
     method: "PUT",
     headers: {
@@ -152,10 +192,10 @@ async function saveQuestToGitHub() {
   });
 
   if (saveRes.ok) {
-    alert("✅ Quest saved to GitHub!");
-    manualLoadQuests(); // reload list
+    alert("✅ Quest saved!");
+    manualLoadQuests();
   } else {
-    alert("❌ Failed to save.");
+    alert("❌ Save failed");
     console.error(await saveRes.text());
   }
 }
