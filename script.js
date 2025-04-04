@@ -43,10 +43,40 @@ function openQuestEditor(key) {
       container.appendChild(createPathBlock(pathKey, pathObj));
     });
   }
-}
 
-function addPathBlock() {
-  document.getElementById("pathsContainer").appendChild(createPathBlock());
+function createPathBlock(pathKey = "", pathData = {}) {
+  const div = document.createElement("div");
+  div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
+  div.draggable = true;
+  div.innerHTML = `
+    <div class="flex justify-between items-center mb-1">
+      <span class="text-xs text-gray-400">↕ Drag to reorder</span>
+      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
+    </div>
+    <label class="text-xs text-gray-400">Path Key (used internally)</label>
+    <input class="path-key w-full my-1 p-1 rounded text-black" placeholder="Path Key" value="${pathKey}"/>
+    <label class="text-xs text-gray-400">Title</label>
+    <input class="path-title w-full my-1 p-1 rounded text-black" placeholder="Title" value="${pathData.title || ""}"/>
+    <label class="text-xs text-gray-400">Description</label>
+    <input class="path-desc w-full my-1 p-1 rounded text-black" placeholder="Description" value="${pathData.description || ""}"/>
+    
+    <h4 class="text-sm text-green-300 mt-2">Midweek - High</h4>
+    <textarea class="mid-high-text w-full p-1 rounded text-black">${pathData.midweek?.High?.text || ""}</textarea>
+    <input class="mid-high-rewards w-full p-1 rounded text-black" placeholder="Items, Reputation, Roles" value="${(pathData.midweek?.High?.rewards?.items || []).join(", ")}"/>
+    
+    <h4 class="text-sm text-green-300 mt-2">Midweek - Low</h4>
+    <textarea class="mid-low-text w-full p-1 rounded text-black">${pathData.midweek?.Low?.text || ""}</textarea>
+    <input class="mid-low-penalties w-full p-1 rounded text-black" placeholder="Penalties (comma-separated)" value="${(pathData.midweek?.Low?.penalties?.roles || []).join(", ")}"/>
+    
+    <h4 class="text-sm text-green-300 mt-2">Final - Success</h4>
+    <textarea class="final-success-text w-full p-1 rounded text-black">${pathData.final?.Success?.text || ""}</textarea>
+    <input class="final-success-rewards w-full p-1 rounded text-black" placeholder="Items, Reputation, Roles" value="${(pathData.final?.Success?.rewards?.items || []).join(", ")}"/>
+    
+    <h4 class="text-sm text-green-300 mt-2">Final - Failure</h4>
+    <textarea class="final-failure-text w-full p-1 rounded text-black">${pathData.final?.Failure?.text || ""}</textarea>
+    <input class="final-failure-penalties w-full p-1 rounded text-black" placeholder="Penalties (comma-separated)" value="${(pathData.final?.Failure?.penalties?.roles || []).join(", ")}"/>
+  `;
+  return div;
 }
 
 // ========== LOAD QUESTS ==========
