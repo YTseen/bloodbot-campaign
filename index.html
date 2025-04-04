@@ -75,6 +75,19 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  document.getElementById("editorBtn").onclick = () => showTab("editorTab");
+  document.getElementById("previewBtn").onclick = () => showTab("previewTab");
+
+  // Show editor on load
+  showTab("editorTab");
+</script>
 </body>
 </html>
