@@ -21,15 +21,23 @@ async function loadQuestFile(type) {
     const url = `https://api.github.com/repos/${repo}/contents/${paths[type]}`;
     const res = await fetch(url, {
       headers: {
-        Authorization: `token ${githubToken}`,
-        Accept: "application/vnd.github.v3.raw"
+        Authorization: `token ${githubToken}`
+        // Remove Accept header, since GitHub will ignore it with a token
       }
     });
+
     if (!res.ok) throw new Error("Failed to fetch " + type);
-    questData[type] = await res.json();
+
+    const data = await res.json();
+
+    // Decode Base64 content
+    const decoded = atob(data.content);
+    questData[type] = JSON.parse(decoded);
+
     renderQuestList(type);
   } catch (e) {
     alert(`❌ Failed to load ${type} quests.`);
+    console.error(e);
   }
 }
 
