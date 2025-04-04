@@ -1,0 +1,54 @@
+{
+  "Side Quest: [Template Title]": {
+    "between": [
+      "Quest 1 - The Blood Oath",
+      "Quest 2 - Shadows Rise"
+    ],
+    "intro": "[Your side quest introduction text here.]",
+    "paths": {
+      "[Path Name]": {
+        "title": "[Path Title]",
+        "description": "[Path description]",
+        "midweek": {
+          "High": {
+            "text": "[Midweek High outcome text]",
+            "rewards": {
+              "items": [],
+              "roles": [],
+              "reputation": []
+            }
+          },
+          "Low": {
+            "text": "[Midweek Low outcome text]",
+            "penalties": {
+              "items": [],
+              "roles": [],
+              "reputation": []
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "[Final Success outcome text]",
+            "rewards": {
+              "items": [],
+              "roles": [],
+              "reputation": []
+            }
+          },
+          "Failure": {
+            "text": "[Final Failure outcome text]",
+            "penalties": {
+              "items": [],
+              "roles": [],
+              "reputation": []
+            }
+          }
+        }
+      }
+    },
+    "wrapup": {
+      "text": "[Wrap-up narration goes here.]"
+    }
+  }
+}

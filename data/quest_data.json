@@ -1,0 +1,57 @@
+{
+  "Quest 1 - The Blood Oath": {
+    "intro": "🩸 QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
+    "paths": {
+      "Execution Squad": {
+        "title": "The Execution Squad",
+        "description": "Train the green recruits under Ronald's supervision.",
+        "midweek": {
+          "High": {
+            "text": "Recruits develop discipline and loyalty.",
+            "rewards": {
+              "items": [
+                "Honor Tag"
+              ],
+              "roles": [
+                "Mild Guilt"
+              ],
+              "reputation": [
+                "+Military"
+              ]
+            }
+          },
+          "Low": {
+            "text": "Training incident injures a recruit. Trust in your leadership falters.",
+            "penalties": {
+              "roles": [
+                "Mild Guilt"
+              ]
+            }
+          }
+        },
+        "final": {
+          "Success": {
+            "text": "Your squad becomes elite NPC backup in later missions.",
+            "rewards": {
+              "items": [
+                "3 Loyal Recruits",
+                "Battlefield Drill Manual"
+              ]
+            }
+          },
+          "Failure": {
+            "text": "Ronald files a critical report. Garath takes note.",
+            "penalties": {
+              "roles": [
+                "Garath's Distrust"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "wrapup": {
+      "text": "📜 **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+    }
+  }
+}
