@@ -134,7 +134,7 @@ function openQuestEditor(key) {
   document.getElementById("questWrap").value = quest.wrap || "";
   document.getElementById("sideQuestBetween").value = quest.between || "";
 
-  const paths = quest.paths || [];
+  const paths = Array.isArray(quest.paths) ? quest.paths : []; // ✅ fix
   document.getElementById("pathsContainer").innerHTML = "";
   paths.forEach(path => createPathBlock(path.key, path));
   document.getElementById("editorSection").classList.remove("hidden");
