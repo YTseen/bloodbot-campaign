@@ -27,41 +27,48 @@ function createNewQuest(isSide = false) {
 
 function createPathBlock(pathKey = "", pathData = {}) {
   const block = document.createElement("div");
-  block.className = "path-block";
+  block.className = "path-block p-2 bg-gray-800 border border-gray-700 rounded";
 
   const pathKeyInput = document.createElement("input");
   pathKeyInput.placeholder = "Path Key";
   pathKeyInput.value = pathKey;
-  pathKeyInput.className = "path-key";
+  pathKeyInput.className = "path-key w-full p-1 mb-2 rounded text-black";
 
   const pathTextInput = document.createElement("textarea");
   pathTextInput.placeholder = "Path Text";
-  pathTextInput.className = "path-text";
+  pathTextInput.className = "path-text w-full mb-2 p-1 rounded text-black h-24";
   pathTextInput.value = pathData.text || "";
 
   const pathNextInput = document.createElement("input");
   pathNextInput.placeholder = "Next Quest Key";
-  pathNextInput.className = "path-next";
+  pathNextInput.className = "path-next w-full p-1 mb-2 rounded text-black";
   pathNextInput.value = pathData.next || "";
 
   const resolutionLabel = document.createElement("label");
-  resolutionLabel.textContent = "Resolution Type:";
+  resolutionLabel.className = "block text-xs text-gray-300 mt-2";
+  resolutionLabel.textContent = "Resolution Type";
 
   const resolutionSelect = document.createElement("select");
-  resolutionSelect.className = "path-resolution";
+  resolutionSelect.className = "path-resolution w-full mt-1 p-1 rounded text-black";
   ["bo1", "dice", "vote"].forEach(opt => {
     const o = document.createElement("option");
     o.value = opt;
-    o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+    o.textContent = opt.toUpperCase();
     resolutionSelect.appendChild(o);
   });
   resolutionSelect.value = pathData.resolution || "bo1";
+
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "🗑 Remove Path";
+  removeBtn.type = "button";
+  removeBtn.className = "remove-path mt-2 bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded text-sm";
 
   block.appendChild(pathKeyInput);
   block.appendChild(pathTextInput);
   block.appendChild(pathNextInput);
   block.appendChild(resolutionLabel);
   block.appendChild(resolutionSelect);
+  block.appendChild(removeBtn);
 
   document.getElementById("pathsContainer").appendChild(block);
 }
