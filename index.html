@@ -28,7 +28,7 @@
         <ul id="mainQuestList" class="mb-6 space-y-2"></ul>
         <h2 class="text-xl mb-2">🌲 Side Quests</h2>
         <ul id="sideQuestList" class="space-y-2"></ul>
-        <button id="loadQuestsBtn" class="...">🔄 Load Quests from GitHub</button>
+        <button id="loadQuestsBtn" class="mt-6 w-full bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded text-white text-sm">🔄 Load Quests from GitHub</button>
         <button onclick="createNewQuest(false)" class="mt-2 w-full bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-white text-sm">➕ New Quest</button>
         <button onclick="createNewQuest(true)" class="mt-2 w-full bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black text-sm">🌲 New Side Quest</button>
       </div>
@@ -87,46 +87,48 @@
     showTab("editorTab");
   </script>
   <script>
-    // Fix drag + delete for dynamically added path blocks
-    document.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("pathsContainer");
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("pathsContainer");
 
-      let dragged = null;
+    document.getElementById("loadQuestsBtn").onclick = manualLoadQuests;
 
-      container.addEventListener("dragstart", (e) => {
-        if (e.target.classList.contains("path-block")) {
-          dragged = e.target;
-          e.dataTransfer.effectAllowed = "move";
-        }
-      });
+    let dragged = null;
 
-      container.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const over = e.target.closest(".path-block");
-        if (over && over !== dragged) {
-          const blocks = [...container.querySelectorAll(".path-block")];
-          const draggedIndex = blocks.indexOf(dragged);
-          const overIndex = blocks.indexOf(over);
-          if (draggedIndex < overIndex) {
-            container.insertBefore(dragged, over.nextSibling);
-          } else {
-            container.insertBefore(dragged, over);
-          }
-        }
-      });
-
-      container.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dragged = null;
-      });
-
-      container.addEventListener("click", (e) => {
-        if (e.target.classList.contains("remove-path")) {
-          const block = e.target.closest(".path-block");
-          if (block) block.remove();
-        }
-      });
+    container.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("path-block")) {
+        dragged = e.target;
+        e.dataTransfer.effectAllowed = "move";
+      }
     });
+
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const over = e.target.closest(".path-block");
+      if (over && over !== dragged) {
+        const blocks = [...container.querySelectorAll(".path-block")];
+        const draggedIndex = blocks.indexOf(dragged);
+        const overIndex = blocks.indexOf(over);
+        if (draggedIndex < overIndex) {
+          container.insertBefore(dragged, over.nextSibling);
+        } else {
+          container.insertBefore(dragged, over);
+        }
+      }
+    });
+
+    container.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dragged = null;
+    });
+
+    container.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-path")) {
+        const block = e.target.closest(".path-block");
+        if (block) block.remove();
+      }
+    });
+  });
+
   </script>
 
   <!-- ✅ MUST BE LAST THING LOADED -->
