@@ -195,6 +195,81 @@ async function saveQuestToGitHub() {
     console.error(await saveRes.text());
   }
 }
+function manualLoadQuests() {
+  if (!githubToken) {
+    githubToken = prompt("Enter your GitHub Token:");
+    if (githubToken) {
+      localStorage.setItem("githubToken", githubToken);
+    } else {
+      alert("GitHub Token is required.");
+      return;
+    }
+  }
+  loadQuestFile();
+}
+
+async function loadQuestFile() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch quest file");
+    const data = await res.json();
+    const decoded = atob(data.content);
+    questData = JSON.parse(decoded);
+    renderQuestList();
+    populatePreviewDropdown();
+  } catch (e) {
+    alert("❌ Failed to load quest data.");
+    console.error(e);
+  }
+}
+
+function renderQuestList() {
+  const mainList = document.getElementById("mainQuestList");
+  const sideList = document.getElementById("sideQuestList");
+  mainList.innerHTML = "";
+  sideList.innerHTML = "";
+
+  Object.keys(questData).forEach(key => {
+    const quest = questData[key];
+    const li = document.createElement("li");
+    li.className = "flex items-center space-x-2";
+
+    const label = document.createElement("span");
+    label.textContent = key;
+    label.className = "text-white font-semibold";
+
+    const tag = document.createElement("span");
+    if (quest.between) {
+      tag.textContent = "🌲 Side";
+      tag.className = "bg-yellow-600 text-xs text-black px-1 py-0.5 rounded";
+    }
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.className = "text-sm text-blue-400 hover:text-blue-200";
+    editBtn.onclick = () => openQuestEditor(key);
+
+    li.appendChild(label);
+    if (quest.between) li.appendChild(tag);
+    li.appendChild(editBtn);
+
+    (quest.between ? sideList : mainList).appendChild(li);
+  });
+}
+
+function populatePreviewDropdown() {
+  const select = document.getElementById("questSelect");
+  if (!select) return;
+  select.innerHTML = "";
+  Object.keys(questData).forEach(key => {
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = key;
+    select.appendChild(opt);
+  });
+}
 
 // === Export functions to global for inline HTML access ===
 window.manualLoadQuests = manualLoadQuests;
