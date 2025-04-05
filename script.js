@@ -181,4 +181,6 @@ window.manualLoadQuests = manualLoadQuests;
 window.createNewQuest = createNewQuest;
 window.saveQuestToGitHub = saveQuestToGitHub;
 window.openQuestEditor = openQuestEditor;
+window.createPathBlock = createPathBlock;
+
 
