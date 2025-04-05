@@ -139,3 +139,46 @@ function openQuestEditor(key) {
   paths.forEach(path => createPathBlock(path.key, path));
   document.getElementById("editorSection").classList.remove("hidden");
 }
+
+function manualLoadQuests() {
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: {
+      Authorization: `token ${githubToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const decoded = atob(data.content);
+      questData = JSON.parse(decoded);
+
+      const mainList = document.getElementById("mainQuestList");
+      const sideList = document.getElementById("sideQuestList");
+      mainList.innerHTML = "";
+      sideList.innerHTML = "";
+
+      Object.keys(questData).forEach(key => {
+        const quest = questData[key];
+        const li = document.createElement("li");
+        li.textContent = key;
+        li.className = "cursor-pointer hover:underline text-blue-400";
+        li.onclick = () => openQuestEditor(key);
+
+        if (quest.between) {
+          sideList.appendChild(li);
+        } else {
+          mainList.appendChild(li);
+        }
+      });
+    })
+    .catch(err => {
+      console.error("Load error:", err);
+      alert("Failed to load quests.");
+    });
+}
+
+// 👇 Expose functions to HTML
+window.manualLoadQuests = manualLoadQuests;
+window.createNewQuest = createNewQuest;
+window.saveQuestToGitHub = saveQuestToGitHub;
+window.openQuestEditor = openQuestEditor;
+
