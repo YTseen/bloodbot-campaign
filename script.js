@@ -134,7 +134,16 @@ function openQuestEditor(key) {
   document.getElementById("questWrap").value = quest.wrap || "";
   document.getElementById("sideQuestBetween").value = quest.between || "";
 
-  const paths = Array.isArray(quest.paths) ? quest.paths : []; // ✅ fix
+  // ✅ Force conversion to array if it's a single object or something else
+  let paths = quest.paths;
+  if (!Array.isArray(paths)) {
+    if (typeof paths === "object" && paths !== null) {
+      paths = Object.values(paths); // fallback if object-like
+    } else {
+      paths = [];
+    }
+  }
+
   document.getElementById("pathsContainer").innerHTML = "";
   paths.forEach(path => createPathBlock(path.key, path));
   document.getElementById("editorSection").classList.remove("hidden");
