@@ -88,47 +88,47 @@
     // Show editor by default
     showTab("editorTab");
   </script>
-<script>
-  // Fix drag + delete for dynamically added path blocks
-  document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("pathsContainer");
+  <script>
+    // Fix drag + delete for dynamically added path blocks
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("pathsContainer");
 
-    let dragged = null;
+      let dragged = null;
 
-    container.addEventListener("dragstart", (e) => {
-      if (e.target.classList.contains("path-block")) {
-        dragged = e.target;
-        e.dataTransfer.effectAllowed = "move";
-      }
-    });
-
-    container.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      const over = e.target.closest(".path-block");
-      if (over && over !== dragged) {
-        const blocks = [...container.querySelectorAll(".path-block")];
-        const draggedIndex = blocks.indexOf(dragged);
-        const overIndex = blocks.indexOf(over);
-        if (draggedIndex < overIndex) {
-          container.insertBefore(dragged, over.nextSibling);
-        } else {
-          container.insertBefore(dragged, over);
+      container.addEventListener("dragstart", (e) => {
+        if (e.target.classList.contains("path-block")) {
+          dragged = e.target;
+          e.dataTransfer.effectAllowed = "move";
         }
-      }
-    });
+      });
 
-    container.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dragged = null;
-    });
+      container.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const over = e.target.closest(".path-block");
+        if (over && over !== dragged) {
+          const blocks = [...container.querySelectorAll(".path-block")];
+          const draggedIndex = blocks.indexOf(dragged);
+          const overIndex = blocks.indexOf(over);
+          if (draggedIndex < overIndex) {
+            container.insertBefore(dragged, over.nextSibling);
+          } else {
+            container.insertBefore(dragged, over);
+          }
+        }
+      });
 
-    container.addEventListener("click", (e) => {
-      if (e.target.classList.contains("remove-path")) {
-        const block = e.target.closest(".path-block");
-        if (block) block.remove();
-      }
+      container.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dragged = null;
+      });
+
+      container.addEventListener("click", (e) => {
+        if (e.target.classList.contains("remove-path")) {
+          const block = e.target.closest(".path-block");
+          if (block) block.remove();
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
