@@ -196,4 +196,9 @@ async function saveQuestToGitHub() {
   }
 }
 
-// Leave everything else (renderQuestList, preview logic, etc.) unchanged unless needed.
+// === Export functions to global for inline HTML access ===
+window.manualLoadQuests = manualLoadQuests;
+window.saveQuestToGitHub = saveQuestToGitHub;
+window.createNewQuest = createNewQuest;
+window.addPathBlock = addPathBlock;
+window.openQuestEditor = openQuestEditor;
