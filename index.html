@@ -129,6 +129,19 @@
     });
   </script>
 
+  <!-- 🧠 Dynamic autocomplete sources -->
+<datalist id="title-list"></datalist>
+<datalist id="item-list"></datalist>
+<datalist id="status-list"></datalist>
+
+<script src="scripts.js"></script>
+<script>
+  // 🚀 Load quests + build autocomplete when the page is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    manualLoadQuests();
+  });
+</script>
+
 <!-- ✅ MUST BE LAST THING LOADED -->
 <script src="script.js"></script>
 </body>
