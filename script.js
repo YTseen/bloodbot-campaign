@@ -277,3 +277,61 @@ window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
 window.addPathBlock = addPathBlock;
 window.openQuestEditor = openQuestEditor;
+
+// Adds requirements & effects when saving path data
+function extractPathBlockData(block) {
+  let pathKey = block.querySelector(".path-key").value.trim();
+  let title = block.querySelector(".path-title").value.trim();
+  let description = block.querySelector(".path-desc").value.trim();
+  let midHighText = block.querySelector(".mid-high-text").value.trim();
+  let midLowText = block.querySelector(".mid-low-text").value.trim();
+  let finalSuccessText = block.querySelector(".final-success-text").value.trim();
+  let finalFailureText = block.querySelector(".final-failure-text").value.trim();
+
+  let requiredItems = block.querySelector(".required-items")?.value.split(",").map(x => x.trim()).filter(Boolean) || [];
+  let requiredStatus = block.querySelector(".required-status")?.value.trim() || "Any";
+  let grantsEffects = block.querySelector(".grants-effects")?.value.split(",").map(x => x.trim()).filter(Boolean) || [];
+  let removesEffects = block.querySelector(".removes-effects")?.value.split(",").map(x => x.trim()).filter(Boolean) || [];
+
+  return {
+    title,
+    description,
+    requirements: {
+      items: requiredItems,
+      status: requiredStatus
+    },
+    effects: {
+      grants: grantsEffects,
+      removes: removesEffects
+    },
+    midweek: {
+      High: { text: midHighText },
+      Low: { text: midLowText }
+    },
+    final: {
+      Success: { text: finalSuccessText },
+      Failure: { text: finalFailureText }
+    }
+  };
+}
+
+// Optional: when loading quests, you can restore these fields from JSON here too.
+
+// Inserts quest between two other quests (between[0] and between[1])
+function insertQuestBetween(existingData, newQuestKey, newQuestData, betweenArray) {
+  if (!betweenArray || betweenArray.length !== 2) return { ...existingData, [newQuestKey]: newQuestData };
+  const newData = {};
+  let inserted = false;
+
+  for (const [key, value] of Object.entries(existingData)) {
+    newData[key] = value;
+    if (key === betweenArray[0] && !inserted) {
+      newData[newQuestKey] = newQuestData;
+      inserted = true;
+    }
+  }
+
+  if (!inserted) newData[newQuestKey] = newQuestData;
+  return newData;
+}
+
