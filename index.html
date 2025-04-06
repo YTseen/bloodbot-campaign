@@ -134,7 +134,16 @@
     });
   </script>
 
-  <!-- === FINAL SCRIPT === -->
+    <!-- === FINAL SCRIPT === -->
   <script src="scripts.js" type="module"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof manualLoadQuests === "function") {
+        manualLoadQuests();
+      } else {
+        console.warn("⚠️ manualLoadQuests not ready at DOMContentLoaded.");
+      }
+    });
+  </script>
 </body>
 </html>
