@@ -15,6 +15,23 @@ function autoGenerateKey(title) {
   return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
 }
 
+function manualLoadQuests() {
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const decoded = atob(data.content);
+      questData = JSON.parse(decoded);
+      renderQuestList();
+      populatePreviewDropdown();
+    })
+    .catch(err => {
+      alert("❌ Failed to load quests");
+      console.error(err);
+    });
+}
+
 function createNewQuest(isSide = false) {
   selectedKey = "Quest " + Date.now();
   document.getElementById("questKey").value = selectedKey;
@@ -254,10 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (block) block.remove();
     }
   });
-});
 
-// === Autocomplete Initialization & Load Quests ===
-window.addEventListener("DOMContentLoaded", () => {
+  // ✅ Auto-load quests ONLY AFTER everything is defined
   manualLoadQuests();
 });
 
