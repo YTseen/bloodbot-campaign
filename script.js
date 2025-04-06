@@ -143,7 +143,6 @@ async function saveQuestToGitHub() {
 
     // Inject enhanced field data
     const requiresItems = block.querySelector(".requires-items")?.value || "";
-    const requiresStatus = block.querySelector(".requires-status")?.value || "";
     const grantsEffects = block.querySelector(".grants-effects")?.value || "";
     const removesEffects = block.querySelector(".removes-effects")?.value || "";
 
@@ -152,7 +151,6 @@ async function saveQuestToGitHub() {
     if (!paths[pathKey].penalties) paths[pathKey].penalties = {};
 
     paths[pathKey].requires.items = requiresItems.split(",").map(x => x.trim()).filter(Boolean);
-    paths[pathKey].requires.status = requiresStatus.trim();
     paths[pathKey].rewards.effects = grantsEffects.split(",").map(x => x.trim()).filter(Boolean);
     paths[pathKey].penalties.effects = removesEffects.split(",").map(x => x.trim()).filter(Boolean);
   });
