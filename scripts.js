@@ -283,7 +283,7 @@ async function saveQuestToGitHub() {
     alert("❌ Save failed");
     console.error(await saveRes.text());
   }
-      }
+    
   } catch (err) {
     alert("❌ Error saving quest");
     console.error(err);
