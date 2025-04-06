@@ -256,6 +256,93 @@ async function saveQuestToGitHub() {
   }
 }
 
+// === Preview Logic ===
+function renderPreview() {
+  const select = document.getElementById("previewQuestSelect");
+  const questKey = select.value;
+  const quest = questData[questKey];
+  if (!quest) return;
+
+  const flow = document.getElementById("questFlow");
+  const intro = document.getElementById("introSection");
+  const pathButtons = document.getElementById("pathButtons");
+  const midweekChoice = document.getElementById("midweekChoice");
+  const outcomeFlow = document.getElementById("outcomeFlow");
+  const midweekResult = document.getElementById("midweekResult");
+  const finalChoices = document.getElementById("finalChoices");
+  const finalResult = document.getElementById("finalResult");
+  const wrapup = document.getElementById("wrapupSection");
+
+  flow.classList.remove("hidden");
+  intro.textContent = quest.intro || "";
+  pathButtons.innerHTML = "";
+  midweekChoice.innerHTML = "";
+  outcomeFlow.classList.add("hidden");
+  midweekResult.innerHTML = "";
+  finalChoices.innerHTML = "";
+  finalResult.innerHTML = "";
+  wrapup.innerHTML = "";
+
+  if (!quest.paths) return;
+
+  Object.entries(quest.paths).forEach(([key, path]) => {
+    const btn = document.createElement("button");
+    btn.className = "bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded";
+    btn.textContent = path.title || key;
+    btn.onclick = () => {
+      midweekChoice.innerHTML = "";
+      outcomeFlow.classList.add("hidden");
+
+      const highBtn = document.createElement("button");
+      highBtn.className = "bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded";
+      highBtn.textContent = "Midweek: High";
+      highBtn.onclick = () => {
+        midweekResult.innerHTML = path.midweek?.High?.text || "⚠️ No result";
+        renderFinalChoices(path);
+        outcomeFlow.classList.remove("hidden");
+      };
+
+      const lowBtn = document.createElement("button");
+      lowBtn.className = "bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded";
+      lowBtn.textContent = "Midweek: Low";
+      lowBtn.onclick = () => {
+        midweekResult.innerHTML = path.midweek?.Low?.text || "⚠️ No result";
+        renderFinalChoices(path);
+        outcomeFlow.classList.remove("hidden");
+      };
+
+      midweekChoice.appendChild(highBtn);
+      midweekChoice.appendChild(lowBtn);
+    };
+    pathButtons.appendChild(btn);
+  });
+
+  function renderFinalChoices(path) {
+    finalChoices.innerHTML = "";
+
+    const successBtn = document.createElement("button");
+    successBtn.className = "bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded";
+    successBtn.textContent = "Final: Success";
+    successBtn.onclick = () => {
+      finalResult.innerHTML = path.final?.Success?.text || "✅ No final success text.";
+      wrapup.innerHTML = quest.wrapup?.text || "";
+    };
+
+    const failBtn = document.createElement("button");
+    failBtn.className = "bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded";
+    failBtn.textContent = "Final: Failure";
+    failBtn.onclick = () => {
+      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text.";
+      wrapup.innerHTML = quest.wrapup?.text || "";
+    };
+
+    finalChoices.appendChild(successBtn);
+    finalChoices.appendChild(failBtn);
+  }
+}
+
+document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
+
 // Export to HTML
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
