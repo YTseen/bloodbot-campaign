@@ -1,6 +1,9 @@
 {
   "Quest 1 - The Blood Oath": {
-    "intro": "ÃÂ°ÃÂÃÂ©ÃÂ¸ QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
+    "intro": "ÃÂÃÂ°ÃÂÃÂÃÂÃÂ©ÃÂÃÂ¸ QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
+    "wrapup": {
+      "text": "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+    },
     "paths": {
       "Execution Squad": {
         "title": "The Execution Squad",
@@ -11,12 +14,6 @@
             "rewards": {
               "items": [
                 "Honor Tag"
-              ],
-              "roles": [
-                "Mild Guilt"
-              ],
-              "reputation": [
-                "+Military"
               ]
             }
           },
@@ -47,6 +44,23 @@
               ]
             }
           }
+        },
+        "requires": {
+          "items": [
+            "sword",
+            "shield"
+          ],
+          "status": "Plagued"
+        },
+        "rewards": {
+          "effects": [
+            "Healthy"
+          ]
+        },
+        "penalties": {
+          "effects": [
+            "Plagued"
+          ]
         }
       },
       "Smuggler's Run": {
@@ -58,9 +72,6 @@
             "rewards": {
               "items": [
                 "Smuggler's Ledger"
-              ],
-              "reputation": [
-                "+Underground"
               ]
             }
           },
@@ -86,11 +97,21 @@
           "Failure": {
             "text": "The guards seize the goods and your reputation suffers.",
             "penalties": {
-              "reputation": [
-                "City Trust -1"
+              "roles": [
+                ""
               ]
             }
           }
+        },
+        "requires": {
+          "items": [],
+          "status": ""
+        },
+        "rewards": {
+          "effects": []
+        },
+        "penalties": {
+          "effects": []
         }
       },
       "Lost Girl": {
@@ -120,9 +141,6 @@
             "rewards": {
               "items": [
                 "Venom Sac"
-              ],
-              "reputation": [
-                "+Merchant Favor"
               ]
             }
           },
@@ -134,6 +152,16 @@
               ]
             }
           }
+        },
+        "requires": {
+          "items": [],
+          "status": ""
+        },
+        "rewards": {
+          "effects": []
+        },
+        "penalties": {
+          "effects": []
         }
       },
       "Crypts Beneath": {
@@ -175,6 +203,16 @@
               ]
             }
           }
+        },
+        "requires": {
+          "items": [],
+          "status": ""
+        },
+        "rewards": {
+          "effects": []
+        },
+        "penalties": {
+          "effects": []
         }
       },
       "Tavern Whisper": {
@@ -215,17 +253,24 @@
               ]
             }
           }
+        },
+        "requires": {
+          "items": [],
+          "status": ""
+        },
+        "rewards": {
+          "effects": []
+        },
+        "penalties": {
+          "effects": []
         }
       }
-    },
-    "wrapup": {
-      "text": "ÃÂ°ÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     }
   },
   "Quest 1 - The Blood Oath 111": {
     "intro": "SSSSSSSSS",
     "wrapup": {
-      "text": "Ã°ÂÂÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+      "text": "ÃÂ°ÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     },
     "paths": {
       "Execution Squad": {
