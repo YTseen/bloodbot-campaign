@@ -16,7 +16,7 @@
 
   <div class="flex gap-4 mb-6">
     <button id="editorBtn" class="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded">🛠 Editor</button>
-    <button id="previewBtn" class="bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded">🎮 Preview</button>
+    <button id="previewBtn" class="bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded">🍾 Preview</button>
   </div>
 
   <!-- === EDITOR TAB === -->
@@ -53,7 +53,7 @@
             <button onclick="addPathBlock()" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 mt-2 rounded text-white">➕ Add Path</button>
           </div>
 
-          <button onclick="saveQuestToGitHub()" class="bg-green-600 hover:bg-green-500 px-4 py-2 mt-4 rounded text-white w-full">🗵 Save Quest to GitHub</button>
+          <button onclick="saveQuestToGitHub()" class="bg-green-600 hover:bg-green-500 px-4 py-2 mt-4 rounded text-white w-full">🕵 Save Quest to GitHub</button>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
 
   <!-- === PREVIEW TAB === -->
   <div id="previewTab" class="tab hidden">
-    <h2 class="text-2xl text-cyan-400 mb-4">🎮 Quest Flow Preview</h2>
+    <h2 class="text-2xl text-cyan-400 mb-4">🍾 Quest Flow Preview</h2>
     <select id="previewQuestSelect" class="text-black p-2 mb-4 rounded"></select>
     <div id="questFlow" class="bg-gray-800 border border-gray-700 rounded p-4 space-y-4 hidden">
       <div class="bg-gray-700 p-3 rounded">
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  <!-- === INTERACTIVE LOGIC === -->
+  <!-- === LOGIC === -->
   <script>
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
@@ -86,7 +86,6 @@
     showTab("editorTab");
   </script>
 
-  <!-- === PATH BLOCK INTERACTIONS === -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const container = document.getElementById("pathsContainer");
@@ -124,7 +123,7 @@
     });
   </script>
 
-  <!-- === AUTOCOMPLETE SOURCES === -->
+  <!-- === AUTOCOMPLETE === -->
   <datalist id="title-list"></datalist>
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
@@ -135,7 +134,7 @@
     });
   </script>
 
-  <!-- ✅ SCRIPTS.JS SHOULD CONTAIN ALL LOGIC -->
+  <!-- === FINAL SCRIPT === -->
   <script src="scripts.js" type="module"></script>
 </body>
 </html>
