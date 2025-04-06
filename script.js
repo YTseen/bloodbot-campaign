@@ -115,8 +115,7 @@ async function saveQuestToGitHub() {
     const pathTitle = block.querySelector(".path-title").value.trim();
     if (!pathKey && pathTitle) pathKey = autoGenerateKey(pathTitle);
     if (!pathKey) return;
-    const requiresStatus = block.querySelector(".requires-status")?.value.trim() || "Any";
-
+    
     paths[pathKey] = {
       title: pathTitle,
       description: block.querySelector(".path-desc").value.trim(),
