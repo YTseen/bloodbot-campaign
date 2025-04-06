@@ -289,6 +289,22 @@ async function saveQuestToGitHub() {
     console.error(err);
   }  // ←✅ ADD THIS CLOSING BRACE!
 
+  function manualLoadQuests() {
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const decoded = atob(data.content);
+      questData = JSON.parse(decoded);
+      
+    })
+    .catch(err => {
+      alert("❌ Failed to load quests");
+      console.error(err);
+    });
+}
+
 // === Export functions to global for inline HTML access ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
@@ -352,3 +368,31 @@ function insertQuestBetween(existingData, newQuestKey, newQuestData, betweenArra
   if (!inserted) newData[newQuestKey] = newQuestData;
   return newData;
 }
+
+  function renderQuestList() {
+  const questList = document.getElementById("questList");
+  if (!questList) return;
+  questList.innerHTML = "";
+
+  Object.keys(questData).forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "bg-blue-700 hover:bg-blue-600 text-white rounded px-3 py-1 mr-2 mb-2";
+    btn.textContent = key;
+    btn.onclick = () => openQuestEditor(key);
+    questList.appendChild(btn);
+  });
+}
+
+function populatePreviewDropdown() {
+  const dropdown = document.getElementById("previewQuestSelect");
+  if (!dropdown) return;
+  dropdown.innerHTML = "";
+
+  Object.keys(questData).forEach(key => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    dropdown.appendChild(option);
+  });
+}
+
