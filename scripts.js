@@ -55,7 +55,9 @@ function createPathBlock(pathKey = "", pathData = {}) {
   ];
 
   outcomes.forEach(({ label, key }) => {
-    const step = pathData?.[key.includes("midweek") ? "midweek" : "final"]?.[key.split(/(?=[A-Z])/)[1]] || {};
+    const stepKey = key.replace("midweek", "midweek.").replace("final", "final.");
+    const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
+
     const block = document.createElement("details");
     block.className = "bg-gray-700 p-2 rounded mt-3";
     block.innerHTML = `
@@ -99,7 +101,7 @@ function openQuestEditor(key) {
   document.getElementById("questKey").value = key;
   document.getElementById("questIntro").value = quest.intro || "";
   document.getElementById("questWrap").value = quest.wrapup?.text || "";
-  document.getElementById("sideQuestBetween").value = quest.between?.join(" | ") || "";
+  document.getElementById("sideQuestBetween").value = quest.between ? quest.between.join(" | ") : "";
   const container = document.getElementById("pathsContainer");
   container.innerHTML = "";
 
@@ -112,6 +114,7 @@ function openQuestEditor(key) {
 
 function renderQuestList() {
   const questList = document.getElementById("questList");
+  if (!questList) return;
   questList.innerHTML = "";
   Object.keys(questData).forEach(key => {
     const btn = document.createElement("button");
@@ -124,6 +127,7 @@ function renderQuestList() {
 
 function populatePreviewDropdown() {
   const dropdown = document.getElementById("previewQuestSelect");
+  if (!dropdown) return;
   dropdown.innerHTML = "";
   Object.keys(questData).forEach(key => {
     const option = document.createElement("option");
@@ -193,7 +197,7 @@ function renderPreview() {
     successBtn.className = "bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded";
     successBtn.textContent = "Final: Success";
     successBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Success?.text || "✅ No success text";
+      finalResult.innerHTML = path.final?.Success?.text || "✅ No final success text.";
       wrapup.innerHTML = quest.wrapup?.text || "";
     };
 
@@ -201,7 +205,7 @@ function renderPreview() {
     failBtn.className = "bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded";
     failBtn.textContent = "Final: Failure";
     failBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text";
+      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text.";
       wrapup.innerHTML = quest.wrapup?.text || "";
     };
 
@@ -212,7 +216,52 @@ function renderPreview() {
 
 document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
 
-// Export functions to global scope
+// === DOM Drag & Drop Logic for Path Blocks ===
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("pathsContainer");
+  let dragged = null;
+
+  container.addEventListener("dragstart", (e) => {
+    if (e.target.classList.contains("path-block")) {
+      dragged = e.target;
+      e.dataTransfer.effectAllowed = "move";
+    }
+  });
+
+  container.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    const over = e.target.closest(".path-block");
+    if (over && over !== dragged) {
+      const blocks = [...container.querySelectorAll(".path-block")];
+      const draggedIndex = blocks.indexOf(dragged);
+      const overIndex = blocks.indexOf(over);
+      if (draggedIndex < overIndex) {
+        container.insertBefore(dragged, over.nextSibling);
+      } else {
+        container.insertBefore(dragged, over);
+      }
+    }
+  });
+
+  container.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dragged = null;
+  });
+
+  container.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-path")) {
+      const block = e.target.closest(".path-block");
+      if (block) block.remove();
+    }
+  });
+});
+
+// === Autocomplete Initialization & Load Quests ===
+window.addEventListener("DOMContentLoaded", () => {
+  manualLoadQuests();
+});
+
+// === Expose Functions to Window for Inline HTML ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
