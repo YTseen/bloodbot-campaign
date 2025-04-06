@@ -15,129 +15,122 @@ function autoGenerateKey(title) {
   return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
 }
 
-function manualLoadQuests() {
-  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  })
-    .then(res => res.json())
-    .then(data => {
-      const decoded = atob(data.content);
-      questData = JSON.parse(decoded);
-      renderQuestList();
-      populatePreviewDropdown();
-    })
-    .catch(err => {
-      alert("❌ Failed to load quests");
-      console.error(err);
-    });
+function createNewQuest(isSide = false) {
+  selectedKey = "Quest " + Date.now();
+  document.getElementById("questKey").value = selectedKey;
+  document.getElementById("questIntro").value = "";
+  document.getElementById("questWrap").value = "";
+  document.getElementById("sideQuestBetween").value = isSide ? "Quest 1 | Quest 2" : "";
+  document.getElementById("pathsContainer").innerHTML = "";
+  document.getElementById("editorSection").classList.remove("hidden");
 }
 
-async function saveQuestToGitHub() {
-  const key = document.getElementById("questKey").value;
-  const intro = document.getElementById("questIntro").value;
-  const wrapup = document.getElementById("questWrap").value;
-  const betweenRaw = document.getElementById("sideQuestBetween").value;
-  const between = betweenRaw.trim() ? betweenRaw.split("|").map(x => x.trim()) : undefined;
+function createPathBlock(pathKey = "", pathData = {}) {
+  const div = document.createElement("div");
+  div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
+  div.draggable = true;
 
-  const paths = {};
-  const blocks = document.querySelectorAll("#pathsContainer > .path-block");
+  div.innerHTML = `
+    <div class="flex justify-between items-center mb-1">
+      <span class="text-xs text-gray-400">↕ Drag to reorder</span>
+      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
+    </div>
 
-  blocks.forEach(block => {
-    let pathKey = autoGenerateKey(Date.now().toString());
-    const requiresTitles = block.querySelector(".requires-titles-input")?.value || "";
-    const requiresItems = block.querySelector(".requires-items-input")?.value || "";
-    const requiresStatus = block.querySelector(".requires-status-input")?.value || "Any";
+    <details class="mb-2">
+      <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
+      <label class="text-xs text-gray-400">Required Titles:</label>
+      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Items:</label>
+      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Status:</label>
+      <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || "Any"}" />
+    </details>
+  `;
 
-    const pathData = {
-      requires: {
-        titles: requiresTitles.split(",").map(x => x.trim()).filter(Boolean),
-        items: requiresItems.split(",").map(x => x.trim()).filter(Boolean),
-        status: requiresStatus
-      },
-      midweek: {},
-      final: {}
-    };
+  const outcomes = [
+    { label: "Midweek - High", key: "midweekHigh" },
+    { label: "Midweek - Low", key: "midweekLow" },
+    { label: "Final - Success", key: "finalSuccess" },
+    { label: "Final - Failure", key: "finalFailure" }
+  ];
 
-    const outcomes = [
-      { step: "High", blockKey: "midweekHigh" },
-      { step: "Low", blockKey: "midweekLow" },
-      { step: "Success", blockKey: "finalSuccess" },
-      { step: "Failure", blockKey: "finalFailure" }
-    ];
+  outcomes.forEach(({ label, key }) => {
+    const step = pathData?.[key.includes("midweek") ? "midweek" : "final"]?.[key.split(/(?=[A-Z])/)[1]] || {};
+    const block = document.createElement("details");
+    block.className = "bg-gray-700 p-2 rounded mt-3";
+    block.innerHTML = `
+      <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
+      <textarea class="${key}-text w-full p-1 rounded text-black mt-2">${step.text || ""}</textarea>
 
-    outcomes.forEach(({ step, blockKey }) => {
-      const text = block.querySelector(`.${blockKey}-text`)?.value || "";
-      const grantItems = block.querySelector(`.${blockKey}-grant-items`)?.value || "";
-      const grantStatus = block.querySelector(`.${blockKey}-grant-status`)?.value || "";
-      const grantTitles = block.querySelector(`.${blockKey}-grant-titles`)?.value || "";
-      const removeItems = block.querySelector(`.${blockKey}-remove-items`)?.value || "";
-      const removeStatus = block.querySelector(`.${blockKey}-remove-status`)?.value || "";
-      const removeTitles = block.querySelector(`.${blockKey}-remove-titles`)?.value || "";
-      const requiresStepItems = block.querySelector(`.${blockKey}-requires-items`)?.value || "";
-      const requiresStepStatus = block.querySelector(`.${blockKey}-requires-status`)?.value || "Any";
+      <label class="text-xs text-pink-300">Grant Items:</label>
+      <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Grant Status:</label>
+      <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Grant Titles:</label>
+      <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
 
-      pathData[blockKey.includes("midweek") ? "midweek" : "final"][step] = {
-        text,
-        requires: {
-          items: requiresStepItems.split(",").map(x => x.trim()).filter(Boolean),
-          status: requiresStepStatus
-        },
-        effects: {
-          grant_items: grantItems.split(",").map(x => x.trim()).filter(Boolean),
-          grant_status: grantStatus.split(",").map(x => x.trim()).filter(Boolean),
-          grant_titles: grantTitles.split(",").map(x => x.trim()).filter(Boolean),
-          remove_items: removeItems.split(",").map(x => x.trim()).filter(Boolean),
-          remove_status: removeStatus.split(",").map(x => x.trim()).filter(Boolean),
-          remove_titles: removeTitles.split(",").map(x => x.trim()).filter(Boolean)
-        }
-      };
-    });
+      <label class="text-xs text-pink-300">Remove Items:</label>
+      <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Remove Status:</label>
+      <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Remove Titles:</label>
+      <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
 
-    paths[pathKey] = pathData;
+      <label class="text-xs text-gray-400">Required Items:</label>
+      <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Status:</label>
+      <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
+    `;
+    div.appendChild(block);
   });
 
-  const newQuest = {
-    intro,
-    wrapup: { text: wrapup },
-    ...(between ? { between } : {}),
-    ...(Object.keys(paths).length ? { paths } : {})
-  };
+  return div;
+}
 
-  try {
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-      headers: { Authorization: `token ${githubToken}` }
+function addPathBlock() {
+  const container = document.getElementById("pathsContainer");
+  container.appendChild(createPathBlock());
+}
+
+function openQuestEditor(key) {
+  selectedKey = key;
+  const quest = questData[key];
+  document.getElementById("editorSection").classList.remove("hidden");
+  document.getElementById("questKey").value = key;
+  document.getElementById("questIntro").value = quest.intro || "";
+  document.getElementById("questWrap").value = quest.wrapup?.text || "";
+  document.getElementById("sideQuestBetween").value = quest.between?.join(" | ") || "";
+  const container = document.getElementById("pathsContainer");
+  container.innerHTML = "";
+
+  if (quest.paths) {
+    Object.entries(quest.paths).forEach(([pathKey, pathObj]) => {
+      container.appendChild(createPathBlock(pathKey, pathObj));
     });
-    const data = await res.json();
-    const decoded = atob(data.content);
-    const json = JSON.parse(decoded);
-
-    json[key] = newQuest;
-
-    const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
-    const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${githubToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: `Save quest ${key}`,
-        content: updatedContent,
-        sha: data.sha
-      })
-    });
-
-    if (saveRes.ok) {
-      alert("✅ Quest saved!");
-      manualLoadQuests();
-    } else {
-      alert("❌ Save failed");
-      console.error(await saveRes.text());
-    }
-  } catch (err) {
-    alert("❌ Error saving quest");
-    console.error(err);
   }
+}
+
+function renderQuestList() {
+  const questList = document.getElementById("questList");
+  questList.innerHTML = "";
+  Object.keys(questData).forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "bg-blue-700 hover:bg-blue-600 text-white rounded px-3 py-1 mr-2 mb-2";
+    btn.textContent = key;
+    btn.onclick = () => openQuestEditor(key);
+    questList.appendChild(btn);
+  });
+}
+
+function populatePreviewDropdown() {
+  const dropdown = document.getElementById("previewQuestSelect");
+  dropdown.innerHTML = "";
+  Object.keys(questData).forEach(key => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    dropdown.appendChild(option);
+  });
 }
 
 function renderPreview() {
@@ -200,7 +193,7 @@ function renderPreview() {
     successBtn.className = "bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded";
     successBtn.textContent = "Final: Success";
     successBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Success?.text || "✅ No final success text.";
+      finalResult.innerHTML = path.final?.Success?.text || "✅ No success text";
       wrapup.innerHTML = quest.wrapup?.text || "";
     };
 
@@ -208,7 +201,7 @@ function renderPreview() {
     failBtn.className = "bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded";
     failBtn.textContent = "Final: Failure";
     failBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text.";
+      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text";
       wrapup.innerHTML = quest.wrapup?.text || "";
     };
 
@@ -219,6 +212,7 @@ function renderPreview() {
 
 document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
 
+// Export functions to global scope
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
