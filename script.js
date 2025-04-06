@@ -25,6 +25,7 @@ function createNewQuest(isSide = false) {
   document.getElementById("editorSection").classList.remove("hidden");
 }
 
+// === Refactored createPathBlock ===
 function createPathBlock(pathKey = "", pathData = {}) {
   const div = document.createElement("div");
   div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
@@ -34,43 +35,106 @@ function createPathBlock(pathKey = "", pathData = {}) {
       <span class="text-xs text-gray-400">↕ Drag to reorder</span>
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
     </div>
-    <label class="text-xs text-gray-400">Path Key</label>
-    <input class="path-key w-full my-1 p-1 rounded text-black" value="${pathKey}"/>
-    <label class="text-xs text-gray-400">Title</label>
-    <input class="path-title w-full my-1 p-1 rounded text-black" value="${pathData.title || ""}"/>
-    <label class="text-xs text-gray-400">Description</label>
-    <input class="path-desc w-full my-1 p-1 rounded text-black" value="${pathData.description || ""}"/>
-    <h4 class="text-sm text-green-300 mt-2">Midweek - High</h4>
-    <textarea class="mid-high-text w-full p-1 rounded text-black">${pathData.midweek?.High?.text || ""}</textarea>
-    <input class="mid-high-rewards w-full p-1 rounded text-black" value="${(pathData.midweek?.High?.rewards?.items || []).join(", ")}"/>
-    <h4 class="text-sm text-green-300 mt-2">Midweek - Low</h4>
-    <textarea class="mid-low-text w-full p-1 rounded text-black">${pathData.midweek?.Low?.text || ""}</textarea>
-    <input class="mid-low-penalties w-full p-1 rounded text-black" value="${(pathData.midweek?.Low?.penalties?.roles || []).join(", ")}"/>
-    <h4 class="text-sm text-green-300 mt-2">Final - Success</h4>
-    <textarea class="final-success-text w-full p-1 rounded text-black">${pathData.final?.Success?.text || ""}</textarea>
-    <input class="final-success-rewards w-full p-1 rounded text-black" value="${(pathData.final?.Success?.rewards?.items || []).join(", ")}"/>
-    <h4 class="text-sm text-green-300 mt-2">Final - Failure</h4>
-    <textarea class="final-failure-text w-full p-1 rounded text-black">${pathData.final?.Failure?.text || ""}</textarea>
-    <input class="final-failure-penalties w-full p-1 rounded text-black" value="${(pathData.final?.Failure?.penalties?.roles || []).join(", ")}"/>
+        <label class="text-xs text-pink-300">Grant Titles:</label>
+    <input class="grant-titles-input w-full p-1 rounded text-black" list="title-list" />
+
+    <label class="text-xs text-pink-300">Grant Items:</label>
+    <input class="grant-items-input w-full p-1 rounded text-black" list="item-list" />
+
+    <label class="text-xs text-pink-300">Grant Status:</label>
+    <input class="grant-status-input w-full p-1 rounded text-black" list="status-list" />
+
+    <label class="text-xs text-pink-300">Remove Titles:</label>
+    <input class="remove-titles-input w-full p-1 rounded text-black" list="title-list" />
+
+    <label class="text-xs text-pink-300">Remove Status:</label>
+    <input class="remove-status-input w-full p-1 rounded text-black" list="status-list" />
+
+    <label class="text-xs text-gray-400">Required Status:</label>
+    <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" />
+
+    <label class="text-xs text-gray-400">Required Items:</label>
+    <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" />
   `;
 
-  // Enhanced Fields
-  const extraFields = document.createElement("div");
-  extraFields.className = "extra-path-fields";
-  extraFields.innerHTML = `
-    <label><strong>🧱 Requirements</strong></label><br>
-    <label>Required Items (comma-separated):</label>
-    <input type="text" class="requires-items" value="${(pathData.requires?.items || []).join(", ")}"><br>
-    <label>Required Status (Alive, Dead, Any):</label>
-    <input type="text" class="requires-status" value="${pathData.requires?.status || ""}"><br><br>
+  const outcomes = [
+    { label: "Midweek - High", key: "midweekHigh" },
+    { label: "Midweek - Low", key: "midweekLow" },
+    { label: "Final - Success", key: "finalSuccess" },
+    { label: "Final - Failure", key: "finalFailure" }
+  ];
 
-    <label><strong>🎁 Effects</strong></label><br>
-    <label>Grants Effects (comma-separated):</label>
-    <input type="text" class="grants-effects" value="${(pathData.rewards?.effects || []).join(", ")}"><br>
-    <label>Removes Effects (comma-separated):</label>
-    <input type="text" class="removes-effects" value="${(pathData.penalties?.effects || []).join(", ")}"><br>
-  `;
-  div.appendChild(extraFields);
+  outcomes.forEach(({ label, key }) => {
+    const stepKey = key.replace("midweek", "midweek.").replace("final", "final.");
+    const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
+    const outcomeBlock = document.createElement("div");
+    outcomeBlock.className = "bg-gray-700 p-2 rounded mt-3";
+    outcomeBlock.innerHTML = `
+      <h4 class="text-sm text-green-300">${label}</h4>
+      <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
+
+      <label class="text-xs text-gray-400">Required Items:</label>
+      <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Status (Alive, Dead, Any):</label>
+      <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
+
+      <label class="text-xs text-pink-300">Grant Items:</label>
+      <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Grant Status:</label>
+      <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Grant Titles:</label>
+      <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
+
+      <label class="text-xs text-pink-300">Remove Status:</label>
+      <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
+      <label class="text-xs text-pink-300">Remove Titles:</label>
+      <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
+    `;
+    div.appendChild(outcomeBlock);
+  });
+
+    // 🌐 Wire input values to pathData for saveQuestToGitHub
+  const grantTitles = document.createElement("input");
+  grantTitles.className = "grant-titles-input w-full p-1 rounded text-black";
+  grantTitles.setAttribute("list", "title-list");
+  grantTitles.value = (pathData.effects?.grant_titles || []).join(", ");
+  div.appendChild(grantTitles);
+
+  const grantItems = document.createElement("input");
+  grantItems.className = "grant-items-input w-full p-1 rounded text-black";
+  grantItems.setAttribute("list", "item-list");
+  grantItems.value = (pathData.effects?.grant_items || []).join(", ");
+  div.appendChild(grantItems);
+
+  const grantStatus = document.createElement("input");
+  grantStatus.className = "grant-status-input w-full p-1 rounded text-black";
+  grantStatus.setAttribute("list", "status-list");
+  grantStatus.value = (pathData.effects?.grant_status || []).join(", ");
+  div.appendChild(grantStatus);
+
+  const removeTitles = document.createElement("input");
+  removeTitles.className = "remove-titles-input w-full p-1 rounded text-black";
+  removeTitles.setAttribute("list", "title-list");
+  removeTitles.value = (pathData.effects?.remove_titles || []).join(", ");
+  div.appendChild(removeTitles);
+
+  const removeStatus = document.createElement("input");
+  removeStatus.className = "remove-status-input w-full p-1 rounded text-black";
+  removeStatus.setAttribute("list", "status-list");
+  removeStatus.value = (pathData.effects?.remove_status || []).join(", ");
+  div.appendChild(removeStatus);
+
+  const requiresStatus = document.createElement("input");
+  requiresStatus.className = "requires-status-input w-full p-1 rounded text-black";
+  requiresStatus.setAttribute("list", "status-list");
+  requiresStatus.value = pathData.requires?.status || "Any";
+  div.appendChild(requiresStatus);
+
+  const requiresItems = document.createElement("input");
+  requiresItems.className = "requires-items-input w-full p-1 rounded text-black";
+  requiresItems.setAttribute("list", "item-list");
+  requiresItems.value = (pathData.requires?.items || []).join(", ");
+  div.appendChild(requiresItems);
 
   return div;
 }
@@ -115,44 +179,58 @@ async function saveQuestToGitHub() {
     const pathTitle = block.querySelector(".path-title").value.trim();
     if (!pathKey && pathTitle) pathKey = autoGenerateKey(pathTitle);
     if (!pathKey) return;
-    
-    paths[pathKey] = {
+
+    const pathData = {
       title: pathTitle,
       description: block.querySelector(".path-desc").value.trim(),
-      midweek: {
-        High: {
-          text: block.querySelector(".mid-high-text").value,
-          rewards: { items: block.querySelector(".mid-high-rewards").value.split(",").map(x => x.trim()) }
-        },
-        Low: {
-          text: block.querySelector(".mid-low-text").value,
-          penalties: { roles: block.querySelector(".mid-low-penalties").value.split(",").map(x => x.trim()) }
-        }
-      },
-      final: {
-        Success: {
-          text: block.querySelector(".final-success-text").value,
-          rewards: { items: block.querySelector(".final-success-rewards").value.split(",").map(x => x.trim()) }
-        },
-        Failure: {
-          text: block.querySelector(".final-failure-text").value,
-          penalties: { roles: block.querySelector(".final-failure-penalties").value.split(",").map(x => x.trim()) }
-        }
-      }
+      midweek: {},
+      final: {}
     };
 
-    // Inject enhanced field data
-    const requiresItems = block.querySelector(".requires-items")?.value || "";
-    const grantsEffects = block.querySelector(".grants-effects")?.value || "";
-    const removesEffects = block.querySelector(".removes-effects")?.value || "";
+    const outcomes = [
+      { step: "High", blockKey: "midweekHigh" },
+      { step: "Low", blockKey: "midweekLow" },
+      { step: "Success", blockKey: "finalSuccess" },
+      { step: "Failure", blockKey: "finalFailure" }
+    ];
 
-    if (!paths[pathKey].requires) paths[pathKey].requires = {};
-    if (!paths[pathKey].rewards) paths[pathKey].rewards = {};
-    if (!paths[pathKey].penalties) paths[pathKey].penalties = {};
+    outcomes.forEach(({ step, blockKey }) => {
+      const text = block.querySelector(`.${blockKey}-text`)?.value || "";
+      const requiresItems = block.querySelector(`.${blockKey}-requires-items`)?.value || "";
+      const requiresStatus = block.querySelector(`.${blockKey}-requires-status`)?.value || "Any";
 
-    paths[pathKey].requires.items = requiresItems.split(",").map(x => x.trim()).filter(Boolean);
-    paths[pathKey].rewards.effects = grantsEffects.split(",").map(x => x.trim()).filter(Boolean);
-    paths[pathKey].penalties.effects = removesEffects.split(",").map(x => x.trim()).filter(Boolean);
+      const grantItems = block.querySelector(`.${blockKey}-grant-items`)?.value || "";
+      const grantStatus = block.querySelector(`.${blockKey}-grant-status`)?.value || "";
+      const grantTitles = block.querySelector(`.${blockKey}-grant-titles`)?.value || "";
+
+      const removeStatus = block.querySelector(`.${blockKey}-remove-status`)?.value || "";
+      const removeTitles = block.querySelector(`.${blockKey}-remove-titles`)?.value || "";
+
+      const stepData = {
+        text,
+        requires: {
+          items: requiresItems.split(",").map(x => x.trim()).filter(Boolean),
+          status: requiresStatus.trim() || "Any"
+        },
+        effects: {
+          grant_items: grantItems.split(",").map(x => x.trim()).filter(Boolean),
+          grant_status: grantStatus.split(",").map(x => x.trim()).filter(Boolean),
+          grant_titles: grantTitles.split(",").map(x => x.trim()).filter(Boolean),
+          remove_status: removeStatus.split(",").map(x => x.trim()).filter(Boolean),
+          remove_titles: removeTitles.split(",").map(x => x.trim()).filter(Boolean)
+        }
+      };
+
+      if (blockKey.startsWith("midweek")) {
+        if (!pathData.midweek) pathData.midweek = {};
+        pathData.midweek[step] = stepData;
+      } else {
+        if (!pathData.final) pathData.final = {};
+        pathData.final[step] = stepData;
+      }
+    });
+
+    paths[pathKey] = pathData;
   });
 
   const newQuest = {
@@ -161,6 +239,38 @@ async function saveQuestToGitHub() {
     ...(between ? { between } : {}),
     ...(Object.keys(paths).length ? { paths } : {})
   };
+
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  });
+  const data = await res.json();
+  const decoded = atob(data.content);
+  const json = JSON.parse(decoded);
+
+  json[key] = newQuest;
+
+  const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
+  const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${githubToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `Save quest ${key}`,
+      content: updatedContent,
+      sha: data.sha
+    })
+  });
+
+  if (saveRes.ok) {
+    alert("✅ Quest saved!");
+    manualLoadQuests();
+  } else {
+    alert("❌ Save failed");
+    console.error(await saveRes.text());
+  }
+}
 
   const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
     headers: { Authorization: `token ${githubToken}` }
@@ -215,12 +325,54 @@ async function loadQuestFile() {
     const data = await res.json();
     const decoded = atob(data.content);
     questData = JSON.parse(decoded);
+
     renderQuestList();
     populatePreviewDropdown();
+    populateDatalistsFromQuestData(); // ✅ INSIDE try block
   } catch (e) {
     alert("❌ Failed to load quest data.");
     console.error(e);
   }
+}
+
+function populateDatalistsFromQuestData() {
+  const titles = new Set();
+  const items = new Set();
+  const statuses = new Set();
+
+  Object.values(questData).forEach(quest => {
+    Object.values(quest.paths || {}).forEach(path => {
+      ["midweek", "final"].forEach(stage => {
+        ["High", "Low", "Success", "Failure"].forEach(step => {
+          const outcome = path?.[stage]?.[step];
+          if (!outcome) return;
+
+          outcome.effects?.grant_titles?.forEach(t => titles.add(t));
+          outcome.effects?.remove_titles?.forEach(t => titles.add(t));
+
+          outcome.effects?.grant_items?.forEach(i => items.add(i));
+          outcome.requires?.items?.forEach(i => items.add(i));
+
+          outcome.effects?.grant_status?.forEach(s => statuses.add(s));
+          outcome.effects?.remove_status?.forEach(s => statuses.add(s));
+          if (outcome.requires?.status) statuses.add(outcome.requires.status);
+        });
+      });
+    });
+  });
+
+  const fillList = (id, values) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = "";
+    Array.from(values).sort().forEach(v => {
+      if (v) el.innerHTML += `<option value="${v}">`;
+    });
+  };
+
+  fillList("title-list", titles);
+  fillList("item-list", items);
+  fillList("status-list", statuses);
 }
 
 function renderQuestList() {
@@ -332,4 +484,3 @@ function insertQuestBetween(existingData, newQuestKey, newQuestData, betweenArra
   if (!inserted) newData[newQuestKey] = newQuestData;
   return newData;
 }
-
