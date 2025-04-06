@@ -1,29 +1,20 @@
+<!-- 🧸 BloodBot Campaign Tool Enhanced UI - HTML (copy/paste ready) -->
+<!-- Use with latest scripts.js provided -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style>
-  details[open] summary::after {
-    content: "▲";
-    float: right;
-  }
-  summary::after {
-    content: "▼";
-    float: right;
-  }
-</style>
-
   <meta charset="UTF-8" />
   <title>🧸 BloodBot Campaign Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    input, textarea, select {
-      color: black !important;
-    }
+    input, textarea, select { color: black !important; }
+    details[open] summary::after { content: "▲"; float: right; }
+    summary::after { content: "▼"; float: right; }
   </style>
 </head>
 <body class="bg-black text-white font-mono p-6 min-h-screen">
-
   <h1 class="text-3xl text-red-500 font-bold mb-4">🍗 BloodBot Architect</h1>
 
   <div class="flex gap-4 mb-6">
@@ -37,21 +28,27 @@
       <div class="md:w-1/3 w-full bg-gray-900 p-4 rounded-lg border border-gray-700 overflow-auto max-h-[75vh]">
         <h2 class="text-xl mb-2">📘 Main + Side Quests</h2>
         <ul id="questList" class="mb-6 space-y-2"></ul>
+
         <button onclick="manualLoadQuests()" class="mt-6 w-full bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded text-white text-sm">🔄 Load Quests from GitHub</button>
         <button onclick="createNewQuest(false)" class="mt-2 w-full bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-white text-sm">➕ New Quest</button>
         <button onclick="createNewQuest(true)" class="mt-2 w-full bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black text-sm">🌲 New Side Quest</button>
       </div>
+
       <div class="md:w-2/3 w-full">
         <div id="editorSection" class="hidden mt-2 bg-gray-800 p-4 rounded-lg border border-gray-700">
           <h2 class="text-xl text-green-400 mb-4">✏️ Edit/Create Quest</h2>
+
           <label class="block text-green-300 text-sm">Quest Key (Title)</label>
           <input id="questKey" class="w-full text-black mb-2 p-2 rounded" />
+
           <label class="block text-green-300 text-sm">Intro</label>
           <textarea id="questIntro" class="w-full text-black mb-2 p-2 rounded h-32"></textarea>
+
           <label class="block text-green-300 text-sm">Wrap-up Text</label>
           <textarea id="questWrap" class="w-full text-black mb-2 p-2 rounded h-32"></textarea>
-          <label class="block text-green-300 text-sm">Side Quest? (Between quests, use pipe | to separate)</label>
-          <input id="sideQuestBetween" class="w-full text-black mb-4 p-2 rounded" />
+
+          <label class="block text-green-300 text-sm">Side Quest? (Between quests)</label>
+          <input id="sideQuestBetween" class="w-full text-black mb-4 p-2 rounded" placeholder="Quest A | Quest B (for sidequests)" />
 
           <div>
             <h3 class="text-green-400 text-lg mb-2">Paths</h3>
@@ -83,6 +80,7 @@
     </div>
   </div>
 
+  <!-- === INTERACTIVE LOGIC === -->
   <script>
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
@@ -91,16 +89,13 @@
 
     document.getElementById("editorBtn").onclick = () => showTab("editorTab");
     document.getElementById("previewBtn").onclick = () => showTab("previewTab");
-
-    // Show editor by default
     showTab("editorTab");
   </script>
 
+  <!-- === PATH BLOCK INTERACTIONS === -->
   <script>
-    // Fix drag + delete for dynamically added path blocks
     document.addEventListener("DOMContentLoaded", () => {
       const container = document.getElementById("pathsContainer");
-
       let dragged = null;
 
       container.addEventListener("dragstart", (e) => {
@@ -139,13 +134,12 @@
     });
   </script>
 
-  <!-- 🧠 Dynamic autocomplete sources -->
+  <!-- === AUTOCOMPLETE SOURCES === -->
   <datalist id="title-list"></datalist>
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
   <script>
-    // 🚀 Load quests + build autocomplete when the page is ready
     window.addEventListener("DOMContentLoaded", () => {
       manualLoadQuests();
     });
