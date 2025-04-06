@@ -187,6 +187,20 @@ async function saveQuestToGitHub() {
       final: {}
     };
 
+    // ⬇️ Extract path-level effects and requirements
+    pathData.effects = {
+      grant_titles: block.querySelector(".grant-titles-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || [],
+      grant_items: block.querySelector(".grant-items-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || [],
+      grant_status: block.querySelector(".grant-status-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || [],
+      remove_titles: block.querySelector(".remove-titles-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || [],
+      remove_status: block.querySelector(".remove-status-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || []
+    };
+
+    pathData.requires = {
+      items: block.querySelector(".requires-items-input")?.value.split(",").map(s => s.trim()).filter(Boolean) || [],
+      status: block.querySelector(".requires-status-input")?.value.trim() || "Any"
+    };
+
     const outcomes = [
       { step: "High", blockKey: "midweekHigh" },
       { step: "Low", blockKey: "midweekLow" },
@@ -222,10 +236,8 @@ async function saveQuestToGitHub() {
       };
 
       if (blockKey.startsWith("midweek")) {
-        if (!pathData.midweek) pathData.midweek = {};
         pathData.midweek[step] = stepData;
       } else {
-        if (!pathData.final) pathData.final = {};
         pathData.final[step] = stepData;
       }
     });
@@ -240,186 +252,42 @@ async function saveQuestToGitHub() {
     ...(Object.keys(paths).length ? { paths } : {})
   };
 
-  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  });
-  const data = await res.json();
-  const decoded = atob(data.content);
-  const json = JSON.parse(decoded);
-
-  json[key] = newQuest;
-
-  const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
-  const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `token ${githubToken}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: `Save quest ${key}`,
-      content: updatedContent,
-      sha: data.sha
-    })
-  });
-
-  if (saveRes.ok) {
-    alert("✅ Quest saved!");
-    manualLoadQuests();
-  } else {
-    alert("❌ Save failed");
-    console.error(await saveRes.text());
-  }
-}
-
-  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  });
-  const data = await res.json();
-  const decoded = atob(data.content);
-  const json = JSON.parse(decoded);
-
-  json[key] = newQuest;
-
-  const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
-  const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `token ${githubToken}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: `Save quest ${key}`,
-      content: updatedContent,
-      sha: data.sha
-    })
-  });
-
-  if (saveRes.ok) {
-    alert("✅ Quest saved!");
-    manualLoadQuests();
-  } else {
-    alert("❌ Save failed");
-    console.error(await saveRes.text());
-  }
-}
-function manualLoadQuests() {
-  if (!githubToken) {
-    githubToken = prompt("Enter your GitHub Token:");
-    if (githubToken) {
-      localStorage.setItem("githubToken", githubToken);
-    } else {
-      alert("GitHub Token is required.");
-      return;
-    }
-  }
-  loadQuestFile();
-}
-
-async function loadQuestFile() {
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
       headers: { Authorization: `token ${githubToken}` }
     });
-    if (!res.ok) throw new Error("Failed to fetch quest file");
     const data = await res.json();
     const decoded = atob(data.content);
-    questData = JSON.parse(decoded);
+    const json = JSON.parse(decoded);
 
-    renderQuestList();
-    populatePreviewDropdown();
-    populateDatalistsFromQuestData(); // ✅ INSIDE try block
-  } catch (e) {
-    alert("❌ Failed to load quest data.");
-    console.error(e);
+    json[key] = newQuest;
+
+    const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
+    const saveRes = await fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Save quest ${key}`,
+        content: updatedContent,
+        sha: data.sha
+      })
+    });
+
+  if (saveRes.ok) {
+    alert("✅ Quest saved!");
+    manualLoadQuests();
+  } else {
+    alert("❌ Save failed");
+    console.error(await saveRes.text());
   }
-}
-
-function populateDatalistsFromQuestData() {
-  const titles = new Set();
-  const items = new Set();
-  const statuses = new Set();
-
-  Object.values(questData).forEach(quest => {
-    Object.values(quest.paths || {}).forEach(path => {
-      ["midweek", "final"].forEach(stage => {
-        ["High", "Low", "Success", "Failure"].forEach(step => {
-          const outcome = path?.[stage]?.[step];
-          if (!outcome) return;
-
-          outcome.effects?.grant_titles?.forEach(t => titles.add(t));
-          outcome.effects?.remove_titles?.forEach(t => titles.add(t));
-
-          outcome.effects?.grant_items?.forEach(i => items.add(i));
-          outcome.requires?.items?.forEach(i => items.add(i));
-
-          outcome.effects?.grant_status?.forEach(s => statuses.add(s));
-          outcome.effects?.remove_status?.forEach(s => statuses.add(s));
-          if (outcome.requires?.status) statuses.add(outcome.requires.status);
-        });
-      });
-    });
-  });
-
-  const fillList = (id, values) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = "";
-    Array.from(values).sort().forEach(v => {
-      if (v) el.innerHTML += `<option value="${v}">`;
-    });
-  };
-
-  fillList("title-list", titles);
-  fillList("item-list", items);
-  fillList("status-list", statuses);
-}
-
-function renderQuestList() {
-  const mainList = document.getElementById("mainQuestList");
-  const sideList = document.getElementById("sideQuestList");
-  mainList.innerHTML = "";
-  sideList.innerHTML = "";
-
-  Object.keys(questData).forEach(key => {
-    const quest = questData[key];
-    const li = document.createElement("li");
-    li.className = "flex items-center space-x-2";
-
-    const label = document.createElement("span");
-    label.textContent = key;
-    label.className = "text-white font-semibold";
-
-    const tag = document.createElement("span");
-    if (quest.between) {
-      tag.textContent = "🌲 Side";
-      tag.className = "bg-yellow-600 text-xs text-black px-1 py-0.5 rounded";
-    }
-
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "✏️";
-    editBtn.className = "text-sm text-blue-400 hover:text-blue-200";
-    editBtn.onclick = () => openQuestEditor(key);
-
-    li.appendChild(label);
-    if (quest.between) li.appendChild(tag);
-    li.appendChild(editBtn);
-
-    (quest.between ? sideList : mainList).appendChild(li);
-  });
-}
-
-function populatePreviewDropdown() {
-  const select = document.getElementById("questSelect");
-  if (!select) return;
-  select.innerHTML = "";
-  Object.keys(questData).forEach(key => {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = key;
-    select.appendChild(opt);
-  });
-}
+      }
+  } catch (err) {
+    alert("❌ Error saving quest");
+    console.error(err);
+  }  // ←✅ ADD THIS CLOSING BRACE!
 
 // === Export functions to global for inline HTML access ===
 window.manualLoadQuests = manualLoadQuests;
