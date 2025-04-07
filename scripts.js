@@ -322,6 +322,85 @@ function updateDatalists() {
   document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
 }
 
+function saveQuestToGitHub() {
+  const key = document.getElementById("questKey").value.trim();
+  const intro = document.getElementById("questIntro").value.trim();
+  const wrapup = document.getElementById("questWrap").value.trim();
+  const between = document.getElementById("sideQuestBetween").value.split("|").map(x => x.trim()).filter(Boolean);
+
+  const paths = {};
+  document.querySelectorAll(".path-block").forEach((block, index) => {
+    const requires = {
+      titles: block.querySelector(".requires-titles-input").value.split(",").map(x => x.trim()).filter(Boolean),
+      items: block.querySelector(".requires-items-input").value.split(",").map(x => x.trim()).filter(Boolean),
+      status: block.querySelector(".requires-status-input").value.trim()
+    };
+
+    const stepData = {};
+    ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(key => {
+      const prefix = key.replace("midweek", "midweek.").replace("final", "final.");
+      const [type, result] = prefix.split(".");
+
+      stepData[type] = stepData[type] || {};
+      stepData[type][result] = {
+        text: block.querySelector(`.${key}-text`).value.trim(),
+        effects: {
+          grant_items: block.querySelector(`.${key}-grant-items`).value.split(",").map(x => x.trim()).filter(Boolean),
+          grant_status: block.querySelector(`.${key}-grant-status`).value.split(",").map(x => x.trim()).filter(Boolean),
+          grant_titles: block.querySelector(`.${key}-grant-titles`).value.split(",").map(x => x.trim()).filter(Boolean),
+          remove_items: block.querySelector(`.${key}-remove-items`).value.split(",").map(x => x.trim()).filter(Boolean),
+          remove_status: block.querySelector(`.${key}-remove-status`).value.split(",").map(x => x.trim()).filter(Boolean),
+          remove_titles: block.querySelector(`.${key}-remove-titles`).value.split(",").map(x => x.trim()).filter(Boolean)
+        },
+        requires: {
+          titles: block.querySelector(`.${key}-requires-titles`)?.value.split(",").map(x => x.trim()).filter(Boolean) || [],
+          items: block.querySelector(`.${key}-requires-items`)?.value.split(",").map(x => x.trim()).filter(Boolean) || [],
+          status: block.querySelector(`.${key}-requires-status`)?.value.trim() || "Any"
+        }
+      };
+    });
+
+    paths[`Path ${index + 1}`] = { requires, ...stepData };
+  });
+
+  const questObj = {
+    intro,
+    between: between.length ? between : undefined,
+    wrapup: { text: wrapup },
+    paths
+  };
+
+  questData[key] = questObj;
+
+  const updatedContent = btoa(JSON.stringify(questData, null, 2));
+
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${githubToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `Update quest ${key}`,
+      content: updatedContent,
+      sha: "" // Will be filled after fetch
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.content && data.commit) {
+        alert("✅ Quest saved to GitHub!");
+      } else {
+        alert("⚠️ Failed to save quest.");
+        console.error(data);
+      }
+    })
+    .catch(err => {
+      alert("❌ Error saving quest.");
+      console.error(err);
+    });
+}
+
 // === Expose Global Functions ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
