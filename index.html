@@ -77,36 +77,29 @@
 
   <!-- === TABS === -->
   <script>
-    function showTab(id) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-  </script>
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
 
-  <!-- === AUTOCOMPLETE === -->
-  <datalist id="title-list"></datalist>
-  <datalist id="item-list"></datalist>
-  <datalist id="status-list"></datalist>
+  window.addEventListener("DOMContentLoaded", () => {
+    showTab('editorTab');
 
-  <!-- === LEGEND SYSTEM UI === -->
-<div id="legendEditor" class="mt-10 p-4 bg-gray-900 border border-gray-700 rounded">
-  <h2 class="text-xl text-yellow-300 mb-4">📘 Global Legends</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">🎖 Titles</label>
-      <textarea id="legendTitles" class="w-full h-32 p-2 text-black rounded" placeholder="Champion, Mercenary, Betrayer"></textarea>
-    </div>
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">📦 Items</label>
-      <textarea id="legendItems" class="w-full h-32 p-2 text-black rounded" placeholder="Sword, Key, Crown"></textarea>
-    </div>
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">🔁 Statuses</label>
-      <textarea id="legendStatuses" class="w-full h-32 p-2 text-black rounded" placeholder="Injured, Promoted, Cursed"></textarea>
-    </div>
-  </div>
-  <button onclick="saveLegends()" class="mt-4 bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded">💾 Save Legends</button>
-</div>
+    // Wait for the script to load and functions to exist
+    const waitForGlobals = () => {
+      if (typeof manualLoadQuests !== 'function' || typeof saveLegends !== 'function') {
+        console.warn("⏳ Waiting for script functions...");
+        return setTimeout(waitForGlobals, 100);
+      }
+
+      console.log("✅ Functions ready. Auto-loading Legends and Quests...");
+      saveLegends(); // this will populate datalists immediately
+      manualLoadQuests();
+    };
+
+    waitForGlobals();
+  });
+</script>
 
   <!-- === FINAL SCRIPT === -->
   <script src="scripts.js" defer></script>
