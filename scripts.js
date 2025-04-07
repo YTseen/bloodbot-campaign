@@ -147,13 +147,13 @@ function createPathBlock(pathKey = "", pathData = {}) {
     const outcome = pathData?.[group]?.[result] || {};
     const text = outcome?.text || "";
 
-    const box = document.createElement("details");
-    box.className = "mt-3 bg-gray-700 p-3 rounded space-y-2";
-    box.innerHTML = `
-      <summary class="text-green-300 text-sm cursor-pointer">${label}</summary>
-      <label class="text-xs text-white">Narrative Text</label>
-      <textarea class="${key}-text w-full bg-white text-black p-2 rounded" placeholder="Narrative text for ${label}">${text}</textarea>
-    `;
+const box = document.createElement("details");
+box.className = "mt-3 bg-gray-700 p-3 rounded space-y-2";
+box.innerHTML = `
+  <summary class="text-green-300 text-sm cursor-pointer">${label}</summary>
+  <label class="text-xs text-white">Narrative Text</label>
+  <textarea class="${key}-text w-full bg-white text-black p-2 rounded" placeholder="Narrative text for ${label}">${text}</textarea>
+`;
     div.appendChild(box);
   });
 
@@ -449,12 +449,36 @@ function saveQuestToGitHub() {
     const path = { title, description, requires, excludes, resolution, fixedOutcome };
 
     outcomeKeys.forEach(key => {
-      const text = block.querySelector(`.${key}-text`)?.value.trim();
-      if (!text) return;
+const text = block.querySelector(`.${key}-text`)?.value.trim();
+if (!text) return;
 
-      const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
-      path[type] ??= {};
-      path[type][result] = { text };
+const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
+
+const stepData = {
+  text,
+  requires: {
+    titles: getCSV(`.${key}-requires-titles`),
+    items: getCSV(`.${key}-requires-items`),
+    status: block.querySelector(`.${key}-requires-status`)?.value.trim() || ""
+  },
+  excludes: {
+    titles: getCSV(`.${key}-excludes-titles`),
+    items: getCSV(`.${key}-excludes-items`),
+    status: block.querySelector(`.${key}-excludes-status`)?.value.trim() || ""
+  },
+  effects: {
+    grant_items: getCSV(`.${key}-grant-items`),
+    grant_titles: getCSV(`.${key}-grant-titles`),
+    grant_status: getCSV(`.${key}-grant-status`),
+    remove_items: getCSV(`.${key}-remove-items`),
+    remove_titles: getCSV(`.${key}-remove-titles`),
+    remove_status: getCSV(`.${key}-remove-status`)
+  }
+};
+
+const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+path[type] ??= {};
+path[type][result] = stepData;
     });
 
     quest.paths[`path_${i}`] = path;
