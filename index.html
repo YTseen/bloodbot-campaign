@@ -86,64 +86,12 @@
     showTab("editorTab");
   </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("pathsContainer");
-      let dragged = null;
-      container.addEventListener("dragstart", (e) => {
-        if (e.target.classList.contains("path-block")) {
-          dragged = e.target;
-          e.dataTransfer.effectAllowed = "move";
-        }
-      });
-      container.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const over = e.target.closest(".path-block");
-        if (over && over !== dragged) {
-          const blocks = [...container.querySelectorAll(".path-block")];
-          const draggedIndex = blocks.indexOf(dragged);
-          const overIndex = blocks.indexOf(over);
-          if (draggedIndex < overIndex) {
-            container.insertBefore(dragged, over.nextSibling);
-          } else {
-            container.insertBefore(dragged, over);
-          }
-        }
-      });
-      container.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dragged = null;
-      });
-      container.addEventListener("click", (e) => {
-        if (e.target.classList.contains("remove-path")) {
-          const block = e.target.closest(".path-block");
-          if (block) block.remove();
-        }
-      });
-    });
-  </script>
-
   <!-- === AUTOCOMPLETE === -->
   <datalist id="title-list"></datalist>
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      manualLoadQuests();
-    });
-  </script>
-
-    <!-- === FINAL SCRIPT === -->
+  <!-- === FINAL SCRIPT === -->
   <script src="scripts.js"></script>
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      if (typeof manualLoadQuests === "function") {
-        manualLoadQuests();
-      } else {
-        console.warn("⚠️ manualLoadQuests not ready at DOMContentLoaded.");
-      }
-    });
-  </script>
 </body>
 </html>
