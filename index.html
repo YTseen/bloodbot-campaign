@@ -63,7 +63,7 @@
   <div id="previewTab" class="tab hidden">
     <h2 class="text-2xl text-cyan-400 mb-4">🍾 Quest Flow Preview</h2>
     <select id="previewQuestSelect" class="text-black p-2 mb-4 rounded"></select>
-<div id="questFlow" class="bg-gray-800 border border-gray-700 rounded p-4 space-y-4 hidden">
+    <div id="questFlow" class="bg-gray-800 border border-gray-700 rounded p-4 space-y-4 hidden">
       <div class="bg-gray-700 p-3 rounded">
         <div id="introSection" class="text-sm text-white whitespace-pre-wrap"></div>
       </div>
@@ -72,64 +72,60 @@
       <div id="finalChoices" class="flex flex-wrap gap-2"></div>
       <div id="finalResult" class="text-green-300 text-sm whitespace-pre-wrap"></div>
       <div id="wrapupSection" class="text-gray-300 text-sm whitespace-pre-wrap"></div>
+      <pre id="scoreBoard" class="text-xs text-gray-500 bg-black p-2 mt-4 rounded border border-gray-800"></pre>
     </div>
   </div>
-  
-  <!-- === TABS === -->
- <script>
-  function showTab(id) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-  }
-
-  window.addEventListener("DOMContentLoaded", () => {
-    showTab('editorTab');
-
-    const waitForGlobals = () => {
-      const ready =
-        typeof manualLoadQuests === "function" &&
-        typeof saveLegends === "function" &&
-        document.getElementById("legendTitles");
-
-      if (!ready) {
-        return setTimeout(waitForGlobals, 100);
-      }
-
-      console.log("✅ Functions ready. Auto-loading Legends and Quests...");
-      loadLegends();
-      manualLoadQuests();
-    };
-
-    waitForGlobals();
-  });
-</script>
 
   <!-- === LEGEND SYSTEM UI === -->
-<div id="legendEditor" class="mt-10 p-4 bg-gray-900 border border-gray-700 rounded">
-  <h2 class="text-xl text-yellow-300 mb-4">📘 Global Legends</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">🎖 Titles</label>
-      <textarea id="legendTitles" class="w-full h-32 p-2 text-black rounded" placeholder="Champion, Mercenary, Betrayer"></textarea>
+  <div id="legendEditor" class="mt-10 p-4 bg-gray-900 border border-gray-700 rounded">
+    <h2 class="text-xl text-yellow-300 mb-4">📘 Global Legends</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label class="block text-sm text-gray-300 mb-1">🎖 Titles</label>
+        <textarea id="legendTitles" class="w-full h-32 p-2 text-black rounded" placeholder="Champion, Mercenary, Betrayer"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-300 mb-1">📦 Items</label>
+        <textarea id="legendItems" class="w-full h-32 p-2 text-black rounded" placeholder="Sword, Key, Crown"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-300 mb-1">🔁 Statuses</label>
+        <textarea id="legendStatuses" class="w-full h-32 p-2 text-black rounded" placeholder="Injured, Promoted, Cursed"></textarea>
+      </div>
     </div>
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">📦 Items</label>
-      <textarea id="legendItems" class="w-full h-32 p-2 text-black rounded" placeholder="Sword, Key, Crown"></textarea>
-    </div>
-    <div>
-      <label class="block text-sm text-gray-300 mb-1">🔁 Statuses</label>
-      <textarea id="legendStatuses" class="w-full h-32 p-2 text-black rounded" placeholder="Injured, Promoted, Cursed"></textarea>
-    </div>
+    <button onclick="saveLegends()" class="mt-4 bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded">💾 Save Legends</button>
   </div>
-  <button onclick="saveLegends()" class="mt-4 bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded">💾 Save Legends</button>
-</div>
 
-<datalist id="title-list"></datalist>
-<datalist id="item-list"></datalist>
-<datalist id="status-list"></datalist>
+  <datalist id="title-list"></datalist>
+  <datalist id="item-list"></datalist>
+  <datalist id="status-list"></datalist>
 
   <!-- === FINAL SCRIPT === -->
-  <script src="scripts.js" defer></script>
+  <script src="scripts.js"></script>
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
 
+    window.addEventListener("DOMContentLoaded", () => {
+      showTab('editorTab');
+
+      const waitForGlobals = () => {
+        const ready =
+          typeof manualLoadQuests === "function" &&
+          typeof saveLegends === "function" &&
+          document.getElementById("legendTitles");
+
+        if (!ready) return setTimeout(waitForGlobals, 100);
+
+        console.log("✅ Functions ready. Auto-loading Legends and Quests...");
+        loadLegends();
+        manualLoadQuests();
+      };
+
+      waitForGlobals();
+    });
+  </script>
 </body>
 </html>
