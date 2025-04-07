@@ -328,7 +328,9 @@ document.querySelectorAll(".path-block").forEach((block, index) => {
   };
 
   questData[key] = questObj;
-  const updatedContent = btoa(JSON.stringify(questData, null, 2));
+  content: btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+  String.fromCharCode('0x' + p1)
+)),
 
   // FIRST: Fetch SHA of existing file
   fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
