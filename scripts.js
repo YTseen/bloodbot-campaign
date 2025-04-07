@@ -453,6 +453,66 @@ function importMockState(file) {
   reader.readAsText(file);
 }
 
+function saveLegends() {
+  const titles = document.getElementById("legendTitles").value.split(",").map(x => x.trim()).filter(Boolean);
+  const items = document.getElementById("legendItems").value.split(",").map(x => x.trim()).filter(Boolean);
+  const statuses = document.getElementById("legendStatuses").value.split(",").map(x => x.trim()).filter(Boolean);
+  localStorage.setItem("legendTitles", JSON.stringify(titles));
+  localStorage.setItem("legendItems", JSON.stringify(items));
+  localStorage.setItem("legendStatuses", JSON.stringify(statuses));
+  updateDatalists();
+  alert("✅ Legends saved!");
+}
+
+function loadLegends() {
+  document.getElementById("legendTitles").value = JSON.parse(localStorage.getItem("legendTitles") || "[]").join(", ");
+  document.getElementById("legendItems").value = JSON.parse(localStorage.getItem("legendItems") || "[]").join(", ");
+  document.getElementById("legendStatuses").value = JSON.parse(localStorage.getItem("legendStatuses") || "[]").join(", ");
+  updateDatalists();
+}
+
+function manualLoadQuests() {
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const decoded = atob(data.content);
+      questData = JSON.parse(decoded);
+      renderQuestList();
+      populatePreviewDropdown();
+    })
+    .catch(err => {
+      alert("❌ Failed to load quests");
+      console.error(err);
+    });
+}
+
+function renderQuestList() {
+  const questList = document.getElementById("questList");
+  if (!questList) return;
+  questList.innerHTML = "";
+  Object.keys(questData).forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "bg-blue-700 hover:bg-blue-600 text-white rounded px-3 py-1 mr-2 mb-2";
+    btn.textContent = key;
+    btn.onclick = () => openQuestEditor(key);
+    questList.appendChild(btn);
+  });
+}
+
+function populatePreviewDropdown() {
+  const dropdown = document.getElementById("previewQuestSelect");
+  if (!dropdown) return;
+  dropdown.innerHTML = "";
+  Object.keys(questData).forEach(key => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    dropdown.appendChild(option);
+  });
+}
+
 // === Expose Global Functions ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveLegends = saveLegends;
