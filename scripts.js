@@ -245,53 +245,6 @@ function renderPreview() {
 
 document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
 
-// === Drag & Drop + Path removal ===
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("pathsContainer");
-  let dragged = null;
-
-  container.addEventListener("dragstart", (e) => {
-    if (e.target.classList.contains("path-block")) {
-      dragged = e.target;
-      e.dataTransfer.effectAllowed = "move";
-    }
-  });
-
-  container.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    const over = e.target.closest(".path-block");
-    if (over && over !== dragged) {
-      const blocks = [...container.querySelectorAll(".path-block")];
-      const draggedIndex = blocks.indexOf(dragged);
-      const overIndex = blocks.indexOf(over);
-      if (draggedIndex < overIndex) {
-        container.insertBefore(dragged, over.nextSibling);
-      } else {
-        container.insertBefore(dragged, over);
-      }
-    }
-  });
-
-  container.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dragged = null;
-  });
-
-  container.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-path")) {
-      const block = e.target.closest(".path-block");
-      if (block) block.remove();
-    }
-  });
-
-  // ✅ Ensure functions exist before calling
-  if (typeof manualLoadQuests === "function") {
-    manualLoadQuests();
-  } else {
-    console.warn("⚠️ manualLoadQuests not ready at DOMContentLoaded.");
-  }
-});
-
 function saveLegends() {
   const titles = document.getElementById("legendTitles").value.split(",").map(x => x.trim()).filter(Boolean);
   const items = document.getElementById("legendItems").value.split(",").map(x => x.trim()).filter(Boolean);
@@ -340,7 +293,6 @@ function saveQuestToGitHub() {
     ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(key => {
       const prefix = key.replace("midweek", "midweek.").replace("final", "final.");
       const [type, result] = prefix.split(".");
-
       stepData[type] = stepData[type] || {};
       stepData[type][result] = {
         text: block.querySelector(`.${key}-text`).value.trim(),
@@ -371,7 +323,6 @@ function saveQuestToGitHub() {
   };
 
   questData[key] = questObj;
-
   const updatedContent = btoa(JSON.stringify(questData, null, 2));
 
   fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
@@ -383,7 +334,7 @@ function saveQuestToGitHub() {
     body: JSON.stringify({
       message: `Update quest ${key}`,
       content: updatedContent,
-      sha: "" // Will be filled after fetch
+      sha: "" // Optional: update later if needed
     })
   })
     .then(res => res.json())
@@ -410,6 +361,7 @@ window.openQuestEditor = openQuestEditor;
 window.saveLegends = saveLegends;
 window.loadLegends = loadLegends;
 
+// === DOM READY HOOK ===
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof manualLoadQuests === "function") manualLoadQuests();
   if (document.getElementById("legendTitles")) loadLegends();
