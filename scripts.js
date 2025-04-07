@@ -30,11 +30,16 @@ function createPathBlock(pathKey = "", pathData = {}) {
   div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
   div.draggable = true;
 
+  const titleValue = pathData.title || "";
+
   div.innerHTML = `
     <div class="flex justify-between items-center mb-1">
       <span class="text-xs text-gray-400">↕ Drag to reorder</span>
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
     </div>
+
+    <label class="text-xs text-yellow-300">Path Title</label>
+    <input class="path-title w-full p-1 mb-2 rounded text-black" value="${titleValue}" />
 
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
@@ -281,13 +286,15 @@ function saveQuestToGitHub() {
   const wrapup = document.getElementById("questWrap").value.trim();
   const between = document.getElementById("sideQuestBetween").value.split("|").map(x => x.trim()).filter(Boolean);
 
-  const paths = {};
-  document.querySelectorAll(".path-block").forEach((block, index) => {
-    const requires = {
-      titles: block.querySelector(".requires-titles-input").value.split(",").map(x => x.trim()).filter(Boolean),
-      items: block.querySelector(".requires-items-input").value.split(",").map(x => x.trim()).filter(Boolean),
-      status: block.querySelector(".requires-status-input").value.trim()
-    };
+const paths = {};
+document.querySelectorAll(".path-block").forEach((block, index) => {
+  const title = block.querySelector(".path-title")?.value.trim() || "";
+
+  const requires = {
+    titles: block.querySelector(".requires-titles-input").value.split(",").map(x => x.trim()).filter(Boolean),
+    items: block.querySelector(".requires-items-input").value.split(",").map(x => x.trim()).filter(Boolean),
+    status: block.querySelector(".requires-status-input").value.trim()
+  };
 
     const stepData = {};
     ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(key => {
@@ -313,7 +320,7 @@ function saveQuestToGitHub() {
       };
     });
 
-    paths[`Path ${index + 1}`] = { requires, ...stepData };
+    paths[`Path ${index + 1}`] = { title, requires, ...stepData };
   });
 
   const questObj = {
