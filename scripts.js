@@ -203,6 +203,7 @@ function openQuestEditor(key) {
   document.getElementById("questKey").value = key;
   document.getElementById("questIntro").value = quest.intro || "";
   document.getElementById("questWrap").value = quest.wrapup?.text || "";
+  document.getElementById("responseLabel").value = quest.responseLabel || "";
   document.getElementById("sideQuestBetween").value = quest.between ? quest.between.join(" | ") : "";
   const container = document.getElementById("pathsContainer");
   container.innerHTML = "";
@@ -252,6 +253,20 @@ function renderPreview() {
   finalChoices.innerHTML = "";
   finalResult.innerHTML = "";
   wrapup.innerHTML = "";
+  const responseLabel = quest.responseLabel || "Response";
+
+Object.entries(quest.paths).forEach(([pathKey, path]) => {
+  const result = playerState.logs.find(l => l.pathKey === pathKey);
+  if (result) {
+    const text = result.resultText || "";
+    finalChoices.innerHTML += `
+      <div class="text-sm text-purple-300 mt-2">
+        ➡️ <strong>${path.title}</strong> – <em>${result.outcomeLabel}</em><br/>
+        💬 <strong>${responseLabel}:</strong> ${text}
+      </div>
+    `;
+  }
+});
 
   if (!quest.paths) return;
 
@@ -433,7 +448,9 @@ function saveQuestToGitHub() {
     intro: document.getElementById("questIntro").value.trim(),
     wrapup: { text: document.getElementById("questWrap").value.trim() },
     between: document.getElementById("sideQuestBetween").value.split("|").map(s => s.trim()).filter(Boolean),
-    paths: {}
+paths: {},
+responseLabel: document.getElementById("responseLabel").value.trim(),
+
   };
 
   const pathBlocks = document.querySelectorAll(".path-block");
@@ -541,7 +558,6 @@ fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
   }
 
 function exportQuestToFile() {
-  const key = document.getElementById("questKey").value.trim();
   if (!key) return alert("❌ Missing quest key");
   const data = JSON.stringify(questData[key], null, 2);
   const blob = new Blob([data], { type: "application/json" });
