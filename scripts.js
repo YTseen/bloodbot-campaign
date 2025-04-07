@@ -292,9 +292,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+function saveLegends() {
+  const titles = document.getElementById("legendTitles").value.split(",").map(x => x.trim()).filter(Boolean);
+  const items = document.getElementById("legendItems").value.split(",").map(x => x.trim()).filter(Boolean);
+  const statuses = document.getElementById("legendStatuses").value.split(",").map(x => x.trim()).filter(Boolean);
+
+  localStorage.setItem("legendTitles", JSON.stringify(titles));
+  localStorage.setItem("legendItems", JSON.stringify(items));
+  localStorage.setItem("legendStatuses", JSON.stringify(statuses));
+
+  updateDatalists();
+  alert("✅ Legends saved!");
+}
+
+function loadLegends() {
+  document.getElementById("legendTitles").value = JSON.parse(localStorage.getItem("legendTitles") || "[]").join(", ");
+  document.getElementById("legendItems").value = JSON.parse(localStorage.getItem("legendItems") || "[]").join(", ");
+  document.getElementById("legendStatuses").value = JSON.parse(localStorage.getItem("legendStatuses") || "[]").join(", ");
+  updateDatalists();
+}
+
+function updateDatalists() {
+  const titleList = JSON.parse(localStorage.getItem("legendTitles") || "[]");
+  const itemList = JSON.parse(localStorage.getItem("legendItems") || "[]");
+  const statusList = JSON.parse(localStorage.getItem("legendStatuses") || "[]");
+
+  document.getElementById("title-list").innerHTML = titleList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("item-list").innerHTML = itemList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
+}
+
 // === Expose Global Functions ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
 window.addPathBlock = addPathBlock;
 window.openQuestEditor = openQuestEditor;
+window.addEventListener("DOMContentLoaded", loadLegends);
