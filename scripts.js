@@ -32,11 +32,14 @@ function createPathBlock(pathKey = "", pathData = {}) {
 
   const pathTitle = pathData.title || "";
 
+  // Add basic path info + requirements
   div.innerHTML = `
     <div class="flex justify-between items-center mb-2">
       <input class="path-title w-full p-1 mb-1 rounded text-black" placeholder="Path Title" value="${pathTitle}" />
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
     </div>
+
+    <textarea class="path-description w-full p-2 mb-2 rounded bg-gray-700 text-white" placeholder="Path Description">${pathData.description || ""}</textarea>
 
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
@@ -49,13 +52,24 @@ function createPathBlock(pathKey = "", pathData = {}) {
     </details>
   `;
 
-  const pathDescriptionInput = document.createElement("textarea");
-pathDescriptionInput.placeholder = "Path Description";
-pathDescriptionInput.className = "path-description bg-gray-700 text-white rounded p-2 mt-2";
-pathDescriptionInput.value = pathData.description || "";
-div.appendChild(pathDescriptionInput);
+  const resolutionLabel = document.createElement("label");
+  resolutionLabel.className = "block text-green-300 text-sm";
+  resolutionLabel.textContent = "Resolution Type:";
 
+  const resolutionSelect = document.createElement("select");
+  resolutionSelect.className = "path-resolution bg-gray-700 text-white rounded p-2 mt-2";
+  ["bo1", "dice", "vote"].forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+    resolutionSelect.appendChild(o);
+  });
+  resolutionSelect.value = pathData.resolution || "bo1";
 
+  div.appendChild(resolutionLabel);
+  div.appendChild(resolutionSelect);
+
+  // Outcomes section
   const outcomes = [
     { label: "Midweek - High", key: "midweekHigh" },
     { label: "Midweek - Low", key: "midweekLow" },
@@ -73,36 +87,7 @@ div.appendChild(pathDescriptionInput);
       <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
       <label class="text-xs text-gray-300">📝 Text</label>
       <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-        <div>
-          <p class="text-xs text-yellow-400 mb-1">✅ Requirements</p>
-          <label class="text-xs text-gray-400">Required Titles:</label>
-          <input class="${key}-requires-titles w-full p-1 rounded text-black" value="${(step.requires?.titles || ["Any"]).join(", ")}" />
-          <label class="text-xs text-gray-400">Required Items:</label>
-          <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || ["Any"]).join(", ")}" />
-          <label class="text-xs text-gray-400">Required Status:</label>
-          <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
-        </div>
-        <div>
-          <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
-          <label class="text-xs text-pink-300">Grant Items:</label>
-          <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Grant Status:</label>
-          <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Grant Titles:</label>
-          <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
-        </div>
-        <div>
-          <p class="text-xs text-red-400 mb-1">❌ Removals</p>
-          <label class="text-xs text-pink-300">Remove Items:</label>
-          <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Remove Status:</label>
-          <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Remove Titles:</label>
-          <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
-        </div>
-      </div>
+      <!-- Add additional input blocks here (effects, requirements, etc.) -->
     `;
     div.appendChild(block);
   });
