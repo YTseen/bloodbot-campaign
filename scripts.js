@@ -538,6 +538,8 @@ fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
     console.error(err);
   });
 
+  }
+
 function exportQuestToFile() {
   const key = document.getElementById("questKey").value.trim();
   if (!key) return alert("❌ Missing quest key");
