@@ -1,14 +1,14 @@
 {
   "Quest 1 - The Blood Oath": {
-    "intro": "Ã°ÂÂ§Â­ INTRO Ã¢ÂÂ \"Arrival\"\nDaybreak spills over shattered stone as you crest the rise Ã¢ÂÂ five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again.\n\nThis place looks like home.\nAt least, to the tents that now occupy it.\n\nÃ¢ÂÂWeÃ¢ÂÂre looking for Garath,Ã¢ÂÂ one of you mutters.\nA nearby merc glances up.\nÃ¢ÂÂCommand tentÃ¢ÂÂs that way Ã¢ÂÂ past the sparring yard.Ã¢ÂÂ\n\nYou pass through the practice ring Ã¢ÂÂ a headmaster barking at recruits, one of them already flat on his back Ã¢ÂÂ and make for the command tent.\n\nInside, lanternlight glows against canvas walls and crumpled maps. Garath stands at the center Ã¢ÂÂ proud, weathered, focused. A commander not above his men, but among them.\n\nHe turns as you enter, eyes scanning each of you Ã¢ÂÂ then glances to Ronald, who stands silently at the side.\n\nÃ¢ÂÂI asked for five,Ã¢ÂÂ Garath says. Ã¢ÂÂI got the best five I know.Ã¢ÂÂ\n\nHe steps forward, placing both hands on the war table.\n\nÃ¢ÂÂWeÃ¢ÂÂre carving something new here. A place of power. But firstÃ¢ÂÂ¦Ã¢ÂÂ\n\nHis voice sharpens Ã¢ÂÂ not cruel, but carved from command.\n\nÃ¢ÂÂProve to me youÃ¢ÂÂre worth the iron you carry.Ã¢ÂÂ",
+    "intro": "ÃÂ°ÃÂÃÂ§ÃÂ­ INTRO ÃÂ¢ÃÂÃÂ \"Arrival\"\nDaybreak spills over shattered stone as you crest the rise ÃÂ¢ÃÂÃÂ five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again.\n\nThis place looks like home.\nAt least, to the tents that now occupy it.\n\nÃÂ¢ÃÂÃÂWeÃÂ¢ÃÂÃÂre looking for Garath,ÃÂ¢ÃÂÃÂ one of you mutters.\nA nearby merc glances up.\nÃÂ¢ÃÂÃÂCommand tentÃÂ¢ÃÂÃÂs that way ÃÂ¢ÃÂÃÂ past the sparring yard.ÃÂ¢ÃÂÃÂ\n\nYou pass through the practice ring ÃÂ¢ÃÂÃÂ a headmaster barking at recruits, one of them already flat on his back ÃÂ¢ÃÂÃÂ and make for the command tent.\n\nInside, lanternlight glows against canvas walls and crumpled maps. Garath stands at the center ÃÂ¢ÃÂÃÂ proud, weathered, focused. A commander not above his men, but among them.\n\nHe turns as you enter, eyes scanning each of you ÃÂ¢ÃÂÃÂ then glances to Ronald, who stands silently at the side.\n\nÃÂ¢ÃÂÃÂI asked for five,ÃÂ¢ÃÂÃÂ Garath says. ÃÂ¢ÃÂÃÂI got the best five I know.ÃÂ¢ÃÂÃÂ\n\nHe steps forward, placing both hands on the war table.\n\nÃÂ¢ÃÂÃÂWeÃÂ¢ÃÂÃÂre carving something new here. A place of power. But firstÃÂ¢ÃÂÃÂ¦ÃÂ¢ÃÂÃÂ\n\nHis voice sharpens ÃÂ¢ÃÂÃÂ not cruel, but carved from command.\n\nÃÂ¢ÃÂÃÂProve to me youÃÂ¢ÃÂÃÂre worth the iron you carry.ÃÂ¢ÃÂÃÂ",
     "wrapup": {
       "text": ""
     },
     "between": [],
     "paths": {
       "path_0": {
-        "title": "🛡️EXECUTION SQUAD",
-        "description": "\"Train the green recruits under RonaldÃ¢ÂÂs supervision.\"\n\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-strapped buckles, eyes full of nerves.\n\nRonald doesnÃ¢ÂÂt bark. He just nods toward them and speaks low.\nÃ¢ÂÂThey wonÃ¢ÂÂt last an hour outside these walls.Ã¢ÂÂ\n\nHe steps back.\nÃ¢ÂÂYou want to lead? Prove it here Ã¢ÂÂ before we get someone killed out there.Ã¢ÂÂ",
+        "title": "ð¡ï¸EXECUTION SQUAD",
+        "description": "\"Train the green recruits under RonaldÃÂ¢ÃÂÃÂs supervision.\"\n\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-strapped buckles, eyes full of nerves.\n\nRonald doesnÃÂ¢ÃÂÃÂt bark. He just nods toward them and speaks low.\nÃÂ¢ÃÂÃÂThey wonÃÂ¢ÃÂÃÂt last an hour outside these walls.ÃÂ¢ÃÂÃÂ\n\nHe steps back.\nÃÂ¢ÃÂÃÂYou want to lead? Prove it here ÃÂ¢ÃÂÃÂ before we get someone killed out there.ÃÂ¢ÃÂÃÂ",
         "requires": {
           "titles": [
             "Any"
@@ -33,7 +33,7 @@
   "Quest 1 - The Blood Oath 111": {
     "intro": "SSSSSSSSS",
     "wrapup": {
-      "text": "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+      "text": "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     },
     "paths": {
       "Execution Squad": {
@@ -238,6 +238,37 @@
             }
           }
         }
+      }
+    }
+  },
+  "Quest 1 - The Blood Oath 👍🏻": {
+    "intro": "ÃÂ°ÃÂÃÂ§ÃÂ­ INTRO ÃÂ¢ÃÂÃÂ \"Arrival\"\nDaybreak spills over shattered stone as you crest the rise ÃÂ¢ÃÂÃÂ five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again.\n\nThis place looks like home.\nAt least, to the tents that now occupy it.\n\nÃÂ¢ÃÂÃÂWeÃÂ¢ÃÂÃÂre looking for Garath,ÃÂ¢ÃÂÃÂ one of you mutters.\nA nearby merc glances up.\nÃÂ¢ÃÂÃÂCommand tentÃÂ¢ÃÂÃÂs that way ÃÂ¢ÃÂÃÂ past the sparring yard.ÃÂ¢ÃÂÃÂ\n\nYou pass through the practice ring ÃÂ¢ÃÂÃÂ a headmaster barking at recruits, one of them already flat on his back ÃÂ¢ÃÂÃÂ and make for the command tent.\n\nInside, lanternlight glows against canvas walls and crumpled maps. Garath stands at the center ÃÂ¢ÃÂÃÂ proud, weathered, focused. A commander not above his men, but among them.\n\nHe turns as you enter, eyes scanning each of you ÃÂ¢ÃÂÃÂ then glances to Ronald, who stands silently at the side.\n\nÃÂ¢ÃÂÃÂI asked for five,ÃÂ¢ÃÂÃÂ Garath says. ÃÂ¢ÃÂÃÂI got the best five I know.ÃÂ¢ÃÂÃÂ\n\nHe steps forward, placing both hands on the war table.\n\nÃÂ¢ÃÂÃÂWeÃÂ¢ÃÂÃÂre carving something new here. A place of power. But firstÃÂ¢ÃÂÃÂ¦ÃÂ¢ÃÂÃÂ\n\nHis voice sharpens ÃÂ¢ÃÂÃÂ not cruel, but carved from command.\n\nÃÂ¢ÃÂÃÂProve to me youÃÂ¢ÃÂÃÂre worth the iron you carry.ÃÂ¢ÃÂÃÂ",
+    "wrapup": {
+      "text": ""
+    },
+    "between": [],
+    "paths": {
+      "path_0": {
+        "title": "ð¡ï¸EXECUTION SQUAD",
+        "description": "\"Train the green recruits under RonaldÃÂ¢ÃÂÃÂs supervision.\"\n\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-strapped buckles, eyes full of nerves.\n\nRonald doesnÃÂ¢ÃÂÃÂt bark. He just nods toward them and speaks low.\nÃÂ¢ÃÂÃÂThey wonÃÂ¢ÃÂÃÂt last an hour outside these walls.ÃÂ¢ÃÂÃÂ\n\nHe steps back.\nÃÂ¢ÃÂÃÂYou want to lead? Prove it here ÃÂ¢ÃÂÃÂ before we get someone killed out there.ÃÂ¢ÃÂÃÂ",
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [
+            "Any"
+          ],
+          "status": [
+            "Any"
+          ]
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "dice",
+        "fixedOutcome": ""
       }
     }
   }
