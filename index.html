@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    input, textarea, select { color: black !important; }
+    input, textarea, select { color: black !important; background-color: white !important; }
     details[open] summary::after { content: "▲"; float: right; }
     summary::after { content: "▼"; float: right; }
   </style>
@@ -72,7 +72,7 @@
       <div id="finalChoices" class="flex flex-wrap gap-2"></div>
       <div id="finalResult" class="text-green-300 text-sm whitespace-pre-wrap"></div>
       <div id="wrapupSection" class="text-gray-300 text-sm whitespace-pre-wrap"></div>
-      <pre id="scoreBoard" class="text-xs text-gray-500 bg-black p-2 mt-4 rounded border border-gray-800"></pre>
+      <pre id="scoreBoard" class="text-xs text-white whitespace-pre-wrap"></pre>
     </div>
   </div>
 
@@ -100,7 +100,7 @@
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
-  <!-- === FINAL SCRIPT === -->
+  <!-- === FINAL SCRIPT LOAD === -->
   <script src="scripts.js"></script>
   <script>
     function showTab(id) {
@@ -117,7 +117,9 @@
           typeof saveLegends === "function" &&
           document.getElementById("legendTitles");
 
-        if (!ready) return setTimeout(waitForGlobals, 100);
+        if (!ready) {
+          return setTimeout(waitForGlobals, 100);
+        }
 
         console.log("✅ Functions ready. Auto-loading Legends and Quests...");
         loadLegends();
