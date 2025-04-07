@@ -30,16 +30,13 @@ function createPathBlock(pathKey = "", pathData = {}) {
   div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
   div.draggable = true;
 
-  const titleValue = pathData.title || "";
+  const pathTitle = pathData.title || "";
 
   div.innerHTML = `
-    <div class="flex justify-between items-center mb-1">
-      <span class="text-xs text-gray-400">↕ Drag to reorder</span>
-      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded text-xs">🗑 Remove</button>
+    <div class="flex justify-between items-center mb-2">
+      <input class="path-title w-full p-1 mb-1 rounded text-black" placeholder="Path Title" value="${pathTitle}" />
+      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
     </div>
-
-    <label class="text-xs text-yellow-300">Path Title</label>
-    <input class="path-title w-full p-1 mb-2 rounded text-black" value="${titleValue}" />
 
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
