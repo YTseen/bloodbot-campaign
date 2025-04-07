@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    input, textarea, select { color: black !important; background-color: white !important; }
+    input, textarea, select { color: black !important; }
     details[open] summary::after { content: "▲"; float: right; }
     summary::after { content: "▼"; float: right; }
   </style>
@@ -72,8 +72,8 @@
       <div id="finalChoices" class="flex flex-wrap gap-2"></div>
       <div id="finalResult" class="text-green-300 text-sm whitespace-pre-wrap"></div>
       <div id="wrapupSection" class="text-gray-300 text-sm whitespace-pre-wrap"></div>
-      <pre id="scoreBoard" class="text-xs text-white whitespace-pre-wrap"></pre>
     </div>
+    <pre id="scoreBoard" class="text-xs text-gray-400 whitespace-pre-wrap"></pre>
   </div>
 
   <!-- === LEGEND SYSTEM UI === -->
@@ -100,32 +100,33 @@
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
-  <!-- === FINAL SCRIPT LOAD === -->
-  <script src="scripts.js"></script>
+  <!-- === GLOBALS + TABS === -->
   <script>
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
     }
+  </script>
 
+  <!-- === MAIN SCRIPT LOAD (AFTER DOM) === -->
+  <script src="scripts.js"></script>
+
+  <!-- === GLOBAL BOOTSTRAP === -->
+  <script>
     window.addEventListener("DOMContentLoaded", () => {
       showTab('editorTab');
-
       const waitForGlobals = () => {
         const ready =
           typeof manualLoadQuests === "function" &&
           typeof saveLegends === "function" &&
+          typeof renderPreview === "function" &&
+          typeof createPathBlock === "function" &&
           document.getElementById("legendTitles");
-
-        if (!ready) {
-          return setTimeout(waitForGlobals, 100);
-        }
-
+        if (!ready) return setTimeout(waitForGlobals, 100);
         console.log("✅ Functions ready. Auto-loading Legends and Quests...");
         loadLegends();
         manualLoadQuests();
       };
-
       waitForGlobals();
     });
   </script>
