@@ -1,4 +1,4 @@
-// ========== GITHUB CONFIG ==========
+// ========== Phase 1: Initialization and Player State ==========
 let githubToken = localStorage.getItem("githubToken") || "";
 if (!githubToken) {
   githubToken = prompt("Enter your GitHub Token:");
@@ -18,10 +18,6 @@ let playerState = {
   logs: [],
   rewards: {},
 };
-
-function autoGenerateKey(title) {
-  return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
-}
 
 function simulatePlayerState() {
   playerState = {
@@ -68,8 +64,13 @@ function resetPlayerState() {
   renderPreview();
 }
 
-// === Phase 2: Editor UI Setup ===
+// === DOM Bindings ===
+document.addEventListener("DOMContentLoaded", () => {
+  simulatePlayerState();
+  updateDatalists();
+});
 
+// === Editor UI Setup ===
 function createNewQuest(isSide = false) {
   selectedKey = "Quest " + Date.now();
   document.getElementById("questKey").value = selectedKey;
@@ -80,9 +81,19 @@ function createNewQuest(isSide = false) {
   document.getElementById("editorSection").classList.remove("hidden");
 }
 
+function updateDatalists() {
+  const titleList = JSON.parse(localStorage.getItem("legendTitles") || "[]");
+  const itemList = JSON.parse(localStorage.getItem("legendItems") || "[]");
+  const statusList = JSON.parse(localStorage.getItem("legendStatuses") || "[]");
+
+  document.getElementById("title-list").innerHTML = titleList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("item-list").innerHTML = itemList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
+}
+
 function createPathBlock(pathKey = "", pathData = {}) {
   const div = document.createElement("div");
-  div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
+  div.className = "path-block border p-2 bg-gray-800 rounded mb-2 text-white";
   div.draggable = true;
 
   const pathTitle = pathData.title || "";
@@ -91,7 +102,7 @@ function createPathBlock(pathKey = "", pathData = {}) {
       <input class="path-title w-full p-1 mb-1 rounded text-black" placeholder="Path Title" value="${pathTitle}" />
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
     </div>
-    <textarea class="path-description w-full p-2 mb-2 rounded bg-gray-700 text-white" placeholder="Path Description">${pathData.description || ""}</textarea>
+    <textarea class="path-description w-full p-2 mb-2 rounded bg-white text-black" placeholder="Path Description">${pathData.description || ""}</textarea>
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
       <label class="text-xs text-gray-400">Required Titles:</label>
@@ -100,6 +111,7 @@ function createPathBlock(pathKey = "", pathData = {}) {
       <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
       <label class="text-xs text-gray-400">Required Status:</label>
       <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || ""}" />
+
       <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
       <input class="excludes-titles-input w-full p-1 rounded text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
       <label class="text-xs text-red-400">❌ Excluded Items:</label>
@@ -109,6 +121,7 @@ function createPathBlock(pathKey = "", pathData = {}) {
     </details>
   `;
 
+  // Inject after innerHTML
   const resolutionLabel = document.createElement("label");
   resolutionLabel.className = "block text-green-300 text-sm";
   resolutionLabel.textContent = "Resolution Type:";
@@ -132,6 +145,87 @@ function createPathBlock(pathKey = "", pathData = {}) {
 
   const fixedOutcomeSelect = document.createElement("select");
   fixedOutcomeSelect.className = "path-fixed-outcome bg-gray-700 text-white rounded p-2 mt-1";
+  ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
+    const o = document.createElement("option");
+    o.value = val;
+    o.textContent = val || "-- Let system decide --";
+    fixedOutcomeSelect.appendChild(o);
+  });
+  fixedOutcomeSelect.value = pathData.fixedOutcome || "";
+  div.appendChild(fixedOutcomeSelect);
+
+  return div;
+}
+
+function addPathBlock() {
+  const container = document.getElementById("pathsContainer");
+  container.appendChild(createPathBlock());
+}
+
+// === Phase 2: Editor UI Setup ===
+
+function createNewQuest(isSide = false) {
+  selectedKey = "Quest " + Date.now();
+  document.getElementById("questKey").value = selectedKey;
+  document.getElementById("questIntro").value = "";
+  document.getElementById("questWrap").value = "";
+  document.getElementById("sideQuestBetween").value = isSide ? "Quest 1 | Quest 2" : "";
+  document.getElementById("pathsContainer").innerHTML = "";
+  document.getElementById("editorSection").classList.remove("hidden");
+}
+
+function createPathBlock(pathKey = "", pathData = {}) {
+  const div = document.createElement("div");
+  div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
+  div.draggable = true;
+
+  const pathTitle = pathData.title || "";
+  div.innerHTML = `
+    <div class="flex justify-between items-center mb-2">
+      <input class="path-title w-full p-1 mb-1 rounded bg-white text-black" placeholder="Path Title" value="${pathTitle}" />
+      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
+    </div>
+    <textarea class="path-description w-full p-2 mb-2 rounded bg-white text-black" placeholder="Path Description">${pathData.description || ""}</textarea>
+    <details class="mb-2">
+      <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
+      <label class="text-xs text-gray-400">Required Titles:</label>
+      <input class="requires-titles-input w-full p-1 rounded bg-white text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Items:</label>
+      <input class="requires-items-input w-full p-1 rounded bg-white text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Status:</label>
+      <input class="requires-status-input w-full p-1 rounded bg-white text-black" list="status-list" value="${pathData.requires?.status || ""}" />
+      <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
+      <input class="excludes-titles-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
+      <label class="text-xs text-red-400">❌ Excluded Items:</label>
+      <input class="excludes-items-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.items || []).join(", ")}" />
+      <label class="text-xs text-red-400">❌ Excluded Status:</label>
+      <input class="excludes-status-input w-full p-1 rounded bg-white text-black" value="${pathData.excludes?.status || ""}" />
+    </details>
+  `;
+
+  const resolutionLabel = document.createElement("label");
+  resolutionLabel.className = "block text-green-300 text-sm";
+  resolutionLabel.textContent = "Resolution Type:";
+  div.appendChild(resolutionLabel);
+
+  const resolutionSelect = document.createElement("select");
+  resolutionSelect.className = "path-resolution bg-white text-black rounded p-2 mt-1";
+  ["bo1", "dice", "vote"].forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+    resolutionSelect.appendChild(o);
+  });
+  resolutionSelect.value = pathData.resolution || "bo1";
+  div.appendChild(resolutionSelect);
+
+  const fixedOutcomeLabel = document.createElement("label");
+  fixedOutcomeLabel.className = "block text-yellow-200 text-sm mt-2";
+  fixedOutcomeLabel.textContent = "Force Outcome (optional):";
+  div.appendChild(fixedOutcomeLabel);
+
+  const fixedOutcomeSelect = document.createElement("select");
+  fixedOutcomeSelect.className = "path-fixed-outcome bg-white text-black rounded p-2 mt-1";
   ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
     const o = document.createElement("option");
     o.value = val;
@@ -318,9 +412,18 @@ function importMockState(file) {
   reader.readAsText(file);
 }
 
+// === Expose Global Functions ===
+window.manualLoadQuests = manualLoadQuests;
+window.saveLegends = saveLegends;
 window.showRewardSummary = showRewardSummary;
 window.showTimelineLog = showTimelineLog;
 window.editPlayerStateManually = editPlayerStateManually;
 window.exportMockState = exportMockState;
 window.importMockState = importMockState;
 window.resetMockState = resetMockState;
+window.createNewQuest = createNewQuest;
+window.createPathBlock = createPathBlock;
+window.addPathBlock = addPathBlock;
+window.openQuestEditor = openQuestEditor;
+window.updateDatalists = updateDatalists;
+window.renderPreview = renderPreview;
