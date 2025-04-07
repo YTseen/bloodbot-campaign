@@ -496,7 +496,7 @@ function saveQuestToGitHub() {
   });
 
   function encodeUTF8toBase64(str) {
-  return btoa(String.fromCharCode(...new Uint8Array(new TextEncoder().encode(str))));
+  return btoa(unescape(encodeURIComponent(str)));
 }
 
   questData[key] = quest;
