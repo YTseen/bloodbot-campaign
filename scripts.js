@@ -142,20 +142,31 @@ function createPathBlock(pathKey = "", pathData = {}) {
     { key: "finalFailure", label: "Final Outcome - Failure" }
   ];
 
-  outcomes.forEach(({ key, label }) => {
-    const [group, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
-    const outcome = pathData?.[group]?.[result] || {};
-    const text = outcome?.text || "";
+outcomes.forEach(({ key, label }) => {
+  const type = key.startsWith("midweek") ? "midweek" : "final";
+  const result = key.endsWith("High") || key.endsWith("Success") ? "high" : "low";
+  const step = pathData?.[type]?.[result] || {};
 
-const box = document.createElement("details");
-box.className = "mt-3 bg-gray-700 p-3 rounded space-y-2";
-box.innerHTML = `
-  <summary class="text-green-300 text-sm cursor-pointer">${label}</summary>
-  <label class="text-xs text-white">Narrative Text</label>
-  <textarea class="${key}-text w-full bg-white text-black p-2 rounded" placeholder="Narrative text for ${label}">${text}</textarea>
-`;
-    div.appendChild(box);
-  });
+  const block = document.createElement("details");
+  block.className = "bg-gray-700 p-3 rounded mt-3";
+  block.innerHTML = `
+    <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
+
+    <label class="text-xs text-white block mt-2">Narrative Text:</label>
+    <textarea class="${key}-text w-full p-1 rounded bg-white text-black" placeholder="Narrative">${step.text || ""}</textarea>
+
+    <label class="text-xs text-yellow-400 block mt-2">✅ Requirements (comma separated)</label>
+    <input class="${key}-requires-titles w-full p-1 rounded text-black bg-white" placeholder="Titles" value="${(step.requires?.titles || []).join(", ")}" />
+    <input class="${key}-requires-items w-full p-1 rounded text-black bg-white" placeholder="Items" value="${(step.requires?.items || []).join(", ")}" />
+    <input class="${key}-requires-status w-full p-1 rounded text-black bg-white" placeholder="Status" value="${step.requires?.status || ""}" />
+
+    <label class="text-xs text-red-400 block mt-2">❌ Exclusions</label>
+    <input class="${key}-excludes-titles w-full p-1 rounded text-black bg-white" placeholder="Exclude Titles" value="${(step.excludes?.titles || []).join(", ")}" />
+    <input class="${key}-excludes-items w-full p-1 rounded text-black bg-white" placeholder="Exclude Items" value="${(step.excludes?.items || []).join(", ")}" />
+    <input class="${key}-excludes-status w-full p-1 rounded text-black bg-white" placeholder="Exclude Status" value="${step.excludes?.status || ""}" />
+  `;
+  div.appendChild(block);
+});
 
   return div;
 }
