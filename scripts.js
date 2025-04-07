@@ -15,23 +15,6 @@ function autoGenerateKey(title) {
   return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
 }
 
-function manualLoadQuests() {
-  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  })
-    .then(res => res.json())
-    .then(data => {
-      const decoded = atob(data.content);
-      questData = JSON.parse(decoded);
-      renderQuestList();
-      populatePreviewDropdown();
-    })
-    .catch(err => {
-      alert("❌ Failed to load quests");
-      console.error(err);
-    });
-}
-
 function createNewQuest(isSide = false) {
   selectedKey = "Quest " + Date.now();
   document.getElementById("questKey").value = selectedKey;
@@ -56,9 +39,9 @@ function createPathBlock(pathKey = "", pathData = {}) {
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
       <label class="text-xs text-gray-400">Required Titles:</label>
-      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
+      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || ["Any"]).join(", ")}" />
       <label class="text-xs text-gray-400">Required Items:</label>
-      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
+      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || ["Any"]).join(", ")}" />
       <label class="text-xs text-gray-400">Required Status:</label>
       <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || "Any"}" />
     </details>
@@ -76,29 +59,52 @@ function createPathBlock(pathKey = "", pathData = {}) {
     const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
 
     const block = document.createElement("details");
-    block.className = "bg-gray-700 p-2 rounded mt-3";
+    block.className = "bg-gray-700 p-3 rounded mt-3 space-y-2";
     block.innerHTML = `
       <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
-      <textarea class="${key}-text w-full p-1 rounded text-black mt-2">${step.text || ""}</textarea>
 
-      <label class="text-xs text-pink-300">Grant Items:</label>
-      <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
-      <label class="text-xs text-pink-300">Grant Status:</label>
-      <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
-      <label class="text-xs text-pink-300">Grant Titles:</label>
-      <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
+      <label class="text-xs text-gray-300">📝 Text</label>
+      <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
 
-      <label class="text-xs text-pink-300">Remove Items:</label>
-      <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
-      <label class="text-xs text-pink-300">Remove Status:</label>
-      <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
-      <label class="text-xs text-pink-300">Remove Titles:</label>
-      <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
 
-      <label class="text-xs text-gray-400">Required Items:</label>
-      <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || []).join(", ")}" />
-      <label class="text-xs text-gray-400">Required Status:</label>
-      <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
+        <div>
+          <p class="text-xs text-yellow-400 mb-1">✅ Requirements</p>
+          <label class="text-xs text-gray-400">Required Titles:</label>
+          <input class="${key}-requires-titles w-full p-1 rounded text-black" value="${(step.requires?.titles || ["Any"]).join(", ")}" />
+
+          <label class="text-xs text-gray-400">Required Items:</label>
+          <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || ["Any"]).join(", ")}" />
+
+          <label class="text-xs text-gray-400">Required Status:</label>
+          <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
+        </div>
+
+        <div>
+          <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
+          <label class="text-xs text-pink-300">Grant Items:</label>
+          <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
+
+          <label class="text-xs text-pink-300">Grant Status:</label>
+          <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
+
+          <label class="text-xs text-pink-300">Grant Titles:</label>
+          <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
+        </div>
+
+        <div>
+          <p class="text-xs text-red-400 mb-1">❌ Removals</p>
+          <label class="text-xs text-pink-300">Remove Items:</label>
+          <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
+
+          <label class="text-xs text-pink-300">Remove Status:</label>
+          <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
+
+          <label class="text-xs text-pink-300">Remove Titles:</label>
+          <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
+        </div>
+
+      </div>
     `;
     div.appendChild(block);
   });
