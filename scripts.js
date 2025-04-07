@@ -180,188 +180,6 @@ function updateDatalists() {
   document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
 }
 
-function createPathBlock(pathKey = "", pathData = {}) {
-  const div = document.createElement("div");
-  div.className = "path-block border p-2 bg-gray-800 rounded mb-4";
-  div.draggable = true;
-
-  const pathTitle = pathData.title || "";
-  div.innerHTML = `
-    <div class="flex justify-between items-center mb-2">
-      <input class="path-title w-full p-1 mb-1 rounded bg-white text-black" placeholder="Path Title" value="${pathTitle}" />
-      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
-    </div>
-    <textarea class="path-description w-full p-2 mb-2 rounded bg-white text-black" placeholder="Path Description">${pathData.description || ""}</textarea>
-    <details class="mb-2">
-      <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
-      <label class="text-xs text-gray-400">Required Titles:</label>
-      <input class="requires-titles-input w-full p-1 rounded bg-white text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
-      <label class="text-xs text-gray-400">Required Items:</label>
-      <input class="requires-items-input w-full p-1 rounded bg-white text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
-      <label class="text-xs text-gray-400">Required Status:</label>
-      <input class="requires-status-input w-full p-1 rounded bg-white text-black" list="status-list" value="${pathData.requires?.status || ""}" />
-      <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
-      <input class="excludes-titles-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
-      <label class="text-xs text-red-400">❌ Excluded Items:</label>
-      <input class="excludes-items-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.items || []).join(", ")}" />
-      <label class="text-xs text-red-400">❌ Excluded Status:</label>
-      <input class="excludes-status-input w-full p-1 rounded bg-white text-black" value="${pathData.excludes?.status || ""}" />
-    </details>
-  `;
-
-  const resolutionSelect = document.createElement("select");
-  resolutionSelect.className = "path-resolution bg-white text-black rounded p-2 mt-1";
-  ["bo1", "dice", "vote"].forEach(opt => {
-    const o = document.createElement("option");
-    o.value = opt;
-    o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
-    resolutionSelect.appendChild(o);
-  });
-  resolutionSelect.value = pathData.resolution || "bo1";
-
-  const resolutionLabel = document.createElement("label");
-  resolutionLabel.className = "block text-green-300 text-sm";
-  resolutionLabel.textContent = "Resolution Type:";
-  div.appendChild(resolutionLabel);
-  div.appendChild(resolutionSelect);
-
-  const fixedOutcomeSelect = document.createElement("select");
-  fixedOutcomeSelect.className = "path-fixed-outcome bg-white text-black rounded p-2 mt-1";
-  ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
-    const o = document.createElement("option");
-    o.value = val;
-    o.textContent = val || "-- Let system decide --";
-    fixedOutcomeSelect.appendChild(o);
-  });
-  fixedOutcomeSelect.value = pathData.fixedOutcome || "";
-
-  const fixedOutcomeLabel = document.createElement("label");
-  fixedOutcomeLabel.className = "block text-yellow-200 text-sm mt-2";
-  fixedOutcomeLabel.textContent = "Force Outcome (optional):";
-  div.appendChild(fixedOutcomeLabel);
-  div.appendChild(fixedOutcomeSelect);
-
-  const outcomes = [
-    { label: "Midweek - High", key: "midweekHigh" },
-    { label: "Midweek - Low", key: "midweekLow" },
-    { label: "Final - Success", key: "finalSuccess" },
-    { label: "Final - Failure", key: "finalFailure" }
-  ];
-
-  outcomes.forEach(({ label, key }) => {
-    const type = key.startsWith("midweek") ? "midweek" : "final";
-    const result = key.endsWith("High") || key.endsWith("Success") ? "high" : "low";
-    const step = pathData?.[type]?.[result] || {};
-
-    const block = document.createElement("details");
-    block.className = "bg-gray-700 p-3 rounded mt-3";
-    block.innerHTML = `
-      <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
-      <label class="text-xs text-white block mt-2">Narrative Text:</label>
-      <textarea class="${key}-text w-full p-1 rounded bg-white text-black" placeholder="Narrative">${step.text || ""}</textarea>
-
-      <label class="text-xs text-yellow-400 block mt-2">✅ Requirements (comma separated)</label>
-      <input class="${key}-requires-titles w-full p-1 rounded text-black bg-white" placeholder="Titles" value="${(step.requires?.titles || []).join(", ")}" />
-      <input class="${key}-requires-items w-full p-1 rounded text-black bg-white" placeholder="Items" value="${(step.requires?.items || []).join(", ")}" />
-      <input class="${key}-requires-status w-full p-1 rounded text-black bg-white" placeholder="Status" value="${step.requires?.status || ""}" />
-
-      <label class="text-xs text-green-400 block mt-2">🎁 Grants</label>
-      <input class="${key}-grant-items w-full p-1 rounded text-black bg-white" placeholder="Grant Items" value="${(step.effects?.grant_items || []).join(", ")}" />
-      <input class="${key}-grant-titles w-full p-1 rounded text-black bg-white" placeholder="Grant Titles" value="${(step.effects?.grant_titles || []).join(", ")}" />
-      <input class="${key}-grant-status w-full p-1 rounded text-black bg-white" placeholder="Grant Status" value="${(step.effects?.grant_status || []).join(", ")}" />
-
-      <label class="text-xs text-red-400 block mt-2">❌ Removes</label>
-      <input class="${key}-remove-items w-full p-1 rounded text-black bg-white" placeholder="Remove Items" value="${(step.effects?.remove_items || []).join(", ")}" />
-      <input class="${key}-remove-titles w-full p-1 rounded text-black bg-white" placeholder="Remove Titles" value="${(step.effects?.remove_titles || []).join(", ")}" />
-      <input class="${key}-remove-status w-full p-1 rounded text-black bg-white" placeholder="Remove Status" value="${(step.effects?.remove_status || []).join(", ")}" />
-    `;
-    div.appendChild(block);
-  });
-
-  return div;
-}
-
-function addPathBlock() {
-  const container = document.getElementById("pathsContainer");
-  container.appendChild(createPathBlock());
-}
-
-// === Phase 2: Editor UI Setup ===
-
-function createNewQuest(isSide = false) {
-  selectedKey = "Quest " + Date.now();
-  document.getElementById("questKey").value = selectedKey;
-  document.getElementById("questIntro").value = "";
-  document.getElementById("questWrap").value = "";
-  document.getElementById("sideQuestBetween").value = isSide ? "Quest 1 | Quest 2" : "";
-  document.getElementById("pathsContainer").innerHTML = "";
-  document.getElementById("editorSection").classList.remove("hidden");
-}
-
-function createPathBlock(pathKey = "", pathData = {}) {
-  const div = document.createElement("div");
-  div.className = "path-block border p-2 bg-gray-800 rounded mb-2";
-  div.draggable = true;
-
-  const pathTitle = pathData.title || "";
-  div.innerHTML = `
-    <div class="flex justify-between items-center mb-2">
-      <input class="path-title w-full p-1 mb-1 rounded bg-white text-black" placeholder="Path Title" value="${pathTitle}" />
-      <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
-    </div>
-    <textarea class="path-description w-full p-2 mb-2 rounded bg-white text-black" placeholder="Path Description">${pathData.description || ""}</textarea>
-    <details class="mb-2">
-      <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
-      <label class="text-xs text-gray-400">Required Titles:</label>
-      <input class="requires-titles-input w-full p-1 rounded bg-white text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
-      <label class="text-xs text-gray-400">Required Items:</label>
-      <input class="requires-items-input w-full p-1 rounded bg-white text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
-      <label class="text-xs text-gray-400">Required Status:</label>
-      <input class="requires-status-input w-full p-1 rounded bg-white text-black" list="status-list" value="${pathData.requires?.status || ""}" />
-      <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
-      <input class="excludes-titles-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
-      <label class="text-xs text-red-400">❌ Excluded Items:</label>
-      <input class="excludes-items-input w-full p-1 rounded bg-white text-black" value="${(pathData.excludes?.items || []).join(", ")}" />
-      <label class="text-xs text-red-400">❌ Excluded Status:</label>
-      <input class="excludes-status-input w-full p-1 rounded bg-white text-black" value="${pathData.excludes?.status || ""}" />
-    </details>
-  `;
-
-  const resolutionLabel = document.createElement("label");
-  resolutionLabel.className = "block text-green-300 text-sm";
-  resolutionLabel.textContent = "Resolution Type:";
-  div.appendChild(resolutionLabel);
-
-  const resolutionSelect = document.createElement("select");
-  resolutionSelect.className = "path-resolution bg-white text-black rounded p-2 mt-1";
-  ["bo1", "dice", "vote"].forEach(opt => {
-    const o = document.createElement("option");
-    o.value = opt;
-    o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
-    resolutionSelect.appendChild(o);
-  });
-  resolutionSelect.value = pathData.resolution || "bo1";
-  div.appendChild(resolutionSelect);
-
-  const fixedOutcomeLabel = document.createElement("label");
-  fixedOutcomeLabel.className = "block text-yellow-200 text-sm mt-2";
-  fixedOutcomeLabel.textContent = "Force Outcome (optional):";
-  div.appendChild(fixedOutcomeLabel);
-
-  const fixedOutcomeSelect = document.createElement("select");
-  fixedOutcomeSelect.className = "path-fixed-outcome bg-white text-black rounded p-2 mt-1";
-  ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
-    const o = document.createElement("option");
-    o.value = val;
-    o.textContent = val || "-- Let system decide --";
-    fixedOutcomeSelect.appendChild(o);
-  });
-  fixedOutcomeSelect.value = pathData.fixedOutcome || "";
-  div.appendChild(fixedOutcomeSelect);
-
-  return div;
-}
-
 function addPathBlock() {
   const container = document.getElementById("pathsContainer");
   container.appendChild(createPathBlock());
@@ -594,6 +412,89 @@ function populatePreviewDropdown() {
     option.textContent = key;
     dropdown.appendChild(option);
   });
+}
+
+function saveQuestToGitHub() {
+  const key = document.getElementById("questKey").value.trim();
+  if (!key) return alert("❌ Missing quest key");
+
+  const quest = {
+    intro: document.getElementById("questIntro").value.trim(),
+    wrapup: { text: document.getElementById("questWrap").value.trim() },
+    between: document.getElementById("sideQuestBetween").value.split("|").map(s => s.trim()).filter(Boolean),
+    paths: {}
+  };
+
+  const pathBlocks = document.querySelectorAll(".path-block");
+  pathBlocks.forEach((block, i) => {
+    const title = block.querySelector(".path-title").value.trim();
+    const description = block.querySelector(".path-description").value.trim();
+
+    const requires = {
+      titles: block.querySelector(".requires-titles-input").value.split(",").map(s => s.trim()).filter(Boolean),
+      items: block.querySelector(".requires-items-input").value.split(",").map(s => s.trim()).filter(Boolean),
+      status: block.querySelector(".requires-status-input").value.split(",").map(s => s.trim()).filter(Boolean)
+    };
+
+    const excludes = {
+      titles: block.querySelector(".excludes-titles-input").value.split(",").map(s => s.trim()).filter(Boolean),
+      items: block.querySelector(".excludes-items-input").value.split(",").map(s => s.trim()).filter(Boolean),
+      status: block.querySelector(".excludes-status-input").value.split(",").map(s => s.trim()).filter(Boolean)
+    };
+
+    const resolution = block.querySelector(".path-resolution").value;
+    const fixedOutcome = block.querySelector(".path-fixed-outcome").value;
+
+    const outcomeKeys = ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"];
+    const path = { title, description, requires, excludes, resolution, fixedOutcome };
+
+    outcomeKeys.forEach(key => {
+      const text = block.querySelector(`.${key}-text`)?.value.trim();
+      if (!text) return;
+
+      const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+      path[type] ??= {};
+      path[type][result] = { text };
+    });
+
+    quest.paths[`path_${i}`] = path;
+  });
+
+  questData[key] = quest;
+
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(questData, null, 2))));
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${githubToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `Update quest: ${key}`,
+      content: encoded,
+      sha: null // let GitHub determine latest
+    })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("GitHub save failed");
+      alert("✅ Quest saved to GitHub");
+    })
+    .catch(err => {
+      alert("❌ Failed to save quest");
+      console.error(err);
+    });
+}
+
+function exportQuestToFile() {
+  const key = document.getElementById("questKey").value.trim();
+  if (!key) return alert("❌ Missing quest key");
+  const data = JSON.stringify(questData[key], null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${key.replace(/\s+/g, "_").toLowerCase()}.json`;
+  a.click();
 }
 
 // === Expose Global Functions ===
