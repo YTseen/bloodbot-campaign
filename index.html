@@ -12,7 +12,7 @@
   </style>
 </head>
 <body class="bg-black text-white font-mono p-6 min-h-screen">
-  <script src="scripts.js"></script>
+
   <h1 class="text-3xl text-red-500 font-bold mb-4">🍗 BloodBot Architect</h1>
 
   <div class="flex gap-4 mb-6">
@@ -101,7 +101,7 @@
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
-  <!-- === GLOBALS + TABS === -->
+  <!-- === GLOBAL TABS SWITCH === -->
   <script>
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
@@ -109,7 +109,7 @@
     }
   </script>
 
-  <!-- === GLOBAL BOOTSTRAP === -->
+  <!-- === LOADER BOOTSTRAP === -->
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       showTab('editorTab');
@@ -120,6 +120,7 @@
           typeof renderPreview === "function" &&
           typeof createPathBlock === "function" &&
           document.getElementById("legendTitles");
+
         if (!ready) return setTimeout(waitForGlobals, 100);
         console.log("✅ Functions ready. Auto-loading Legends and Quests...");
         loadLegends();
@@ -128,5 +129,8 @@
       waitForGlobals();
     });
   </script>
+
+  <!-- === LOAD MAIN LOGIC === -->
+  <script src="scripts.js" defer></script>
 </body>
 </html>
