@@ -76,7 +76,7 @@
   </div>
 
   <!-- === TABS === -->
-  <script>
+ <script>
   function showTab(id) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
@@ -85,15 +85,18 @@
   window.addEventListener("DOMContentLoaded", () => {
     showTab('editorTab');
 
-    // Wait for the script to load and functions to exist
     const waitForGlobals = () => {
-      if (typeof manualLoadQuests !== 'function' || typeof saveLegends !== 'function') {
-        console.warn("⏳ Waiting for script functions...");
+      const ready =
+        typeof manualLoadQuests === "function" &&
+        typeof saveLegends === "function" &&
+        document.getElementById("legendTitles");
+
+      if (!ready) {
         return setTimeout(waitForGlobals, 100);
       }
 
       console.log("✅ Functions ready. Auto-loading Legends and Quests...");
-      saveLegends(); // this will populate datalists immediately
+      loadLegends();
       manualLoadQuests();
     };
 
