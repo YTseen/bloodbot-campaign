@@ -49,6 +49,13 @@ function createPathBlock(pathKey = "", pathData = {}) {
     </details>
   `;
 
+  const pathDescriptionInput = document.createElement("textarea");
+pathDescriptionInput.placeholder = "Path Description";
+pathDescriptionInput.className = "path-description bg-gray-700 text-white rounded p-2 mt-2";
+pathDescriptionInput.value = pathData.description || "";
+block.appendChild(pathDescriptionInput);
+
+
   const outcomes = [
     { label: "Midweek - High", key: "midweekHigh" },
     { label: "Midweek - Low", key: "midweekLow" },
@@ -283,90 +290,70 @@ function saveQuestToGitHub() {
   const wrapup = document.getElementById("questWrap").value.trim();
   const between = document.getElementById("sideQuestBetween").value.split("|").map(x => x.trim()).filter(Boolean);
 
-const paths = {};
-document.querySelectorAll(".path-block").forEach((block, index) => {
-  const title = block.querySelector(".path-title")?.value.trim() || "";
+  const paths = {};
+  document.querySelectorAll(".path-block").forEach((block, index) => {
+    const title = block.querySelector(".path-title")?.value.trim() || "";
+    const description = block.querySelector(".path-description")?.value.trim() || "";
+    const resolution = block.querySelector(".path-resolution")?.value || "bo1";
 
-  const requires = {
-    titles: block.querySelector(".requires-titles-input").value.split(",").map(x => x.trim()).filter(Boolean),
-    items: block.querySelector(".requires-items-input").value.split(",").map(x => x.trim()).filter(Boolean),
-    status: block.querySelector(".requires-status-input").value.trim()
-  };
+    const requires = {
+      titles: block.querySelector(".requires-titles-input")?.value.split(",").map(x => x.trim()).filter(Boolean),
+      items: block.querySelector(".requires-items-input")?.value.split(",").map(x => x.trim()).filter(Boolean),
+      status: block.querySelector(".requires-status-input")?.value.trim()
+    };
 
     const stepData = {};
-    ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(key => {
-      const prefix = key.replace("midweek", "midweek.").replace("final", "final.");
-      const [type, result] = prefix.split(".");
-
-      stepData[type] = stepData[type] || {};
+    ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(k => {
+      const [type, result] = k.replace("midweek", "midweek.").replace("final", "final.").split(".");
+      if (!stepData[type]) stepData[type] = {};
       stepData[type][result] = {
-        text: block.querySelector(`.${key}-text`).value.trim(),
-        effects: {
-          grant_items: block.querySelector(`.${key}-grant-items`).value.split(",").map(x => x.trim()).filter(Boolean),
-          grant_status: block.querySelector(`.${key}-grant-status`).value.split(",").map(x => x.trim()).filter(Boolean),
-          grant_titles: block.querySelector(`.${key}-grant-titles`).value.split(",").map(x => x.trim()).filter(Boolean),
-          remove_items: block.querySelector(`.${key}-remove-items`).value.split(",").map(x => x.trim()).filter(Boolean),
-          remove_status: block.querySelector(`.${key}-remove-status`).value.split(",").map(x => x.trim()).filter(Boolean),
-          remove_titles: block.querySelector(`.${key}-remove-titles`).value.split(",").map(x => x.trim()).filter(Boolean)
-        },
-        requires: {
-          titles: block.querySelector(`.${key}-requires-titles`)?.value.split(",").map(x => x.trim()).filter(Boolean) || [],
-          items: block.querySelector(`.${key}-requires-items`)?.value.split(",").map(x => x.trim()).filter(Boolean) || [],
-          status: block.querySelector(`.${key}-requires-status`)?.value.trim() || "Any"
-        }
+        title: block.querySelector(`.${k}-title`)?.value.trim() || "",
+        outcome: block.querySelector(`.${k}-outcome`)?.value.trim() || "",
+        effects: block.querySelector(`.${k}-effects`)?.value.trim() || ""
       };
     });
 
-    paths[`Path ${index + 1}`] = { title, requires, ...stepData };
+    paths[`Path ${index + 1}`] = {
+      title,
+      description,
+      resolution,
+      requires,
+      ...stepData
+    };
   });
 
-  const questObj = {
+  questData[key] = {
     intro,
-    between: between.length ? between : undefined,
-    wrapup: { text: wrapup },
+    wrap: wrapup,
+    between,
     paths
   };
 
-  questData[key] = questObj;
-  content: btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-  String.fromCharCode('0x' + p1)
-)),
+  // 🔐 Encode safely (UTF-8 base64 for GitHub)
+  const content = JSON.stringify(questData, null, 2);
+  const safeEncoded = btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+    String.fromCharCode('0x' + p1)
+  ));
 
-  // FIRST: Fetch SHA of existing file
-  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+  const url = `https://api.github.com/repos/${repo}/contents/${questFilePath}`;
+  fetch(url, {
+    method: "GET",
     headers: { Authorization: `token ${githubToken}` }
-  })
-    .then(res => res.json())
-    .then(fileData => {
-      const sha = fileData.sha;
-
-      // THEN: PUT with correct sha
-      return fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${githubToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: `Update quest ${key}`,
-          content: updatedContent,
-          sha: sha
-        })
-      });
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.content && data.commit) {
-        alert("✅ Quest saved to GitHub!");
-      } else {
-        alert("⚠️ Failed to save quest.");
-        console.error(data);
-      }
-    })
-    .catch(err => {
-      alert("❌ Error saving quest.");
-      console.error(err);
-    });
+  }).then(res => res.json()).then(data => {
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Update quest ${key}`,
+        content: safeEncoded,
+        sha: data.sha
+      })
+    }).then(() => alert("✅ Quest saved!"))
+      .catch(err => console.error("❌ Save error:", err));
+  });
 }
 
 // === Expose Global Functions ===
