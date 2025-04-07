@@ -134,46 +134,27 @@ function createPathBlock(pathKey = "", pathData = {}) {
   fixedOutcomeSelect.value = pathData.fixedOutcome || "";
   div.appendChild(fixedOutcomeSelect);
 
+  // Outcomes: Midweek High / Low, Final Success / Failure
   const outcomes = [
-    { label: "Midweek - High", key: "midweekHigh" },
-    { label: "Midweek - Low", key: "midweekLow" },
-    { label: "Final - Success", key: "finalSuccess" },
-    { label: "Final - Failure", key: "finalFailure" }
+    { key: "midweekHigh", label: "Midweek Outcome - High" },
+    { key: "midweekLow", label: "Midweek Outcome - Low" },
+    { key: "finalSuccess", label: "Final Outcome - Success" },
+    { key: "finalFailure", label: "Final Outcome - Failure" }
   ];
 
-  outcomes.forEach(({ label, key }) => {
-    const stepKey = key.replace("midweek", "midweek.").replace("final", "final.");
-    const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
+  outcomes.forEach(({ key, label }) => {
+    const [group, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+    const outcome = pathData?.[group]?.[result] || {};
+    const text = outcome?.text || "";
 
-    const block = document.createElement("details");
-    block.className = "bg-gray-700 p-3 rounded mt-3 space-y-2";
-    block.innerHTML = `
-      <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
+    const box = document.createElement("details");
+    box.className = "mt-3 bg-gray-700 p-3 rounded space-y-2";
+    box.innerHTML = `
+      <summary class="text-green-300 text-sm cursor-pointer">${label}</summary>
       <label class="text-xs text-white">Narrative Text</label>
-      <textarea class="${key}-text w-full p-1 rounded text-black bg-white">${step.text || ""}</textarea>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-        <div>
-          <p class="text-xs text-yellow-400 mb-1">✅ Requirements</p>
-          <input class="${key}-requires-titles w-full p-1 rounded text-black" placeholder="Titles" value="${(step.requires?.titles || []).join(", ")}" />
-          <input class="${key}-requires-items w-full p-1 rounded text-black" placeholder="Items" value="${(step.requires?.items || []).join(", ")}" />
-          <input class="${key}-requires-status w-full p-1 rounded text-black" placeholder="Status" value="${step.requires?.status || ""}" />
-        </div>
-        <div>
-          <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
-          <input class="${key}-grant-items w-full p-1 rounded text-black" placeholder="Grant Items" value="${(step.effects?.grant_items || []).join(", ")}" />
-          <input class="${key}-grant-status w-full p-1 rounded text-black" placeholder="Grant Status" value="${(step.effects?.grant_status || []).join(", ")}" />
-          <input class="${key}-grant-titles w-full p-1 rounded text-black" placeholder="Grant Titles" value="${(step.effects?.grant_titles || []).join(", ")}" />
-        </div>
-        <div>
-          <p class="text-xs text-red-400 mb-1">❌ Removes</p>
-          <input class="${key}-remove-items w-full p-1 rounded text-black" placeholder="Remove Items" value="${(step.effects?.remove_items || []).join(", ")}" />
-          <input class="${key}-remove-status w-full p-1 rounded text-black" placeholder="Remove Status" value="${(step.effects?.remove_status || []).join(", ")}" />
-          <input class="${key}-remove-titles w-full p-1 rounded text-black" placeholder="Remove Titles" value="${(step.effects?.remove_titles || []).join(", ")}" />
-        </div>
-      </div>
+      <textarea class="${key}-text w-full bg-white text-black p-2 rounded" placeholder="Narrative text for ${label}">${text}</textarea>
     `;
-    div.appendChild(block);
+    div.appendChild(box);
   });
 
   return div;
