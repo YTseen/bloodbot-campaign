@@ -5,6 +5,48 @@
       "text": "The fires burn lower now. The last drills have ended. The ruin has grown quieter — not silent, but focused. Your choices echo through it.\n\nYou return to the war tent. Garath is already there, alone, reading a scroll by lamplight. He doesn’t look up immediately, but when he does, there’s no anger in his eyes — only calculation.\n\n“You made an impact,” he says. “Not always clean. But real.”\n\nHe sets the parchment aside, folding his arms. The flame behind him flickers as he steps into its glow.\n\n“We build on what we earn. Your names carry more weight now — for better, or worse.”\n\nHe walks past you without waiting for a reply.\n“Rest while you can,” he adds. “The next oath won’t be given. It’ll be taken.”"
     },
     "between": [],
-    "paths": {}
+    "paths": {
+      "path_0": {
+        "title": "🛡️EXECUTION SQUAD",
+        "description": "\"Drill Line\"\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-fastened buckles, eyes full of nerves.\n\nRonald doesn’t bark. He just nods toward them and speaks low.\n“Fix them,” he says. “Or we all bleed later.”\n\nYou step into the yard. The morning dew hasn’t even burned off, but already the dirt feels like a battlefield.",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "dice",
+        "fixedOutcome": "",
+        "midweek": {
+          "High": {
+            "text": "\"The Shift\"\nAt first, it’s all flinching and fumbled stances. But day by day, something shifts. By the third morning, they move like a unit. Eyes sharper. Blades steady. Intent builds behind every swing.\n\nRonald watches from the yard’s edge at sunset, arms crossed. He stays until the last spar ends. That says enough.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“You didn’t waste them. They’ll follow you now... Commander.”"
+          }
+        }
+      }
+    },
+    "responseLabel": ""
   }
 }
