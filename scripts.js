@@ -293,6 +293,7 @@ function saveQuestToGitHub() {
     ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(key => {
       const prefix = key.replace("midweek", "midweek.").replace("final", "final.");
       const [type, result] = prefix.split(".");
+
       stepData[type] = stepData[type] || {};
       stepData[type][result] = {
         text: block.querySelector(`.${key}-text`).value.trim(),
@@ -325,18 +326,28 @@ function saveQuestToGitHub() {
   questData[key] = questObj;
   const updatedContent = btoa(JSON.stringify(questData, null, 2));
 
+  // FIRST: Fetch SHA of existing file
   fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `token ${githubToken}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: `Update quest ${key}`,
-      content: updatedContent,
-      sha: "" // Optional: update later if needed
-    })
+    headers: { Authorization: `token ${githubToken}` }
   })
+    .then(res => res.json())
+    .then(fileData => {
+      const sha = fileData.sha;
+
+      // THEN: PUT with correct sha
+      return fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${githubToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: `Update quest ${key}`,
+          content: updatedContent,
+          sha: sha
+        })
+      });
+    })
     .then(res => res.json())
     .then(data => {
       if (data && data.content && data.commit) {
