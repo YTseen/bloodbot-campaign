@@ -1,13 +1,13 @@
 {
   "Quest 1 - The Blood Oath": {
-    "intro": "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
+    "intro": "🧭 INTRO – \"Arrival\"\nDaybreak spills over shattered stone as you crest the rise — five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again.\n\nThis place looks like home.\nAt least, to the tents that now occupy it.\n\n“We’re looking for Garath,” one of you mutters.\nA nearby merc glances up.\n“Command tent’s that way — past the sparring yard.”\n\nYou pass through the practice ring — a headmaster barking at recruits, one of them already flat on his back — and make for the command tent.\n\nInside, lanternlight glows against canvas walls and crumpled maps. Garath stands at the center — proud, weathered, focused. A commander not above his men, but among them.\n\nHe turns as you enter, eyes scanning each of you — then glances to Ronald, who stands silently at the side.\n\n“I asked for five,” Garath says. “I got the best five I know.”\n\nHe steps forward, placing both hands on the war table.\n\n“We’re carving something new here. A place of power. But first…”\n\nHis voice sharpens — not cruel, but carved from command.\n\n“Prove to me you’re worth the iron you carry.”",
     "wrap": "",
     "between": [],
     "paths": {
       "Path 1": {
-        "title": "",
-        "description": "",
-        "resolution": "bo1",
+        "title": "🛡️EXECUTION SQUAD",
+        "description": "\"Train the green recruits under Ronald’s supervision.\"\n\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-strapped buckles, eyes full of nerves.\n\nRonald doesn’t bark. He just nods toward them and speaks low.\n“They won’t last an hour outside these walls.”\n\nHe steps back.\n“You want to lead? Prove it here — before we get someone killed out there.”",
+        "resolution": "dice",
         "requires": {
           "titles": [
             "Any"
@@ -47,7 +47,7 @@
   "Quest 1 - The Blood Oath 111": {
     "intro": "SSSSSSSSS",
     "wrapup": {
-      "text": "ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+      "text": "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     },
     "paths": {
       "Execution Squad": {
