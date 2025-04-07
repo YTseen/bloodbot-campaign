@@ -62,48 +62,37 @@ function createPathBlock(pathKey = "", pathData = {}) {
     block.className = "bg-gray-700 p-3 rounded mt-3 space-y-2";
     block.innerHTML = `
       <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
-
       <label class="text-xs text-gray-300">📝 Text</label>
       <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-
         <div>
           <p class="text-xs text-yellow-400 mb-1">✅ Requirements</p>
           <label class="text-xs text-gray-400">Required Titles:</label>
           <input class="${key}-requires-titles w-full p-1 rounded text-black" value="${(step.requires?.titles || ["Any"]).join(", ")}" />
-
           <label class="text-xs text-gray-400">Required Items:</label>
           <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || ["Any"]).join(", ")}" />
-
           <label class="text-xs text-gray-400">Required Status:</label>
           <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
         </div>
-
         <div>
           <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
           <label class="text-xs text-pink-300">Grant Items:</label>
           <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
-
           <label class="text-xs text-pink-300">Grant Status:</label>
           <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
-
           <label class="text-xs text-pink-300">Grant Titles:</label>
           <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
         </div>
-
         <div>
           <p class="text-xs text-red-400 mb-1">❌ Removals</p>
           <label class="text-xs text-pink-300">Remove Items:</label>
           <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
-
           <label class="text-xs text-pink-300">Remove Status:</label>
           <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
-
           <label class="text-xs text-pink-300">Remove Titles:</label>
           <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
         </div>
-
       </div>
     `;
     div.appendChild(block);
@@ -146,6 +135,23 @@ function renderQuestList() {
     btn.onclick = () => openQuestEditor(key);
     questList.appendChild(btn);
   });
+}
+
+function manualLoadQuests() {
+  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const decoded = atob(data.content);
+      questData = JSON.parse(decoded);
+      renderQuestList();
+      populatePreviewDropdown();
+    })
+    .catch(err => {
+      alert("❌ Failed to load quests");
+      console.error(err);
+    });
 }
 
 function populatePreviewDropdown() {
@@ -239,7 +245,7 @@ function renderPreview() {
 
 document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
 
-// === DOM Drag & Drop Logic for Path Blocks ===
+// === Drag & Drop + Path removal ===
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("pathsContainer");
   let dragged = null;
@@ -278,11 +284,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ✅ Auto-load quests ONLY AFTER everything is defined
-  manualLoadQuests();
+  // ✅ Ensure functions exist before calling
+  if (typeof manualLoadQuests === "function") {
+    manualLoadQuests();
+  } else {
+    console.warn("⚠️ manualLoadQuests not ready at DOMContentLoaded.");
+  }
 });
 
-// === Expose Functions to Window for Inline HTML ===
+// === Expose Global Functions ===
 window.manualLoadQuests = manualLoadQuests;
 window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
