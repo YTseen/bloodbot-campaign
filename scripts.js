@@ -154,6 +154,8 @@ outcomes.forEach(({ key, label }) => {
 
     <label class="text-xs text-white block mt-2">Narrative Text:</label>
     <textarea class="${key}-text w-full p-1 rounded bg-white text-black" placeholder="Narrative">${step.text || ""}</textarea>
+    <label class="text-xs text-purple-300 block mt-2">💬 Response Line:</label>
+<textarea class="${key}-response-text w-full p-1 rounded bg-white text-black" placeholder="Response for this outcome">${step.response || ""}</textarea>
 
     <label class="text-xs text-yellow-400 block mt-2">✅ Requirements (comma separated)</label>
     <input class="${key}-requires-titles w-full p-1 rounded text-black bg-white" placeholder="Titles" value="${(step.requires?.titles || []).join(", ")}" />
@@ -259,10 +261,12 @@ Object.entries(quest.paths).forEach(([pathKey, path]) => {
   const result = playerState.logs.find(l => l.pathKey === pathKey);
   if (result) {
     const text = result.resultText || "";
+      const outcome = quest.paths[result.pathKey]?.[result.outcomeLabel.startsWith("midweek") ? "midweek" : "final"]?.[result.outcomeLabel.endsWith("High") || result.outcomeLabel.endsWith("Success") ? "high" : "low"];
+  const response = outcome?.response || "";
     finalChoices.innerHTML += `
       <div class="text-sm text-purple-300 mt-2">
         ➡️ <strong>${path.title}</strong> – <em>${result.outcomeLabel}</em><br/>
-        💬 <strong>${responseLabel}:</strong> ${text}
+💬 <strong>${responseLabel}:</strong> ${response || text}
       </div>
     `;
   }
@@ -483,26 +487,27 @@ responseLabel: document.getElementById("responseLabel").value.trim(),
       const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
 
       const stepData = {
-        text,
-        requires: {
-          titles: getCSV(`.${key}-requires-titles`),
-          items: getCSV(`.${key}-requires-items`),
-          status: block.querySelector(`.${key}-requires-status`)?.value.trim() || ""
-        },
-        excludes: {
-          titles: getCSV(`.${key}-excludes-titles`),
-          items: getCSV(`.${key}-excludes-items`),
-          status: block.querySelector(`.${key}-excludes-status`)?.value.trim() || ""
-        },
-        effects: {
-          grant_items: getCSV(`.${key}-grant-items`),
-          grant_titles: getCSV(`.${key}-grant-titles`),
-          grant_status: getCSV(`.${key}-grant-status`),
-          remove_items: getCSV(`.${key}-remove-items`),
-          remove_titles: getCSV(`.${key}-remove-titles`),
-          remove_status: getCSV(`.${key}-remove-status`)
-        }
-      };
+  text,
+  requires: {
+    titles: getCSV(`.${key}-requires-titles`),
+    items: getCSV(`.${key}-requires-items`),
+    status: block.querySelector(`.${key}-requires-status`)?.value.trim() || ""
+  },
+  excludes: {
+    titles: getCSV(`.${key}-excludes-titles`),
+    items: getCSV(`.${key}-excludes-items`),
+    status: block.querySelector(`.${key}-excludes-status`)?.value.trim() || ""
+  },
+  effects: {
+    grant_items: getCSV(`.${key}-grant-items`),
+    grant_titles: getCSV(`.${key}-grant-titles`),
+    grant_status: getCSV(`.${key}-grant-status`),
+    remove_items: getCSV(`.${key}-remove-items`),
+    remove_titles: getCSV(`.${key}-remove-titles`),
+    remove_status: getCSV(`.${key}-remove-status`)
+  },
+  response: block.querySelector(`.${key}-response-text`)?.value.trim() || ""
+};
 
       const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
       path[type] ??= {};
