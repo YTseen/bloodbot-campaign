@@ -1,14 +1,53 @@
 {
   "Quest 1 - The Blood Oath": {
-    "intro": "ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©ÃÂÃÂÃÂÃÂ¸ QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
-    "wrap": "ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come...",
+    "intro": "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ QUEST 1: THE BLOOD OATH\n\nFive warriors are summoned by Garath, a charismatic but ruthless mercenary commander. In the ruins of an old fortress, he offers power, but demands proof.\n\nGarath slams his fist on the war table.\n\"Your first job is simple. Show me you're worth the iron you carry.\"\n\nChoose your mission:",
+    "wrap": "",
     "between": [],
-    "paths": {}
+    "paths": {
+      "Path 1": {
+        "title": "",
+        "description": "",
+        "resolution": "bo1",
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [
+            "Any"
+          ],
+          "status": "Any"
+        },
+        "midweek": {
+          "High": {
+            "title": "",
+            "outcome": "",
+            "effects": ""
+          },
+          "Low": {
+            "title": "",
+            "outcome": "",
+            "effects": ""
+          }
+        },
+        "final": {
+          "Success": {
+            "title": "",
+            "outcome": "",
+            "effects": ""
+          },
+          "Failure": {
+            "title": "",
+            "outcome": "",
+            "effects": ""
+          }
+        }
+      }
+    }
   },
   "Quest 1 - The Blood Oath 111": {
     "intro": "SSSSSSSSS",
     "wrapup": {
-      "text": "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
+      "text": "ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     },
     "paths": {
       "Execution Squad": {
