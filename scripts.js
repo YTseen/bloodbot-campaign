@@ -389,8 +389,8 @@ function manualLoadQuests() {
   })
     .then(res => res.json())
     .then(data => {
-      const decoded = atob(data.content);
-      questData = JSON.parse(decoded);
+const decoded = new TextDecoder("utf-8").decode(Uint8Array.from(atob(data.content), c => c.charCodeAt(0)));
+questData = JSON.parse(decoded);
       renderQuestList();
       populatePreviewDropdown();
     })
