@@ -497,7 +497,12 @@ path[type][result] = stepData;
 
   questData[key] = quest;
 
-  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(questData, null, 2))));
+function utf8ToBase64(str) {
+  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+}
+
+const jsonString = JSON.stringify(questData, null, 2);
+const encoded = utf8ToBase64(jsonString);
   fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
     method: "PUT",
     headers: {
