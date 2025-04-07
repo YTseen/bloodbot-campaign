@@ -53,7 +53,7 @@ function createPathBlock(pathKey = "", pathData = {}) {
 pathDescriptionInput.placeholder = "Path Description";
 pathDescriptionInput.className = "path-description bg-gray-700 text-white rounded p-2 mt-2";
 pathDescriptionInput.value = pathData.description || "";
-block.appendChild(pathDescriptionInput);
+div.appendChild(pathDescriptionInput);
 
 
   const outcomes = [
