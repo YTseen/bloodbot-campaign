@@ -328,4 +328,11 @@ window.saveQuestToGitHub = saveQuestToGitHub;
 window.createNewQuest = createNewQuest;
 window.addPathBlock = addPathBlock;
 window.openQuestEditor = openQuestEditor;
-window.addEventListener("DOMContentLoaded", loadLegends);
+window.saveLegends = saveLegends;
+window.loadLegends = loadLegends;
+
+window.addEventListener("DOMContentLoaded", () => {
+  manualLoadQuests();
+  loadLegends();
+});
+
