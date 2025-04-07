@@ -10,10 +10,65 @@ const questFilePath = "data/quest_data.json";
 
 let questData = {};
 let selectedKey = null;
+let playerState = {
+  items: [],
+  titles: [],
+  status: [],
+  completedPaths: {},
+  logs: [],
+  rewards: {},
+};
 
 function autoGenerateKey(title) {
   return title.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, "_");
 }
+
+function simulatePlayerState() {
+  playerState = {
+    items: ["dagger"],
+    titles: ["hero"],
+    status: ["wounded"],
+    completedPaths: {},
+    logs: [],
+    rewards: {},
+  };
+}
+
+function applyEffects(effects = {}) {
+  effects.grant_items?.forEach(i => !playerState.items.includes(i) && playerState.items.push(i));
+  effects.grant_titles?.forEach(t => !playerState.titles.includes(t) && playerState.titles.push(t));
+  effects.grant_status?.forEach(s => !playerState.status.includes(s) && playerState.status.push(s));
+  effects.remove_items?.forEach(i => playerState.items = playerState.items.filter(x => x !== i));
+  effects.remove_titles?.forEach(t => playerState.titles = playerState.titles.filter(x => x !== t));
+  effects.remove_status?.forEach(s => playerState.status = playerState.status.filter(x => x !== s));
+}
+
+function checkExclusions(path) {
+  const ex = path.excludes || {};
+  const hasExcluded = (list, check) => check?.some(x => list.includes(x));
+  return !(
+    hasExcluded(playerState.titles, ex.titles) ||
+    hasExcluded(playerState.items, ex.items) ||
+    hasExcluded(playerState.status, ex.status)
+  );
+}
+
+function logPathAction(pathKey, outcomeLabel, resultText, effects) {
+  playerState.logs.push({ pathKey, outcomeLabel, resultText });
+  if (!playerState.rewards[pathKey]) playerState.rewards[pathKey] = [];
+  if (effects) {
+    const grant = [...(effects.grant_items || []), ...(effects.grant_titles || []), ...(effects.grant_status || [])];
+    playerState.rewards[pathKey].push(...grant);
+  }
+}
+
+function resetPlayerState() {
+  simulatePlayerState();
+  document.getElementById("scoreBoard").textContent = "";
+  renderPreview();
+}
+
+// === Phase 2: Editor UI Setup ===
 
 function createNewQuest(isSide = false) {
   selectedKey = "Quest " + Date.now();
@@ -31,32 +86,36 @@ function createPathBlock(pathKey = "", pathData = {}) {
   div.draggable = true;
 
   const pathTitle = pathData.title || "";
-
   div.innerHTML = `
     <div class="flex justify-between items-center mb-2">
       <input class="path-title w-full p-1 mb-1 rounded text-black" placeholder="Path Title" value="${pathTitle}" />
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
     </div>
-
     <textarea class="path-description w-full p-2 mb-2 rounded bg-gray-700 text-white" placeholder="Path Description">${pathData.description || ""}</textarea>
-
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
       <label class="text-xs text-gray-400">Required Titles:</label>
-      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || ["Any"]).join(", ")}" />
+      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
       <label class="text-xs text-gray-400">Required Items:</label>
-      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || ["Any"]).join(", ")}" />
+      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
       <label class="text-xs text-gray-400">Required Status:</label>
-      <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || "Any"}" />
+      <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || ""}" />
+      <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
+      <input class="excludes-titles-input w-full p-1 rounded text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
+      <label class="text-xs text-red-400">❌ Excluded Items:</label>
+      <input class="excludes-items-input w-full p-1 rounded text-black" value="${(pathData.excludes?.items || []).join(", ")}" />
+      <label class="text-xs text-red-400">❌ Excluded Status:</label>
+      <input class="excludes-status-input w-full p-1 rounded text-black" value="${pathData.excludes?.status || ""}" />
     </details>
   `;
 
   const resolutionLabel = document.createElement("label");
   resolutionLabel.className = "block text-green-300 text-sm";
   resolutionLabel.textContent = "Resolution Type:";
+  div.appendChild(resolutionLabel);
 
   const resolutionSelect = document.createElement("select");
-  resolutionSelect.className = "path-resolution bg-gray-700 text-white rounded p-2 mt-2";
+  resolutionSelect.className = "path-resolution bg-gray-700 text-white rounded p-2 mt-1";
   ["bo1", "dice", "vote"].forEach(opt => {
     const o = document.createElement("option");
     o.value = opt;
@@ -64,60 +123,23 @@ function createPathBlock(pathKey = "", pathData = {}) {
     resolutionSelect.appendChild(o);
   });
   resolutionSelect.value = pathData.resolution || "bo1";
-
-  div.appendChild(resolutionLabel);
   div.appendChild(resolutionSelect);
 
-  const outcomes = [
-    { label: "Midweek - High", key: "midweekHigh" },
-    { label: "Midweek - Low", key: "midweekLow" },
-    { label: "Final - Success", key: "finalSuccess" },
-    { label: "Final - Failure", key: "finalFailure" }
-  ];
+  const fixedOutcomeLabel = document.createElement("label");
+  fixedOutcomeLabel.className = "block text-yellow-200 text-sm mt-2";
+  fixedOutcomeLabel.textContent = "Force Outcome (optional):";
+  div.appendChild(fixedOutcomeLabel);
 
-  outcomes.forEach(({ label, key }) => {
-    const stepKey = key.replace("midweek", "midweek.").replace("final", "final.");
-    const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
-
-    const block = document.createElement("details");
-    block.className = "bg-gray-700 p-3 rounded mt-3 space-y-2";
-    block.innerHTML = `
-      <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
-      <label class="text-xs text-gray-300">📝 Text</label>
-      <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-        <div>
-          <p class="text-xs text-yellow-400 mb-1">✅ Requirements</p>
-          <label class="text-xs text-gray-400">Required Titles:</label>
-          <input class="${key}-requires-titles w-full p-1 rounded text-black" value="${(step.requires?.titles || ["Any"]).join(", ")}" />
-          <label class="text-xs text-gray-400">Required Items:</label>
-          <input class="${key}-requires-items w-full p-1 rounded text-black" value="${(step.requires?.items || ["Any"]).join(", ")}" />
-          <label class="text-xs text-gray-400">Required Status:</label>
-          <input class="${key}-requires-status w-full p-1 rounded text-black" value="${step.requires?.status || "Any"}" />
-        </div>
-        <div>
-          <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
-          <label class="text-xs text-pink-300">Grant Items:</label>
-          <input class="${key}-grant-items w-full p-1 rounded text-black" value="${(step.effects?.grant_items || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Grant Status:</label>
-          <input class="${key}-grant-status w-full p-1 rounded text-black" value="${(step.effects?.grant_status || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Grant Titles:</label>
-          <input class="${key}-grant-titles w-full p-1 rounded text-black" value="${(step.effects?.grant_titles || []).join(", ")}" />
-        </div>
-        <div>
-          <p class="text-xs text-red-400 mb-1">❌ Removals</p>
-          <label class="text-xs text-pink-300">Remove Items:</label>
-          <input class="${key}-remove-items w-full p-1 rounded text-black" value="${(step.effects?.remove_items || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Remove Status:</label>
-          <input class="${key}-remove-status w-full p-1 rounded text-black" value="${(step.effects?.remove_status || []).join(", ")}" />
-          <label class="text-xs text-pink-300">Remove Titles:</label>
-          <input class="${key}-remove-titles w-full p-1 rounded text-black" value="${(step.effects?.remove_titles || []).join(", ")}" />
-        </div>
-      </div>
-    `;
-    div.appendChild(block);
+  const fixedOutcomeSelect = document.createElement("select");
+  fixedOutcomeSelect.className = "path-fixed-outcome bg-gray-700 text-white rounded p-2 mt-1";
+  ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
+    const o = document.createElement("option");
+    o.value = val;
+    o.textContent = val || "-- Let system decide --";
+    fixedOutcomeSelect.appendChild(o);
   });
+  fixedOutcomeSelect.value = pathData.fixedOutcome || "";
+  div.appendChild(fixedOutcomeSelect);
 
   return div;
 }
@@ -145,47 +167,23 @@ function openQuestEditor(key) {
   }
 }
 
-function renderQuestList() {
-  const questList = document.getElementById("questList");
-  if (!questList) return;
-  questList.innerHTML = "";
-  Object.keys(questData).forEach(key => {
-    const btn = document.createElement("button");
-    btn.className = "bg-blue-700 hover:bg-blue-600 text-white rounded px-3 py-1 mr-2 mb-2";
-    btn.textContent = key;
-    btn.onclick = () => openQuestEditor(key);
-    questList.appendChild(btn);
-  });
+function updateDatalists() {
+  const titleList = JSON.parse(localStorage.getItem("legendTitles") || "[]");
+  const itemList = JSON.parse(localStorage.getItem("legendItems") || "[]");
+  const statusList = JSON.parse(localStorage.getItem("legendStatuses") || "[]");
+
+  document.getElementById("title-list").innerHTML = titleList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("item-list").innerHTML = itemList.map(t => `<option value="${t}">`).join("");
+  document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
 }
 
-function manualLoadQuests() {
-  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  })
-    .then(res => res.json())
-    .then(data => {
-      const decoded = atob(data.content);
-      questData = JSON.parse(decoded);
-      renderQuestList();
-      populatePreviewDropdown();
-    })
-    .catch(err => {
-      alert("❌ Failed to load quests");
-      console.error(err);
-    });
-}
+window.createNewQuest = createNewQuest;
+window.createPathBlock = createPathBlock;
+window.addPathBlock = addPathBlock;
+window.openQuestEditor = openQuestEditor;
+window.updateDatalists = updateDatalists;
 
-function populatePreviewDropdown() {
-  const dropdown = document.getElementById("previewQuestSelect");
-  if (!dropdown) return;
-  dropdown.innerHTML = "";
-  Object.keys(questData).forEach(key => {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = key;
-    dropdown.appendChild(option);
-  });
-}
+// === Phase 3: Preview Engine and Resolution Logic ===
 
 function renderPreview() {
   const select = document.getElementById("previewQuestSelect");
@@ -210,176 +208,119 @@ function renderPreview() {
 
   if (!quest.paths) return;
 
-  Object.entries(quest.paths).forEach(([key, path]) => {
+  Object.entries(quest.paths).forEach(([pathKey, path]) => {
+    const alreadyDone = playerState.completedPaths[pathKey];
+    const eligible = checkExclusions(path);
+
     const btn = document.createElement("button");
-    btn.className = "bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded";
-    btn.textContent = path.title || key;
+    btn.className = `px-3 py-1 rounded text-white mr-2 mb-2 ${alreadyDone ? "bg-gray-500" : eligible ? "bg-green-600" : "bg-red-600"}`;
+    btn.disabled = alreadyDone || !eligible;
+    btn.textContent = `${path.title || pathKey} ${alreadyDone ? "✅" : eligible ? "" : "🔒"}`;
+
     btn.onclick = () => {
-      midweekResult.innerHTML = "";
+      let outcomeKey = path.fixedOutcome || resolveOutcome(path.resolution);
+      if (!outcomeKey) return alert("❌ No resolution decided.");
+
+      const [type, result] = outcomeKey.replace("midweek", "midweek.").replace("final", "final.").split(".");
+      const outcome = path[type]?.[result];
+      const text = outcome?.text || "No result text.";
+
+      midweekResult.innerHTML = `📘 ${outcomeKey}: ${text}`;
       finalChoices.innerHTML = "";
+      finalResult.innerHTML = "";
+      wrapup.innerHTML = quest.wrapup?.text || "";
 
-      const highBtn = document.createElement("button");
-      highBtn.className = "bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded";
-      highBtn.textContent = "Midweek: High";
-      highBtn.onclick = () => {
-        midweekResult.innerHTML = path.midweek?.High?.text || "⚠️ No result";
-        renderFinal(path);
-      };
-
-      const lowBtn = document.createElement("button");
-      lowBtn.className = "bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded";
-      lowBtn.textContent = "Midweek: Low";
-      lowBtn.onclick = () => {
-        midweekResult.innerHTML = path.midweek?.Low?.text || "⚠️ No result";
-        renderFinal(path);
-      };
-
-      finalChoices.appendChild(highBtn);
-      finalChoices.appendChild(lowBtn);
+      applyEffects(outcome.effects);
+      logPathAction(pathKey, outcomeKey, text, outcome.effects);
+      playerState.completedPaths[pathKey] = true;
+      renderScoreBoard();
+      renderPreview();
     };
     pathButtons.appendChild(btn);
   });
-
-  function renderFinal(path) {
-    finalChoices.innerHTML = "";
-
-    const successBtn = document.createElement("button");
-    successBtn.className = "bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded";
-    successBtn.textContent = "Final: Success";
-    successBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Success?.text || "✅ No final success text.";
-      wrapup.innerHTML = quest.wrapup?.text || "";
-    };
-
-    const failBtn = document.createElement("button");
-    failBtn.className = "bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded";
-    failBtn.textContent = "Final: Failure";
-    failBtn.onclick = () => {
-      finalResult.innerHTML = path.final?.Failure?.text || "❌ No failure text.";
-      wrapup.innerHTML = quest.wrapup?.text || "";
-    };
-
-    finalChoices.appendChild(successBtn);
-    finalChoices.appendChild(failBtn);
-  }
 }
 
 document.getElementById("previewQuestSelect").addEventListener("change", renderPreview);
 
-function saveLegends() {
-  const titles = document.getElementById("legendTitles").value.split(",").map(x => x.trim()).filter(Boolean);
-  const items = document.getElementById("legendItems").value.split(",").map(x => x.trim()).filter(Boolean);
-  const statuses = document.getElementById("legendStatuses").value.split(",").map(x => x.trim()).filter(Boolean);
-
-  localStorage.setItem("legendTitles", JSON.stringify(titles));
-  localStorage.setItem("legendItems", JSON.stringify(items));
-  localStorage.setItem("legendStatuses", JSON.stringify(statuses));
-
-  updateDatalists();
-  alert("✅ Legends saved!");
+function resolveOutcome(resType) {
+  const roll = Math.random();
+  if (resType === "dice") return roll > 0.5 ? "midweekHigh" : "midweekLow";
+  if (resType === "vote") return roll > 0.5 ? "finalSuccess" : "finalFailure";
+  if (resType === "bo1") return confirm("Choose outcome? OK = High/Success, Cancel = Low/Fail") ? "midweekHigh" : "midweekLow";
+  return "midweekHigh";
 }
 
-function loadLegends() {
-  document.getElementById("legendTitles").value = JSON.parse(localStorage.getItem("legendTitles") || "[]").join(", ");
-  document.getElementById("legendItems").value = JSON.parse(localStorage.getItem("legendItems") || "[]").join(", ");
-  document.getElementById("legendStatuses").value = JSON.parse(localStorage.getItem("legendStatuses") || "[]").join(", ");
-  updateDatalists();
+function renderScoreBoard() {
+  const score = document.getElementById("scoreBoard");
+  const logText = playerState.logs.map(log => `➡️ ${log.pathKey}: ${log.outcomeLabel}`).join("\n");
+  score.textContent = logText;
 }
 
-function updateDatalists() {
-  const titleList = JSON.parse(localStorage.getItem("legendTitles") || "[]");
-  const itemList = JSON.parse(localStorage.getItem("legendItems") || "[]");
-  const statusList = JSON.parse(localStorage.getItem("legendStatuses") || "[]");
-
-  document.getElementById("title-list").innerHTML = titleList.map(t => `<option value="${t}">`).join("");
-  document.getElementById("item-list").innerHTML = itemList.map(t => `<option value="${t}">`).join("");
-  document.getElementById("status-list").innerHTML = statusList.map(t => `<option value="${t}">`).join("");
+function resetMockState() {
+  simulatePlayerState();
+  renderScoreBoard();
+  renderPreview();
 }
 
-function saveQuestToGitHub() {
-  const key = document.getElementById("questKey").value.trim();
-  const intro = document.getElementById("questIntro").value.trim();
-  const wrapup = document.getElementById("questWrap").value.trim();
-  const between = document.getElementById("sideQuestBetween").value.split("|").map(x => x.trim()).filter(Boolean);
+// === Phase 4: Admin Tools and Player Reward Summary ===
 
-  const paths = {};
-  document.querySelectorAll(".path-block").forEach((block, index) => {
-    const title = block.querySelector(".path-title")?.value.trim() || "";
-    const description = block.querySelector(".path-description")?.value.trim() || "";
-    const resolution = block.querySelector(".path-resolution")?.value || "bo1";
+function showRewardSummary() {
+  const score = document.getElementById("scoreBoard");
+  const lines = [];
+  for (const [pathKey, rewards] of Object.entries(playerState.rewards)) {
+    lines.push(`🎁 ${pathKey}: ${rewards.join(", ")}`);
+  }
+  score.textContent = lines.join("\n");
+}
 
-    const requires = {
-      titles: block.querySelector(".requires-titles-input")?.value.split(",").map(x => x.trim()).filter(Boolean),
-      items: block.querySelector(".requires-items-input")?.value.split(",").map(x => x.trim()).filter(Boolean),
-      status: block.querySelector(".requires-status-input")?.value.trim()
-    };
+function showTimelineLog() {
+  const flow = document.getElementById("questFlow");
+  const timeline = document.createElement("div");
+  timeline.className = "bg-black border-t mt-4 pt-2 text-xs text-gray-400";
+  timeline.innerHTML = "<strong>🕒 Timeline:</strong><br>" +
+    playerState.logs.map(l => `➡️ ${l.pathKey}: ${l.outcomeLabel}`).join("<br>");
+  flow.appendChild(timeline);
+}
 
-    const stepData = {};
-    ["midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(k => {
-      const [type, result] = k.replace("midweek", "midweek.").replace("final", "final.").split(".");
-      if (!stepData[type]) stepData[type] = {};
-      stepData[type][result] = {
-        title: block.querySelector(`.${k}-title`)?.value.trim() || "",
-        outcome: block.querySelector(`.${k}-outcome`)?.value.trim() || "",
-        effects: block.querySelector(`.${k}-effects`)?.value.trim() || ""
-      };
-    });
-
-    paths[`Path ${index + 1}`] = {
-      title,
-      description,
-      resolution,
-      requires,
-      ...stepData
-    };
+function editPlayerStateManually() {
+  const fields = ["items", "titles", "status"];
+  fields.forEach(field => {
+    const val = prompt(`Edit ${field} (comma separated):`, playerState[field].join(", "));
+    if (val !== null) {
+      playerState[field] = val.split(",").map(x => x.trim()).filter(Boolean);
+    }
   });
+  renderPreview();
+  renderScoreBoard();
+}
 
-  questData[key] = {
-    intro,
-    wrap: wrapup,
-    between,
-    paths
+function exportMockState() {
+  const data = JSON.stringify(playerState, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "mock_player_state.json";
+  a.click();
+}
+
+function importMockState(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      playerState = JSON.parse(e.target.result);
+      renderScoreBoard();
+      renderPreview();
+    } catch (err) {
+      alert("❌ Invalid state file");
+    }
   };
-
-  // 🔐 Encode safely (UTF-8 base64 for GitHub)
-  const content = JSON.stringify(questData, null, 2);
-  const safeEncoded = btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-    String.fromCharCode('0x' + p1)
-  ));
-
-  const url = `https://api.github.com/repos/${repo}/contents/${questFilePath}`;
-  fetch(url, {
-    method: "GET",
-    headers: { Authorization: `token ${githubToken}` }
-  }).then(res => res.json()).then(data => {
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${githubToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: `Update quest ${key}`,
-        content: safeEncoded,
-        sha: data.sha
-      })
-    }).then(() => alert("✅ Quest saved!"))
-      .catch(err => console.error("❌ Save error:", err));
-  });
+  reader.readAsText(file);
 }
 
-// === Expose Global Functions ===
-window.manualLoadQuests = manualLoadQuests;
-window.saveQuestToGitHub = saveQuestToGitHub;
-window.createNewQuest = createNewQuest;
-window.addPathBlock = addPathBlock;
-window.openQuestEditor = openQuestEditor;
-window.saveLegends = saveLegends;
-window.loadLegends = loadLegends;
-
-// === DOM READY HOOK ===
-window.addEventListener("DOMContentLoaded", () => {
-  if (typeof manualLoadQuests === "function") manualLoadQuests();
-  if (document.getElementById("legendTitles")) loadLegends();
-  else console.warn("⚠️ legendTitles not found in DOM.");
-});
+window.showRewardSummary = showRewardSummary;
+window.showTimelineLog = showTimelineLog;
+window.editPlayerStateManually = editPlayerStateManually;
+window.exportMockState = exportMockState;
+window.importMockState = importMockState;
+window.resetMockState = resetMockState;
