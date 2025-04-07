@@ -460,36 +460,36 @@ function saveQuestToGitHub() {
     const path = { title, description, requires, excludes, resolution, fixedOutcome };
 
     outcomeKeys.forEach(key => {
-const text = block.querySelector(`.${key}-text`)?.value.trim();
-if (!text) return;
+      const text = block.querySelector(`.${key}-text`)?.value.trim();
+      if (!text) return;
 
-const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
+      const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
 
-const stepData = {
-  text,
-  requires: {
-    titles: getCSV(`.${key}-requires-titles`),
-    items: getCSV(`.${key}-requires-items`),
-    status: block.querySelector(`.${key}-requires-status`)?.value.trim() || ""
-  },
-  excludes: {
-    titles: getCSV(`.${key}-excludes-titles`),
-    items: getCSV(`.${key}-excludes-items`),
-    status: block.querySelector(`.${key}-excludes-status`)?.value.trim() || ""
-  },
-  effects: {
-    grant_items: getCSV(`.${key}-grant-items`),
-    grant_titles: getCSV(`.${key}-grant-titles`),
-    grant_status: getCSV(`.${key}-grant-status`),
-    remove_items: getCSV(`.${key}-remove-items`),
-    remove_titles: getCSV(`.${key}-remove-titles`),
-    remove_status: getCSV(`.${key}-remove-status`)
-  }
-};
+      const stepData = {
+        text,
+        requires: {
+          titles: getCSV(`.${key}-requires-titles`),
+          items: getCSV(`.${key}-requires-items`),
+          status: block.querySelector(`.${key}-requires-status`)?.value.trim() || ""
+        },
+        excludes: {
+          titles: getCSV(`.${key}-excludes-titles`),
+          items: getCSV(`.${key}-excludes-items`),
+          status: block.querySelector(`.${key}-excludes-status`)?.value.trim() || ""
+        },
+        effects: {
+          grant_items: getCSV(`.${key}-grant-items`),
+          grant_titles: getCSV(`.${key}-grant-titles`),
+          grant_status: getCSV(`.${key}-grant-status`),
+          remove_items: getCSV(`.${key}-remove-items`),
+          remove_titles: getCSV(`.${key}-remove-titles`),
+          remove_status: getCSV(`.${key}-remove-status`)
+        }
+      };
 
-const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
-path[type] ??= {};
-path[type][result] = stepData;
+      const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+      path[type] ??= {};
+      path[type][result] = stepData;
     });
 
     quest.paths[`path_${i}`] = path;
@@ -497,31 +497,42 @@ path[type][result] = stepData;
 
   questData[key] = quest;
 
-function utf8ToBase64(str) {
-  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
-}
+  const jsonString = JSON.stringify(questData, null, 2);
+  const encoded = btoa(unescape(encodeURIComponent(jsonString))); // emoji-safe
 
-const jsonString = JSON.stringify(questData, null, 2);
-const encoded = utf8ToBase64(jsonString);
+  // ✅ Fetch latest file to get the required `sha`
   fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    method: "PUT",
     headers: {
-      Authorization: `token ${githubToken}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: `Update quest: ${key}`,
-      content: encoded,
-      sha: null // let GitHub determine latest
-    })
+      Authorization: `token ${githubToken}`
+    }
   })
+    .then(res => res.json())
+    .then(file => {
+      const payload = {
+        message: `Update quest: ${key}`,
+        content: encoded,
+        sha: file.sha
+      };
+
+      return fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${githubToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    })
     .then(res => {
       if (!res.ok) throw new Error("GitHub save failed");
+      return res.json();
+    })
+    .then(() => {
       alert("✅ Quest saved to GitHub");
     })
     .catch(err => {
-      alert("❌ Failed to save quest");
       console.error(err);
+      alert("❌ Failed to save quest");
     });
 }
 
