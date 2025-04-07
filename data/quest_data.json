@@ -1,1 +1,10 @@
-
+{
+  "🩸 THE BLOOD OATH": {
+    "intro": "Daybreak spills over shattered stone as you crest the rise — five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again. This place looks like home. At least, to the tents that now occupy it.\n\n“We’re looking for Garath,” one of you mutters. A nearby merc glances up from sharpening a blade. “Command tent’s that way — past the sparring yard.”\n\nYou make your way through the yard. A headmaster yells over the clash of wooden blades, one recruit already flat on his back.\n\nThe command tent looms ahead. Inside, lanternlight glows against crumpled maps and scattered tokens. Garath stands over the table — proud, weathered, focused. A commander not above his men, but among them.\n\nHe doesn’t look up right away. But when he does, his gaze hits each of you, slow and sure. Then he glances to Ronald, arms crossed nearby.\n\n“I asked for five,” Garath says. “I got the best five I know.”\n\nHe steps forward, planting both hands on the war table.\n\n“We’re carving something new here. A place of power. But first...” His voice sharpens — not cruel, but carved from command. “Prove to me you’re worth the iron you carry.”",
+    "wrapup": {
+      "text": "The fires burn lower now. The last drills have ended. The ruin has grown quieter — not silent, but focused. Your choices echo through it.\n\nYou return to the war tent. Garath is already there, alone, reading a scroll by lamplight. He doesn’t look up immediately, but when he does, there’s no anger in his eyes — only calculation.\n\n“You made an impact,” he says. “Not always clean. But real.”\n\nHe sets the parchment aside, folding his arms. The flame behind him flickers as he steps into its glow.\n\n“We build on what we earn. Your names carry more weight now — for better, or worse.”\n\nHe walks past you without waiting for a reply.\n“Rest while you can,” he adds. “The next oath won’t be given. It’ll be taken.”"
+    },
+    "between": [],
+    "paths": {}
+  }
+}
