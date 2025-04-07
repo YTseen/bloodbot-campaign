@@ -495,46 +495,48 @@ function saveQuestToGitHub() {
     quest.paths[`path_${i}`] = path;
   });
 
+  function encodeUTF8toBase64(str) {
+  return btoa(String.fromCharCode(...new Uint8Array(new TextEncoder().encode(str))));
+}
+
   questData[key] = quest;
+const encoded = encodeUTF8toBase64(JSON.stringify(questData, null, 2));
 
-  const jsonString = JSON.stringify(questData, null, 2);
-  const encoded = btoa(unescape(encodeURIComponent(jsonString))); // emoji-safe
-
-  // ✅ Fetch latest file to get the required `sha`
-  fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-    headers: {
-      Authorization: `token ${githubToken}`
-    }
+// ✅ First: Fetch latest SHA of the file
+fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+  headers: {
+    Authorization: `token ${githubToken}`
+  }
+})
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to fetch file SHA");
+    return res.json();
   })
-    .then(res => res.json())
-    .then(file => {
-      const payload = {
+  .then(fileData => {
+    const sha = fileData.sha;
+
+    // ✅ Then: Upload new content with that SHA
+    return fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
         message: `Update quest: ${key}`,
         content: encoded,
-        sha: file.sha
-      };
-
-      return fetch(`https://api.github.com/repos/${repo}/contents/${questFilePath}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${githubToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-    })
-    .then(res => {
-      if (!res.ok) throw new Error("GitHub save failed");
-      return res.json();
-    })
-    .then(() => {
-      alert("✅ Quest saved to GitHub");
-    })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Failed to save quest");
+        sha
+      })
     });
-}
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("GitHub save failed");
+    alert("✅ Quest saved to GitHub");
+  })
+  .catch(err => {
+    alert("❌ Failed to save quest");
+    console.error(err);
+  });
 
 function exportQuestToFile() {
   const key = document.getElementById("questKey").value.trim();
