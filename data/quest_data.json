@@ -5,264 +5,472 @@
       "text": "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ **Results Report from Garath**\n\nThe mercenary camp gathers under dim lanterns. Garath steps onto the central platform, his voice cold and clear:\n\n\"Some of you performed admirably. Others... disappointed. Choices matter. Strength matters more. Be ready for what comes next.\"\n\nThe fire crackles.\n\n**The Blood Oath is complete.**\nPrepare yourselves for the betrayal to come..."
     },
     "paths": {
-      "Execution Squad": {
-        "title": "The Execution Squad",
-        "description": "Train the green recruits under Ronald's supervision.",
-        "midweek": {
-          "High": {
-            "text": "Recruits develop discipline and loyalty.",
-            "rewards": {
-              "items": [
-                "Honor Tag"
-              ]
-            }
-          },
-          "Low": {
-            "text": "Training incident injures a recruit. Trust in your leadership falters.",
-            "penalties": {
-              "roles": [
-                "Mild Guilt"
-              ]
-            }
-          }
-        },
-        "final": {
-          "Success": {
-            "text": "Your squad becomes elite NPC backup in later missions.",
-            "rewards": {
-              "items": [
-                "3 Loyal Recruits",
-                "Battlefield Drill Manual"
-              ]
-            }
-          },
-          "Failure": {
-            "text": "Ronald files a critical report. Garath takes note.",
-            "penalties": {
-              "roles": [
-                "Garath's Distrust"
-              ]
-            }
-          }
-        },
+      "Path 1": {
         "requires": {
+          "titles": [
+            "Any"
+          ],
           "items": [
             "sword",
             "shield"
           ],
           "status": "Plagued"
         },
-        "rewards": {
-          "effects": [
-            "Healthy"
-          ]
+        "midweek": {
+          "High": {
+            "text": "Recruits develop discipline and loyalty.",
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
+            }
+          },
+          "Low": {
+            "text": "Training incident injures a recruit. Trust in your leadership falters.",
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
+            }
+          }
         },
-        "penalties": {
-          "effects": [
-            "Plagued"
-          ]
+        "final": {
+          "Success": {
+            "text": "Your squad becomes elite NPC backup in later missions.",
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
+            }
+          },
+          "Failure": {
+            "text": "Ronald files a critical report. Garath takes note.",
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
+            }
+          }
         }
       },
-      "Smuggler's Run": {
-        "title": "The Smuggler's Run",
-        "description": "Intercept an underground weapons exchange.",
+      "Path 2": {
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [],
+          "status": "Any"
+        },
         "midweek": {
           "High": {
             "text": "You uncover a coded ledger and a secret tunnel.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Smuggler's Ledger"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Low": {
             "text": "A poison trap wounds one of you.",
-            "penalties": {
-              "roles": [
-                "Lingering Toxin"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
         },
         "final": {
           "Success": {
             "text": "You secure a cache of rare weapons but get arrested in the aftermath.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Shadowfang Dagger",
-                "Tunnel Map"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Failure": {
             "text": "The guards seize the goods and your reputation suffers.",
-            "penalties": {
-              "roles": [
-                ""
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
-        },
-        "requires": {
-          "items": [],
-          "status": ""
-        },
-        "rewards": {
-          "effects": []
-        },
-        "penalties": {
-          "effects": []
         }
       },
-      "Lost Girl": {
-        "title": "The Lost Girl",
-        "description": "Locate a missing merchant's daughter.",
+      "Path 3": {
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [],
+          "status": "Any"
+        },
         "midweek": {
           "High": {
             "text": "You find a locket pointing toward an abandoned mill.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Girl's Locket"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Low": {
             "text": "Public scuffle hurts your image.",
-            "penalties": {
-              "roles": [
-                "Black Eye"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
         },
         "final": {
           "Success": {
             "text": "You rescue the girl and gain community favor.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Venom Sac"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Failure": {
             "text": "You find nothing and suspicion spreads.",
-            "penalties": {
-              "roles": [
-                "Doubtful"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
-        },
-        "requires": {
-          "items": [],
-          "status": ""
-        },
-        "rewards": {
-          "effects": []
-        },
-        "penalties": {
-          "effects": []
         }
       },
-      "Crypts Beneath": {
-        "title": "The Crypts Beneath",
-        "description": "Investigate strange noises under the arena.",
+      "Path 4": {
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [],
+          "status": "Any"
+        },
         "midweek": {
           "High": {
             "text": "You discover occult markings and a broken seal.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Unholy Sigil"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Low": {
             "text": "One of you flees into the dark.",
-            "penalties": {
-              "roles": [
-                "Paranoia"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
         },
         "final": {
           "Success": {
             "text": "You slay the creature and claim the tunnels.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Mutant Claw",
-                "Crypt Base"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Failure": {
             "text": "Ambush in the dark drains your strength.",
-            "penalties": {
-              "roles": [
-                "Blood Loss"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
-        },
-        "requires": {
-          "items": [],
-          "status": ""
-        },
-        "rewards": {
-          "effects": []
-        },
-        "penalties": {
-          "effects": []
         }
       },
-      "Tavern Whisper": {
-        "title": "The Tavern Whisper",
-        "description": "Uncover rebellion talk at the Bronze Belly Tavern.",
+      "Path 5": {
+        "requires": {
+          "titles": [
+            "Any"
+          ],
+          "items": [],
+          "status": "Any"
+        },
         "midweek": {
           "High": {
             "text": "You intercept a ciphered message.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Cipher Fragment"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Low": {
             "text": "You offend a noble. A fight breaks out.",
-            "penalties": {
-              "roles": [
-                "Shame Spiral"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
         },
         "final": {
           "Success": {
             "text": "You gain names of rebel leaders.",
-            "rewards": {
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
               "items": [
-                "Blackmail Dossier"
-              ]
+                "Any"
+              ],
+              "status": "Any"
             }
           },
           "Failure": {
             "text": "You're arrested. Garath is furious.",
-            "penalties": {
-              "roles": [
-                "Tension with Garath"
-              ]
+            "effects": {
+              "grant_items": [],
+              "grant_status": [],
+              "grant_titles": [],
+              "remove_items": [],
+              "remove_status": [],
+              "remove_titles": []
+            },
+            "requires": {
+              "titles": [
+                "Any"
+              ],
+              "items": [
+                "Any"
+              ],
+              "status": "Any"
             }
           }
-        },
-        "requires": {
-          "items": [],
-          "status": ""
-        },
-        "rewards": {
-          "effects": []
-        },
-        "penalties": {
-          "effects": []
         }
       }
     }
