@@ -25,10 +25,9 @@
       <div class="md:w-1/3 w-full bg-gray-900 p-4 rounded-lg border border-gray-700 overflow-auto max-h-[75vh]">
         <h2 class="text-xl mb-2">📚 Main + Side Quests</h2>
         <ul id="questList" class="mb-6 space-y-2"></ul>
-
-        <button onclick="manualLoadQuests()" class="mt-6 w-full bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded text-white text-sm">🔄 Load Quests from GitHub</button>
-        <button onclick="createNewQuest(false)" class="mt-2 w-full bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-white text-sm">➕ New Quest</button>
-        <button onclick="createNewQuest(true)" class="mt-2 w-full bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black text-sm">🌲 New Side Quest</button>
+        <button onclick="window.manualLoadQuests()" class="mt-6 w-full bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded text-white text-sm">📀 Load Quests from GitHub</button>
+        <button onclick="window.createNewQuest(false)" class="mt-2 w-full bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-white text-sm">➕ New Quest</button>
+        <button onclick="window.createNewQuest(true)" class="mt-2 w-full bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded text-black text-sm">🌲 New Side Quest</button>
       </div>
 
       <div class="md:w-2/3 w-full">
@@ -50,10 +49,10 @@
           <div>
             <h3 class="text-green-400 text-lg mb-2">Paths</h3>
             <div id="pathsContainer" class="space-y-4 bg-gray-900 p-2 rounded border border-gray-700 max-h-[40vh] overflow-auto"></div>
-            <button onclick="addPathBlock()" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 mt-2 rounded text-white">➕ Add Path</button>
+            <button onclick="window.addPathBlock()" class="bg-blue-600 hover:bg-blue-500 px-3 py-1 mt-2 rounded text-white">➕ Add Path</button>
           </div>
 
-          <button onclick="saveQuestToGitHub()" class="bg-green-600 hover:bg-green-500 px-4 py-2 mt-4 rounded text-white w-full">🕵 Save Quest to GitHub</button>
+          <button onclick="window.saveQuestToGitHub()" class="bg-green-600 hover:bg-green-500 px-4 py-2 mt-4 rounded text-white w-full">🕵 Save Quest to GitHub</button>
         </div>
       </div>
     </div>
@@ -75,14 +74,14 @@
     </div>
   </div>
 
-  <!-- === LOGIC === -->
+  <!-- === NAVIGATION LOGIC === -->
   <script>
+    document.getElementById("editorBtn").onclick = () => showTab("editorTab");
+    document.getElementById("previewBtn").onclick = () => showTab("previewTab");
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
     }
-    document.getElementById("editorBtn").onclick = () => showTab("editorTab");
-    document.getElementById("previewBtn").onclick = () => showTab("previewTab");
     showTab("editorTab");
   </script>
 
@@ -91,7 +90,7 @@
   <datalist id="item-list"></datalist>
   <datalist id="status-list"></datalist>
 
-  <!-- === FINAL SCRIPT === -->
-  <script src="scripts.js"></script>
+  <!-- === LOAD CORE SCRIPT === -->
+  <script src="scripts.js" defer></script>
 </body>
 </html>
