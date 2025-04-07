@@ -97,46 +97,37 @@ function createPathBlock(pathKey = "", pathData = {}) {
   div.draggable = true;
 
   const pathTitle = pathData.title || "";
-
   div.innerHTML = `
     <div class="flex justify-between items-center mb-2">
       <input class="path-title w-full p-1 mb-1 rounded text-black" placeholder="Path Title" value="${pathTitle}" />
       <button class="remove-path bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 ml-2 rounded text-xs">🗑 Remove</button>
     </div>
-
-    <textarea class="path-description w-full p-2 mb-2 rounded bg-gray-700 text-white" placeholder="Path Description">${pathData.description || ""}</textarea>
+    <textarea class="path-description w-full p-2 mb-2 rounded bg-white text-black" placeholder="Path Description">${pathData.description || ""}</textarea>
 
     <details class="mb-2">
       <summary class="text-xs text-yellow-300 cursor-pointer">Requirements (Click to Expand)</summary>
-
-      <label class="text-xs text-gray-400">✅ Required Titles:</label>
-      <input class="requires-titles-input w-full p-1 rounded text-black" value="${(pathData.requires?.titles || []).join(", ")}" />
-
-      <label class="text-xs text-gray-400">✅ Required Items:</label>
-      <input class="requires-items-input w-full p-1 rounded text-black" value="${(pathData.requires?.items || []).join(", ")}" />
-
-      <label class="text-xs text-gray-400">✅ Required Status:</label>
-      <input class="requires-status-input w-full p-1 rounded text-black" value="${pathData.requires?.status || ""}" />
-
+      <label class="text-xs text-gray-400">Required Titles:</label>
+      <input class="requires-titles-input w-full p-1 rounded text-black" list="title-list" value="${(pathData.requires?.titles || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Items:</label>
+      <input class="requires-items-input w-full p-1 rounded text-black" list="item-list" value="${(pathData.requires?.items || []).join(", ")}" />
+      <label class="text-xs text-gray-400">Required Status:</label>
+      <input class="requires-status-input w-full p-1 rounded text-black" list="status-list" value="${pathData.requires?.status || ""}" />
       <label class="text-xs text-red-400 mt-2">❌ Excluded Titles:</label>
       <input class="excludes-titles-input w-full p-1 rounded text-black" value="${(pathData.excludes?.titles || []).join(", ")}" />
-
       <label class="text-xs text-red-400">❌ Excluded Items:</label>
       <input class="excludes-items-input w-full p-1 rounded text-black" value="${(pathData.excludes?.items || []).join(", ")}" />
-
       <label class="text-xs text-red-400">❌ Excluded Status:</label>
       <input class="excludes-status-input w-full p-1 rounded text-black" value="${pathData.excludes?.status || ""}" />
     </details>
   `;
 
-  // Resolution Type Dropdown
   const resolutionLabel = document.createElement("label");
-  resolutionLabel.className = "block text-green-300 text-sm mt-2";
-  resolutionLabel.textContent = "🎲 Resolution Type:";
+  resolutionLabel.className = "block text-green-300 text-sm";
+  resolutionLabel.textContent = "Resolution Type:";
   div.appendChild(resolutionLabel);
 
   const resolutionSelect = document.createElement("select");
-  resolutionSelect.className = "path-resolution bg-gray-700 text-white rounded p-2 mt-1";
+  resolutionSelect.className = "path-resolution bg-white text-black rounded p-2 mt-1";
   ["bo1", "dice", "vote"].forEach(opt => {
     const o = document.createElement("option");
     o.value = opt;
@@ -146,14 +137,13 @@ function createPathBlock(pathKey = "", pathData = {}) {
   resolutionSelect.value = pathData.resolution || "bo1";
   div.appendChild(resolutionSelect);
 
-  // Optional Fixed Outcome
   const fixedOutcomeLabel = document.createElement("label");
   fixedOutcomeLabel.className = "block text-yellow-200 text-sm mt-2";
-  fixedOutcomeLabel.textContent = "📌 Force Outcome (optional):";
+  fixedOutcomeLabel.textContent = "Force Outcome (optional):";
   div.appendChild(fixedOutcomeLabel);
 
   const fixedOutcomeSelect = document.createElement("select");
-  fixedOutcomeSelect.className = "path-fixed-outcome bg-gray-700 text-white rounded p-2 mt-1";
+  fixedOutcomeSelect.className = "path-fixed-outcome bg-white text-black rounded p-2 mt-1";
   ["", "midweekHigh", "midweekLow", "finalSuccess", "finalFailure"].forEach(val => {
     const o = document.createElement("option");
     o.value = val;
@@ -163,24 +153,23 @@ function createPathBlock(pathKey = "", pathData = {}) {
   fixedOutcomeSelect.value = pathData.fixedOutcome || "";
   div.appendChild(fixedOutcomeSelect);
 
-  // All 4 Outcomes
   const outcomes = [
     { label: "Midweek - High", key: "midweekHigh" },
     { label: "Midweek - Low", key: "midweekLow" },
     { label: "Final - Success", key: "finalSuccess" },
-    { label: "Final - Failure", key: "finalFailure" },
+    { label: "Final - Failure", key: "finalFailure" }
   ];
 
   outcomes.forEach(({ label, key }) => {
-    const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
-    const step = pathData?.[type]?.[result] || {};
+    const stepKey = key.replace("midweek", "midweek.").replace("final", "final.");
+    const step = pathData?.[stepKey.split(".")[0]]?.[stepKey.split(".")[1]] || {};
 
     const block = document.createElement("details");
     block.className = "bg-gray-700 p-3 rounded mt-3 space-y-2";
     block.innerHTML = `
       <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
-      <label class="text-xs text-gray-300">📝 Text</label>
-      <textarea class="${key}-text w-full p-1 rounded text-black">${step.text || ""}</textarea>
+      <label class="text-xs text-white">Narrative Text</label>
+      <textarea class="${key}-text w-full p-1 rounded text-black bg-white">${step.text || ""}</textarea>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
         <div>
@@ -191,15 +180,15 @@ function createPathBlock(pathKey = "", pathData = {}) {
         </div>
         <div>
           <p class="text-xs text-green-400 mb-1">🎁 Grants</p>
-          <input class="${key}-grant-items w-full p-1 rounded text-black" placeholder="Items" value="${(step.effects?.grant_items || []).join(", ")}" />
-          <input class="${key}-grant-status w-full p-1 rounded text-black" placeholder="Status" value="${(step.effects?.grant_status || []).join(", ")}" />
-          <input class="${key}-grant-titles w-full p-1 rounded text-black" placeholder="Titles" value="${(step.effects?.grant_titles || []).join(", ")}" />
+          <input class="${key}-grant-items w-full p-1 rounded text-black" placeholder="Grant Items" value="${(step.effects?.grant_items || []).join(", ")}" />
+          <input class="${key}-grant-status w-full p-1 rounded text-black" placeholder="Grant Status" value="${(step.effects?.grant_status || []).join(", ")}" />
+          <input class="${key}-grant-titles w-full p-1 rounded text-black" placeholder="Grant Titles" value="${(step.effects?.grant_titles || []).join(", ")}" />
         </div>
         <div>
-          <p class="text-xs text-red-400 mb-1">❌ Removals</p>
-          <input class="${key}-remove-items w-full p-1 rounded text-black" placeholder="Items" value="${(step.effects?.remove_items || []).join(", ")}" />
-          <input class="${key}-remove-status w-full p-1 rounded text-black" placeholder="Status" value="${(step.effects?.remove_status || []).join(", ")}" />
-          <input class="${key}-remove-titles w-full p-1 rounded text-black" placeholder="Titles" value="${(step.effects?.remove_titles || []).join(", ")}" />
+          <p class="text-xs text-red-400 mb-1">❌ Removes</p>
+          <input class="${key}-remove-items w-full p-1 rounded text-black" placeholder="Remove Items" value="${(step.effects?.remove_items || []).join(", ")}" />
+          <input class="${key}-remove-status w-full p-1 rounded text-black" placeholder="Remove Status" value="${(step.effects?.remove_status || []).join(", ")}" />
+          <input class="${key}-remove-titles w-full p-1 rounded text-black" placeholder="Remove Titles" value="${(step.effects?.remove_titles || []).join(", ")}" />
         </div>
       </div>
     `;
