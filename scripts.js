@@ -411,6 +411,7 @@ window.saveLegends = saveLegends;
 window.loadLegends = loadLegends;
 
 window.addEventListener("DOMContentLoaded", () => {
-  manualLoadQuests();
-  loadLegends();
+  if (typeof manualLoadQuests === "function") manualLoadQuests();
+  if (document.getElementById("legendTitles")) loadLegends();
+  else console.warn("⚠️ legendTitles not found in DOM.");
 });
