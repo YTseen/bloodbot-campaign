@@ -143,30 +143,81 @@ function createPathBlock(pathKey = "", pathData = {}) {
   ];
 
 outcomes.forEach(({ key, label }) => {
-  const type = key.startsWith("midweek") ? "midweek" : "final";
-  const result = key.endsWith("High") || key.endsWith("Success") ? "high" : "low";
-  const step = pathData?.[type]?.[result] || {};
-
+  ...
   const block = document.createElement("details");
   block.className = "bg-gray-700 p-3 rounded mt-3";
+
   block.innerHTML = `
     <summary class="text-sm text-green-300 cursor-pointer">${label}</summary>
 
     <label class="text-xs text-white block mt-2">Narrative Text:</label>
     <textarea class="${key}-text w-full p-1 rounded bg-white text-black" placeholder="Narrative">${step.text || ""}</textarea>
+
+    <details class="mt-2">
+      <summary class="text-xs text-blue-300 cursor-pointer">🎛 Outcome Setup (Requirements, Exclusions, Effects)</summary>
+
+      <div class="grid grid-cols-3 gap-2 text-xs text-black mt-2">
+
+        <div>
+          <label class="block text-green-600 mb-1">✅ Requires Titles</label>
+          <input class="${key}-requires-titles w-full p-1 rounded bg-white" value="${(step.requires?.titles || []).join(", ")}" />
+        </div>
+        <div>
+          <label class="block text-red-500 mb-1">❌ Excludes Titles</label>
+          <input class="${key}-excludes-titles w-full p-1 rounded bg-white" value="${(step.excludes?.titles || []).join(", ")}" />
+        </div>
+        <div>
+          <label class="block text-blue-500 mb-1">🎁 Grant Titles</label>
+          <input class="${key}-grant-titles w-full p-1 rounded bg-white" value="${(step.effects?.grant_titles || []).join(", ")}" />
+        </div>
+
+        <div>
+          <label class="block text-green-600 mb-1">✅ Requires Items</label>
+          <input class="${key}-requires-items w-full p-1 rounded bg-white" value="${(step.requires?.items || []).join(", ")}" />
+        </div>
+        <div>
+          <label class="block text-red-500 mb-1">❌ Excludes Items</label>
+          <input class="${key}-excludes-items w-full p-1 rounded bg-white" value="${(step.excludes?.items || []).join(", ")}" />
+        </div>
+        <div>
+          <label class="block text-blue-500 mb-1">🎁 Grant Items</label>
+          <input class="${key}-grant-items w-full p-1 rounded bg-white" value="${(step.effects?.grant_items || []).join(", ")}" />
+        </div>
+
+        <div>
+          <label class="block text-green-600 mb-1">✅ Requires Status</label>
+          <input class="${key}-requires-status w-full p-1 rounded bg-white" value="${step.requires?.status || ""}" />
+        </div>
+        <div>
+          <label class="block text-red-500 mb-1">❌ Excludes Status</label>
+          <input class="${key}-excludes-status w-full p-1 rounded bg-white" value="${step.excludes?.status || ""}" />
+        </div>
+        <div>
+          <label class="block text-blue-500 mb-1">🎁 Grant Status</label>
+          <input class="${key}-grant-status w-full p-1 rounded bg-white" value="${(step.effects?.grant_status || []).join(", ")}" />
+        </div>
+
+        <div></div>
+        <div>
+          <label class="block text-red-500 mb-1">🗑 Remove Items</label>
+          <input class="${key}-remove-items w-full p-1 rounded bg-white" value="${(step.effects?.remove_items || []).join(", ")}" />
+        </div>
+        <div>
+          <label class="block text-red-500 mb-1">🗑 Remove Titles</label>
+          <input class="${key}-remove-titles w-full p-1 rounded bg-white" value="${(step.effects?.remove_titles || []).join(", ")}" />
+        </div>
+        <div></div>
+        <div>
+          <label class="block text-red-500 mb-1">🗑 Remove Status</label>
+          <input class="${key}-remove-status w-full p-1 rounded bg-white" value="${(step.effects?.remove_status || []).join(", ")}" />
+        </div>
+      </div>
+    </details>
+
     <label class="text-xs text-purple-300 block mt-2">💬 Response Line:</label>
-<textarea class="${key}-response-text w-full p-1 rounded bg-white text-black" placeholder="Response for this outcome">${step.response || ""}</textarea>
-
-    <label class="text-xs text-yellow-400 block mt-2">✅ Requirements (comma separated)</label>
-    <input class="${key}-requires-titles w-full p-1 rounded text-black bg-white" placeholder="Titles" value="${(step.requires?.titles || []).join(", ")}" />
-    <input class="${key}-requires-items w-full p-1 rounded text-black bg-white" placeholder="Items" value="${(step.requires?.items || []).join(", ")}" />
-    <input class="${key}-requires-status w-full p-1 rounded text-black bg-white" placeholder="Status" value="${step.requires?.status || ""}" />
-
-    <label class="text-xs text-red-400 block mt-2">❌ Exclusions</label>
-    <input class="${key}-excludes-titles w-full p-1 rounded text-black bg-white" placeholder="Exclude Titles" value="${(step.excludes?.titles || []).join(", ")}" />
-    <input class="${key}-excludes-items w-full p-1 rounded text-black bg-white" placeholder="Exclude Items" value="${(step.excludes?.items || []).join(", ")}" />
-    <input class="${key}-excludes-status w-full p-1 rounded text-black bg-white" placeholder="Exclude Status" value="${step.excludes?.status || ""}" />
+    <textarea class="${key}-response-text w-full p-1 rounded bg-white text-black" placeholder="Response for this outcome">${step.response || ""}</textarea>
   `;
+
   div.appendChild(block);
 });
 
