@@ -104,6 +104,34 @@
               ]
             },
             "response": ""
+          },
+          "Failure": {
+            "text": "\"The Report\"\nThey show up late. Some not at all. Ronald doesn’t correct them. He just writes.\n\nWhen you return to the command tent, Garath is already reading the report.\n“I asked you to shape them,” he says. “Now I have to patch the damage.”\n\nHe doesn’t raise his voice. But the silence that follows hits hard.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [
+                "Garath’s Distrust"
+              ],
+              "remove_items": [
+                "Honor Tag"
+              ],
+              "remove_titles": [],
+              "remove_status": [
+                "Military Respect"
+              ]
+            },
+            "response": ""
           }
         }
       }
