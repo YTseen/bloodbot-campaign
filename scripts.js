@@ -143,7 +143,12 @@ function createPathBlock(pathKey = "", pathData = {}) {
   ];
 
 outcomes.forEach(({ key, label }) => {
+  const type = key.startsWith("midweek") ? "midweek" : "final";
+  const resultKey = key.endsWith("High") || key.endsWith("Success") ? "high" : "low";
+  const step = pathData?.[type]?.[resultKey] || {};
+
   const block = document.createElement("details");
+
   block.className = "bg-gray-700 p-3 rounded mt-3";
 
   block.innerHTML = `
