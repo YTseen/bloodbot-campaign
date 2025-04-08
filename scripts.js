@@ -143,7 +143,6 @@ function createPathBlock(pathKey = "", pathData = {}) {
   ];
 
 outcomes.forEach(({ key, label }) => {
-  ...
   const block = document.createElement("details");
   block.className = "bg-gray-700 p-3 rounded mt-3";
 
