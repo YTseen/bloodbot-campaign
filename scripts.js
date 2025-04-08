@@ -310,13 +310,15 @@ function renderPreview() {
 Object.entries(quest.paths).forEach(([pathKey, path]) => {
   const result = playerState.logs.find(l => l.pathKey === pathKey);
   if (result) {
-    const text = result.resultText || "";
-      const outcome = quest.paths[result.pathKey]?.[result.outcomeLabel.startsWith("midweek") ? "midweek" : "final"]?.[result.outcomeLabel.endsWith("High") || result.outcomeLabel.endsWith("Success") ? "high" : "low"];
-  const response = outcome?.response || "";
+    const type = result.outcomeLabel.startsWith("midweek") ? "midweek" : "final";
+    const outcomeResult = result.outcomeLabel.endsWith("High") || result.outcomeLabel.endsWith("Success") ? "high" : "low";
+    const outcome = quest.paths[pathKey]?.[type]?.[outcomeResult];
+    const response = outcome?.response || result.resultText;
+
     finalChoices.innerHTML += `
       <div class="text-sm text-purple-300 mt-2">
         ➡️ <strong>${path.title}</strong> – <em>${result.outcomeLabel}</em><br/>
-💬 <strong>${responseLabel}:</strong> ${response || text}
+        💬 <strong>${responseLabel}:</strong> ${response}
       </div>
     `;
   }
