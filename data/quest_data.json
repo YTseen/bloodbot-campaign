@@ -46,7 +46,7 @@
               "remove_titles": [],
               "remove_status": []
             },
-            "response": ""
+            "response": "“Not bad,” he mutters, almost to himself. “They’ve got something now.”"
           },
           "Low": {
             "text": "\"The Break\"\nYou saw it coming — too much weight behind a blade, too much fear in the grip. The recruit spins out, catches another across the ribs.\n\nRonald storms in. “You training them to follow orders or dig graves?”\nHe doesn’t speak again for the rest of the day.",
@@ -72,7 +72,7 @@
               "remove_titles": [],
               "remove_status": []
             },
-            "response": ""
+            "response": "“You don’t get second chances with soldiers. Only blood.”"
           }
         },
         "final": {
@@ -103,7 +103,7 @@
                 "Guilt"
               ]
             },
-            "response": ""
+            "response": "“You didn’t just train them. You stepped up. Now they answer to you.”"
           },
           "Failure": {
             "text": "\"The Report\"\nThey show up late. Some not at all. Ronald doesn’t correct them. He just writes.\n\nWhen you return to the command tent, Garath is already reading the report.\n“I asked you to shape them,” he says. “Now I have to patch the damage.”\n\nHe doesn’t raise his voice. But the silence that follows hits hard.",
@@ -131,11 +131,11 @@
                 "Military Respect"
               ]
             },
-            "response": ""
+            "response": "“Ronald trusted you. That trust just cost us.”"
           }
         }
       }
     },
-    "responseLabel": ""
+    "responseLabel": "Garath"
   }
 }
