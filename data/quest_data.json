@@ -26,31 +26,23 @@
             "text": "1",
             "requires": {
               "titles": [],
-              "items": [
-                "1"
-              ],
+              "items": [],
               "status": ""
             },
             "excludes": {
               "titles": [],
-              "items": [
-                "1"
-              ],
+              "items": [],
               "status": ""
             },
             "effects": {
-              "grant_items": [
-                "1"
-              ],
+              "grant_items": [],
               "grant_titles": [],
               "grant_status": [],
               "remove_items": [],
-              "remove_titles": [
-                "1"
-              ],
+              "remove_titles": [],
               "remove_status": []
             },
-            "response": "1"
+            "response": ""
           },
           "Low": {
             "text": "",
