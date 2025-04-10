@@ -580,7 +580,8 @@ if (!hasOutcomeData) return;
     response: block.querySelector(`.${key}-response-text`)?.value.trim() || ""
   };
 
-  const [type, result] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+  const [type, rawResult] = key.replace("midweek", "midweek.").replace("final", "final.").split(".");
+const result = (rawResult === "High" || rawResult === "Success") ? "high" : "low";
   path[type] ??= {};
   path[type][result] = stepData;
 });
