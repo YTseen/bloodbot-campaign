@@ -536,8 +536,24 @@ responseLabel: document.getElementById("responseLabel").value.trim(),
     const path = { title, description, requires, excludes, resolution, fixedOutcome };
 
     outcomeKeys.forEach(key => {
-  const text = block.querySelector(`.${key}-text`)?.value.trim();
-  if (!text) return;
+const text = block.querySelector(`.${key}-text`)?.value.trim() || "";
+const hasOutcomeData =
+  text ||
+  block.querySelector(`.${key}-response-text`)?.value.trim() ||
+  block.querySelector(`.${key}-grant-items`)?.value.trim() ||
+  block.querySelector(`.${key}-grant-titles`)?.value.trim() ||
+  block.querySelector(`.${key}-grant-status`)?.value.trim() ||
+  block.querySelector(`.${key}-remove-items`)?.value.trim() ||
+  block.querySelector(`.${key}-remove-titles`)?.value.trim() ||
+  block.querySelector(`.${key}-remove-status`)?.value.trim() ||
+  block.querySelector(`.${key}-requires-titles`)?.value.trim() ||
+  block.querySelector(`.${key}-requires-items`)?.value.trim() ||
+  block.querySelector(`.${key}-requires-status`)?.value.trim() ||
+  block.querySelector(`.${key}-excludes-titles`)?.value.trim() ||
+  block.querySelector(`.${key}-excludes-items`)?.value.trim() ||
+  block.querySelector(`.${key}-excludes-status`)?.value.trim();
+
+if (!hasOutcomeData) return;
 
   const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
 
