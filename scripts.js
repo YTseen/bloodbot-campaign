@@ -538,8 +538,7 @@ responseLabel: document.getElementById("responseLabel").value.trim(),
     const path = { title, description, requires, excludes, resolution, fixedOutcome };
 
     outcomeKeys.forEach(key => {
-      const text = block.querySelector(`.${key}-text`)?.value.trim();
-      if (!text) return;
+      const text = block.querySelector(`.${key}-text`)?.value.trim() || "";
 
       const getCSV = sel => block.querySelector(sel)?.value.split(",").map(s => s.trim()).filter(Boolean) || [];
 
