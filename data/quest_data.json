@@ -27,22 +27,28 @@
             "requires": {
               "titles": [],
               "items": [],
-              "status": ""
+              "status": "1"
             },
             "excludes": {
-              "titles": [],
+              "titles": [
+                "1"
+              ],
               "items": [],
               "status": ""
             },
             "effects": {
-              "grant_items": [],
+              "grant_items": [
+                "1"
+              ],
               "grant_titles": [],
               "grant_status": [],
-              "remove_items": [],
+              "remove_items": [
+                "1"
+              ],
               "remove_titles": [],
               "remove_status": []
             },
-            "response": ""
+            "response": "1"
           },
           "Low": {
             "text": "",
