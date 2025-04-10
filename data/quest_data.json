@@ -4,64 +4,85 @@
     "wrapup": {
       "text": "And so the story ends. But the legend lives on..."
     },
-    "between": [
-      "Quest A",
-      "Quest B"
-    ],
+    "between": ["Quest A", "Quest B"],
+    "responseLabel": "The Guild",
     "paths": {
       "path_0": {
         "title": "Path of Shadows",
         "description": "A silent route through the back alleys.",
         "requires": {
-          "titles": [
-            "Thief"
-          ],
-          "items": [
-            "cloak"
-          ],
-          "status": [
-            "hidden"
-          ]
+          "titles": ["Thief"],
+          "items": ["cloak"],
+          "status": ["hidden"]
         },
         "excludes": {
-          "titles": [
-            "Knight"
-          ],
-          "items": [
-            "torch"
-          ],
-          "status": [
-            "wounded"
-          ]
+          "titles": ["Knight"],
+          "items": ["torch"],
+          "status": ["wounded"]
         },
         "resolution": "dice",
         "fixedOutcome": "",
         "midweek": {
-          "High": {
-            "text": "",
-            "requires": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "excludes": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
+          "high": {
+            "text": "You slipped through unnoticed.",
+            "response": "Impressive maneuver.",
+            "requires": { "titles": [], "items": [], "status": "" },
+            "excludes": { "titles": [], "items": [], "status": "" },
+            "effects": {
+              "grant_items": ["lockpick"],
+              "grant_titles": ["Silent Blade"],
+              "grant_status": ["stealthy"],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            }
+          },
+          "low": {
+            "text": "You tripped and made a loud noise.",
+            "response": "Sloppy work.",
+            "requires": { "titles": [], "items": [], "status": "" },
+            "excludes": { "titles": [], "items": [], "status": "" },
             "effects": {
               "grant_items": [],
               "grant_titles": [],
+              "grant_status": ["noticed"],
+              "remove_items": ["cloak"],
+              "remove_titles": [],
+              "remove_status": ["hidden"]
+            }
+          }
+        },
+        "final": {
+          "high": {
+            "text": "You delivered the message and vanished.",
+            "response": "Mission complete.",
+            "requires": { "titles": [], "items": [], "status": "" },
+            "excludes": { "titles": [], "items": [], "status": "" },
+            "effects": {
+              "grant_items": ["gold"],
+              "grant_titles": ["Courier"],
               "grant_status": [],
               "remove_items": [],
               "remove_titles": [],
               "remove_status": []
-            },
-            "response": "233562456"
+            }
+          },
+          "low": {
+            "text": "You were captured by guards.",
+            "response": "Interrogation begins.",
+            "requires": { "titles": [], "items": [], "status": "" },
+            "excludes": { "titles": [], "items": [], "status": "" },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": ["prisoner"],
+              "remove_items": ["dagger"],
+              "remove_titles": ["Thief"],
+              "remove_status": ["stealthy"]
+            }
           }
         }
       }
-    },
-    "responseLabel": "The Guild"
+    }
   }
 }
