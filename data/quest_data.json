@@ -33,22 +33,16 @@
             },
             "excludes": {
               "titles": [],
-              "items": [
-                "1"
-              ],
+              "items": [],
               "status": ""
             },
             "effects": {
-              "grant_items": [
-                "1"
-              ],
+              "grant_items": [],
               "grant_titles": [],
               "grant_status": [],
               "remove_items": [],
               "remove_titles": [],
-              "remove_status": [
-                "1"
-              ]
+              "remove_status": []
             },
             "response": "1"
           }
