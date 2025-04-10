@@ -25,16 +25,16 @@
           "High": {
             "text": "1",
             "requires": {
-              "titles": [],
-              "items": [],
-              "status": "1"
-            },
-            "excludes": {
               "titles": [
                 "1"
               ],
               "items": [],
               "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": "1"
             },
             "effects": {
               "grant_items": [
@@ -42,11 +42,11 @@
               ],
               "grant_titles": [],
               "grant_status": [],
-              "remove_items": [
-                "1"
-              ],
+              "remove_items": [],
               "remove_titles": [],
-              "remove_status": []
+              "remove_status": [
+                "11"
+              ]
             },
             "response": "1"
           },
