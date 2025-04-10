@@ -38,39 +38,7 @@
         "fixedOutcome": "",
         "midweek": {
           "High": {
-            "text": "You slipped through unnoticed.",
-            "requires": {
-              "titles": [
-                "1334"
-              ],
-              "items": [
-                "221"
-              ],
-              "status": ""
-            },
-            "excludes": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "effects": {
-              "grant_items": [
-                "lockpick"
-              ],
-              "grant_titles": [
-                "Silent Blade"
-              ],
-              "grant_status": [
-                "13451346"
-              ],
-              "remove_items": [],
-              "remove_titles": [],
-              "remove_status": []
-            },
-            "response": "Impressive maneuver."
-          },
-          "Low": {
-            "text": "You tripped and made a loud noise.",
+            "text": "",
             "requires": {
               "titles": [],
               "items": [],
@@ -84,76 +52,12 @@
             "effects": {
               "grant_items": [],
               "grant_titles": [],
-              "grant_status": [
-                "noticed"
-              ],
-              "remove_items": [
-                "cloak"
-              ],
-              "remove_titles": [],
-              "remove_status": [
-                "hidden"
-              ]
-            },
-            "response": "Sloppy work."
-          }
-        },
-        "final": {
-          "Success": {
-            "text": "You delivered the message and vanished.",
-            "requires": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "excludes": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "effects": {
-              "grant_items": [
-                "gold"
-              ],
-              "grant_titles": [
-                "Courier"
-              ],
               "grant_status": [],
               "remove_items": [],
               "remove_titles": [],
               "remove_status": []
             },
-            "response": "Mission complete."
-          },
-          "Failure": {
-            "text": "You were captured by guards.",
-            "requires": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "excludes": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "effects": {
-              "grant_items": [],
-              "grant_titles": [],
-              "grant_status": [
-                "prisoner"
-              ],
-              "remove_items": [
-                "dagger"
-              ],
-              "remove_titles": [
-                "Thief"
-              ],
-              "remove_status": [
-                "stealthy"
-              ]
-            },
-            "response": "Interrogation begins."
+            "response": "233562456"
           }
         }
       }
