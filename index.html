@@ -109,6 +109,8 @@
   <script>
     function showTab(id) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+      block.open = true;
+
       document.getElementById(id).classList.remove('hidden');
     }
   </script>
