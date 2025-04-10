@@ -56,5 +56,64 @@
       }
     },
     "responseLabel": ""
+  },
+  "Quest 1744324222116": {
+    "intro": "1",
+    "wrapup": {
+      "text": "1"
+    },
+    "between": [
+      "Quest 1",
+      "Quest 2"
+    ],
+    "paths": {
+      "path_0": {
+        "title": "11",
+        "description": "1",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": "",
+        "midweek": {
+          "High": {
+            "text": "11",
+            "requires": {
+              "titles": [
+                "1"
+              ],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [
+                "1"
+              ],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [
+                "1"
+              ],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "1"
+          }
+        }
+      }
+    },
+    "responseLabel": "1"
   }
 }
