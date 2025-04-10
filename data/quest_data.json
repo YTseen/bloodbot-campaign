@@ -20,36 +20,40 @@
           "status": []
         },
         "resolution": "dice",
-        "fixedOutcome": "",
+        "fixedOutcome": "finalSuccess",
         "midweek": {
           "High": {
-            "text": "\"The Shift\"\nAt first, it’s all flinching and fumbled stances. But day by day, something shifts. By the third morning, they move like a unit. Eyes sharper. Blades steady. Intent builds behind every swing.\n\nRonald watches from the yard’s edge at sunset, arms crossed. He stays until the last spar ends. That says enough.",
+            "text": "1",
             "requires": {
-              "titles": [],
+              "titles": [
+                "1"
+              ],
               "items": [],
               "status": ""
             },
             "excludes": {
               "titles": [],
-              "items": [],
+              "items": [
+                "1"
+              ],
               "status": ""
             },
             "effects": {
-              "grant_items": [
-                "Honor Tag"
-              ],
+              "grant_items": [],
               "grant_titles": [],
               "grant_status": [
-                "Military Respect"
+                "1"
               ],
               "remove_items": [],
-              "remove_titles": [],
+              "remove_titles": [
+                "1"
+              ],
               "remove_status": []
             },
-            "response": "“Not bad,” he mutters, almost to himself. “They’ve got something now.”"
+            "response": "1"
           },
           "Low": {
-            "text": "\"The Break\"\nYou saw it coming — too much weight behind a blade, too much fear in the grip. The recruit spins out, catches another across the ribs.\n\nRonald storms in. “You training them to follow orders or dig graves?”\nHe doesn’t speak again for the rest of the day.",
+            "text": "",
             "requires": {
               "titles": [],
               "items": [],
@@ -62,51 +66,18 @@
             },
             "effects": {
               "grant_items": [],
-              "grant_titles": [
-                "Untrustworthy"
-              ],
-              "grant_status": [
-                "Guilt"
-              ],
+              "grant_titles": [],
+              "grant_status": [],
               "remove_items": [],
               "remove_titles": [],
               "remove_status": []
             },
-            "response": "“You don’t get second chances with soldiers. Only blood.”"
+            "response": ""
           }
         },
         "final": {
           "Success": {
-            "text": "\"Field-Tested\"\nThey stand at attention before the sun. Armor strapped. Weapons cleaned. Fear replaced with focus.\n\nRonald walks the line. Silent. Then turns to you.\n“they're yours to lead now.”\n\nHe hands over a sealed scroll — stamped and signed.\n“You didn’t just teach them to fight. You gave them someone to follow.”",
-            "requires": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "excludes": {
-              "titles": [],
-              "items": [],
-              "status": ""
-            },
-            "effects": {
-              "grant_items": [
-                "Battlefield Drill Manual",
-                "3 Loyal Recruits"
-              ],
-              "grant_titles": [
-                "Ronald’s Second"
-              ],
-              "grant_status": [],
-              "remove_items": [],
-              "remove_titles": [],
-              "remove_status": [
-                "Guilt"
-              ]
-            },
-            "response": "“You didn’t just train them. You stepped up. Now they answer to you.”"
-          },
-          "Failure": {
-            "text": "\"The Report\"\nThey show up late. Some not at all. Ronald doesn’t correct them. He just writes.\n\nWhen you return to the command tent, Garath is already reading the report.\n“I asked you to shape them,” he says. “Now I have to patch the damage.”\n\nHe doesn’t raise his voice. But the silence that follows hits hard.",
+            "text": "",
             "requires": {
               "titles": [],
               "items": [],
@@ -120,18 +91,34 @@
             "effects": {
               "grant_items": [],
               "grant_titles": [],
-              "grant_status": [
-                "Garath’s Distrust"
-              ],
-              "remove_items": [
-                "Honor Tag"
-              ],
+              "grant_status": [],
+              "remove_items": [],
               "remove_titles": [],
-              "remove_status": [
-                "Military Respect"
-              ]
+              "remove_status": []
             },
-            "response": "“Ronald trusted you. That trust just cost us.”"
+            "response": ""
+          },
+          "Failure": {
+            "text": "",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": ""
           }
         }
       }
