@@ -25,10 +25,10 @@
           "High": {
             "text": "1",
             "requires": {
-              "titles": [
+              "titles": [],
+              "items": [
                 "1"
               ],
-              "items": [],
               "status": ""
             },
             "excludes": {
@@ -39,11 +39,11 @@
               "status": ""
             },
             "effects": {
-              "grant_items": [],
-              "grant_titles": [],
-              "grant_status": [
+              "grant_items": [
                 "1"
               ],
+              "grant_titles": [],
+              "grant_status": [],
               "remove_items": [],
               "remove_titles": [
                 "1"
