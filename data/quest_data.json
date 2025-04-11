@@ -1,14 +1,14 @@
 {
-  "Blood Bath": {
-    "intro": "",
+  "the blood oath": {
+    "intro": "Daybreak spills over shattered stone as you crest the rise — five warriors, bound not by coin but by choice. Below, the ruins stir with purpose: tents flutter in the breeze, steel sings in morning drills, and the bones of the old fortress begin to breathe again. This place looks like home. At least, to the tents that now occupy it.\n\n“We’re looking for Garath,” one of you mutters. A nearby merc glances up from sharpening a blade. “Command tent’s that way — past the sparring yard.”\n\nYou make your way through the yard. A headmaster yells over the clash of wooden blades, one recruit already flat on his back.\n\nThe command tent looms ahead. Inside, lanternlight glows against crumpled maps and scattered tokens. Garath stands over the table — proud, weathered, focused. A commander not above his men, but among them.\n\nHe doesn’t look up right away. But when he does, his gaze hits each of you, slow and sure. Then he glances to Ronald, arms crossed nearby.\n\n“I asked for five,” Garath says. “I got the best five I know.”\n\nHe steps forward, planting both hands on the war table.\n\n“We’re carving something new here. A place of power. But first...” His voice sharpens — not cruel, but carved from command. “Prove to me you’re worth the iron you carry.”",
     "wrapup": {
-      "text": ""
+      "text": "The fires burn lower now. The last drills have ended. The ruin has grown quieter — not silent, but focused. Your choices echo through it.\n\nYou return to the war tent. Garath is already there, alone, reading a scroll by lamplight. He doesn’t look up immediately, but when he does, there’s no anger in his eyes — only calculation.\n\n“You made an impact,” he says. “Not always clean. But real.”\n\nHe sets the parchment aside, folding his arms. The flame behind him flickers as he steps into its glow.\n\n“We build on what we earn. Your names carry more weight now — for better, or worse.”\n\nHe walks past you without waiting for a reply.\n“Rest while you can,” he adds. “The next oath won’t be given. It’ll be taken.”"
     },
     "between": [],
     "paths": {
       "path_0": {
-        "title": "",
-        "description": "",
+        "title": "🛡️execution squad",
+        "description": "\"Drill Line\"\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-fastened buckles, eyes full of nerves.\n\nRonald doesn’t bark. He just nods toward them and speaks low.\n“Fix them,” he says. “Or we all bleed later.”\n\nYou step into the yard. The morning dew hasn’t even burned off, but already the dirt feels like a battlefield.",
         "requires": {
           "titles": [],
           "items": [],
@@ -19,26 +19,169 @@
           "items": [],
           "status": []
         },
-        "resolution": "bo1",
-        "fixedOutcome": ""
+        "resolution": "dice",
+        "fixedOutcome": "",
+        "midweek": {
+          "high": {
+            "text": "\"The Shift\"\nAt first, it’s all flinching and fumbled stances. But day by day, something shifts. By the third morning, they move like a unit. Eyes sharper. Blades steady. Intent builds behind every swing.\n\nRonald watches from the yard’s edge at sunset, arms crossed. He stays until the last spar ends. That says enough.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [
+                "Honor Tag"
+              ],
+              "grant_titles": [],
+              "grant_status": [
+                "Military Respect"
+              ],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“Not bad,” he mutters, almost to himself. “They’ve got something now.”"
+          },
+          "low": {
+            "text": "\"The Break\"\nYou saw it coming — too much weight behind a blade, too much fear in the grip. The recruit spins out, catches another across the ribs.\n\nRonald storms in. “You training them to follow orders or dig graves?”\nHe doesn’t speak again for the rest of the day.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [
+                "Untrustworthy"
+              ],
+              "grant_status": [
+                "Guilt"
+              ],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“You don’t get second chances with soldiers. Only blood.”"
+          }
+        },
+        "final": {
+          "high": {
+            "text": "\"Field-Tested\"\nThey stand at attention before the sun. Armor strapped. Weapons cleaned. Fear replaced with focus.\n\nRonald walks the line. Silent. Then turns to you.\n“They’re yours now.”\n\nHe hands over a sealed scroll — stamped and signed.\n“You didn’t just teach them to fight. You gave them someone to follow.”",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [
+                "Battlefield Drill Manual",
+                "3 Loyal Recruits"
+              ],
+              "grant_titles": [
+                "Ronald’s Second"
+              ],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": [
+                "Guilt"
+              ]
+            },
+            "response": "“They’re not recruits anymore. They’re yours now — and they know it.”"
+          },
+          "low": {
+            "text": "\"The Report\"\nThey show up late. Some not at all. Ronald doesn’t correct them. He just writes.\n\nWhen you return to the command tent, Garath is already reading the report.\n“I asked you to shape them,” he says. “Now I have to patch the damage.”\n\nHe doesn’t raise his voice. But the silence that follows hits hard.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [
+                "Garath’s Distrust"
+              ],
+              "remove_items": [
+                "Honor Tag"
+              ],
+              "remove_titles": [],
+              "remove_status": [
+                "Military Respect"
+              ]
+            },
+            "response": "“I gave you the yard. You gave it back broken.”"
+          }
+        }
       },
-      "path_1": {
-        "title": "",
-        "description": "",
-        "requires": {
-          "titles": [],
-          "items": [],
-          "status": []
-        },
-        "excludes": {
-          "titles": [],
-          "items": [],
-          "status": []
-        },
-        "resolution": "bo1",
-        "fixedOutcome": ""
+     "path_1": {
+  "title": "💼Smuggler’s Run",
+  "description": "“Tools of the Enemy”\nGarath stands at the war table, brushing aside a scatter of old campaign markers. He unfurls a creased, dirt-smudged map and taps a spot near the southern underworks of the city.\n\n“Smugglers’ve been running gear through these tunnels for weeks now.”\nHe doesn’t look up as he speaks. Just keeps tracing lines on the parchment with a gloved hand.\n“We’ve been watching. Bronze Belly gang. Loose morals, tight timing. Weapons. Powder. Some city guard paid to look the other way.”\n\nHe looks to you now.\n“Gold’s not what we need. We need gear. Get in, get what you can, and get out before someone lights the wrong fuse.”\n\nHe leans in, voice low but direct.\n“This isn’t a crusade. It’s inventory control.”\n\nBy nightfall, you’re lowered into a runoff canal behind the market quarter. You land on slick stone beside a rusted access grate. From here, it’s torches, tunnels, and tension.\n\nYou hear boots echoing ahead. You smell oil and mold. You’re not alone down here.",
+  "requires": {
+    "titles": [],
+    "items": [],
+    "status": []
+  },
+  "excludes": {
+    "titles": [],
+    "items": [],
+    "status": []
+  },
+  "resolution": "bo1",
+  "fixedOutcome": "",
+  "midweek": {
+    "high": {
+      "text": "“Thread in the Dust”\nYou and one other head into the village just after Garath’s briefing. The air’s damp. The sky bruised. You don’t wear armor — just quiet steps and a question on your tongue.\n\nYou both arrive at the tavern. Something feels off.\n\nThe barkeep pours drinks too fast. No joy in the room. A trader in the corner grumbles about missing stock. A woman mutters about a child who wandered too far and didn’t come back.\n\nYou settle into a corner booth. Good vantage. Eyes on every exit. One ale between you. No conversation.\n\nHours pass. You’re barely awake.\n\nThen — the man.\nShort cloak. Pale boots.\n\nEYES OPEN.\n\nYou’re up in a heartbeat, slipping outside into the cold.\n\nHe’s walking — quiet but purposeful — behind the forge, past the root-split stones, down toward the dry creek bed.\n\nHe stops once. Looks your way.\n\nYou duck fast. Hold your breath.\n\nThen you hear something… wrong.\nWet. Crunching. Deliberate.\n\nWhen you look again, he’s gone.\n\nYou return in the morning. Where he stood, nestled in the roots of a twisted tree:\n\nA real rat. Tail split. A small dagger beside it.\n\nYou don’t touch either. You don’t have to.\n\nBack at the tavern, your third companion — the one searching for the girl — tells you they saw the same thing at the smithy.\n\nIt’s not a clue. It’s a message.",
+      "response": "“You tracked it. Good. That stash better be worth the risk.”"
+    },
+    "low": {
+      "text": "“Watched”\nYou and one other leave the camp just after dusk. The sky’s gone black. Not cloudy. Not moonless. Just heavy.\n\nYou slip through the village under cover of quiet. The tavern’s lanterns glow like teeth in the dark. Inside, you blend in — or try to.\n\nYou take a seat in the back. Say nothing. Order nothing.\nYou watch. And wait.\n\nPeople speak softer after midnight. Someone slips out the side door — fast, low, cloaked. You don’t get a look. Just a feeling.\n\nYou follow.\n\nOut the rear, past the forge, down the narrow slope behind the barn — a footpath locals stopped using years ago. It curls past a dry well and ends near the edge of the old woodline.\n\nYou’re nearly there. You don’t even breathe.\n\nAnd then it happens.\n\nA glint — just a flick of brass — to your left.\n\nYou snap your head around.\nA guard.\n\nYou don’t think. You just move.\nBackpedal. Duck. Run.\n\n“Damn village curfew.”\n\nYou don’t wait for a shout. Don’t give him time to speak.\n\nBecause curfew means detention — and you really wouldn’t want that.\n\nYou make it back to the tavern.\nOrder a bed.\nAnd you go into a deep, exhausted sleep.",
+      "response": "“You missed it. Now someone else arms up while we wait.”"
+    }
+  },
+  "final": {
+    "high": {
+      "text": "“More Than Steel”\nYou leave at dawn with one companion — the one who’s been chasing whispers of the missing girl.\n\nNeither of you speak much.\n\nThe trail leads far — back to the place you spotted the cloaked man days ago. Past the forge. Through the root-split path. Over the ridgeline.\n\nYou travel deep into the forest, then into rock.\nThe air thins. Vines thicken.\n\nYou move quiet.\n\nThe path opens up to a dug-out entrance — half-covered, almost collapsed, but marked.\n\nThe rat.\nSplit-tailed. Fresh.\n\nYou descend.\n\nInside, the tunnels breathe.\n\nYou and your companion split — only briefly — following signs scratched into damp stone. You pass crates — broken. Some sealed. Some too heavy to move alone.\n\nYou trace your steps back. You plan on returning.",
+      "response": "“Good haul. But that’s not why your eyes look like that.”",
+      "effects": {
+        "grant_items": ["Scribbled Path"],
+        "grant_titles": [],
+        "grant_status": [],
+        "remove_items": [],
+        "remove_titles": [],
+        "remove_status": []
       }
     },
-    "responseLabel": ""
+    "low": {
+      "text": "“Rude Awakening”\nYou're deep in a nightmare.\n\nFloating in darkness.\nYour hands ache — freezing, like ice is biting into the bone.\nNo voice. No ground. Just cold.\n\nYour eyes crack open.\n\nThe room spins.\nYour arms won’t move — shackled. Steel cuffs locked at the wrists.\n\nAnd then —\nA sharp shot to the ribs.\n\nYou gasp, pain blooming up your side.\n\n“Get up.”\n\nThree guards grab at once — manhandling you.\n\nYou’re yanked upright, boots dragging against the floorboards as they half-haul you from the bed.\n\nIt’s morning.\n\nThe tavern door swings open. Daylight cuts through your vision.\nThe village is awake — market stalls, morning voices, and people.\n\nYour companions are in the crowd.\nThey see everything.\n\n“What the hell is this!?” you shout.\n“Say something!”\n\nOne of them meets your eyes.\nAnd turns away.\n\nYou twist in their grip. A guard slams a knee into your spine.\n\nAnother leans in — close enough to smell his breath, voice low and venomous:\n\n“Aww, are we hurting you, pretty boy?”\n“Wait till we make you talk.”\n“That’s the fun part — watching you squirm.”\n\nYou're thrown into the cell.\nNo questions.\nNo chance to explain.\nJust stone, and silence.",
+      "response": "“You sleep on a mission, you wake in a cage. Hope your mouth holds out.”",
+      "effects": {
+        "grant_items": [],
+        "grant_titles": [],
+        "grant_status": ["Branded", "Bruised"],
+        "remove_items": [],
+        "remove_titles": [],
+        "remove_status": []
   }
 }
