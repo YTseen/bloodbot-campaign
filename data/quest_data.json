@@ -134,6 +134,38 @@
             "response": "“I gave you the yard. You gave it back broken.”"
           }
         }
+      },
+      "path_1": {
+        "title": "💼Smuggler’s Run",
+        "description": "“Tools of the Enemy”\nGarath stands at the war table, brushing aside a scatter of old campaign markers. He unfurls a creased, dirt-smudged map and taps a spot near the southern underworks of the city.\n\n“Smugglers’ve been running gear through these tunnels for weeks now.”\nHe doesn’t look up as he speaks. Just keeps tracing lines on the parchment with a gloved hand.\n“We’ve been watching. Bronze Belly gang. Loose morals, tight timing. Weapons. Powder. Some city guard paid to look the other way.”\n\nHe looks to you now.\n“Gold’s not what we need. We need gear. Get in, get what you can, and get out before someone lights the wrong fuse.”\n\nHe leans in, voice low but direct.\n“This isn’t a crusade. It’s inventory control.”\n\nBy nightfall, you’re lowered into a runoff canal behind the market quarter. You land on slick stone beside a rusted access grate. From here, it’s torches, tunnels, and tension.\n\nYou hear boots echoing ahead. You smell oil and mold. You’re not alone down here.",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": ""
+      },
+      "path_2": {
+        "title": "",
+        "description": "",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": ""
       }
     },
     "responseLabel": "Garath"
