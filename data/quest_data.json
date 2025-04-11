@@ -1,1 +1,44 @@
-{}
+{
+  "Blood Bath": {
+    "intro": "",
+    "wrapup": {
+      "text": ""
+    },
+    "between": [],
+    "paths": {
+      "path_0": {
+        "title": "",
+        "description": "",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": ""
+      },
+      "path_1": {
+        "title": "",
+        "description": "",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": ""
+      }
+    },
+    "responseLabel": ""
+  }
+}
