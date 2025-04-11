@@ -136,8 +136,8 @@
         }
       },
       "path_1": {
-        "title": "",
-        "description": "",
+        "title": "1",
+        "description": "1",
         "requires": {
           "titles": [],
           "items": [],
@@ -149,9 +149,105 @@
           "status": []
         },
         "resolution": "bo1",
-        "fixedOutcome": ""
+        "fixedOutcome": "",
+        "midweek": {
+          "high": {
+            "text": "1",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "1"
+          },
+          "low": {
+            "text": "1",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "1"
+          }
+        },
+        "final": {
+          "high": {
+            "text": "1",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [
+                "1"
+              ],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "1"
+          },
+          "low": {
+            "text": "11",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [
+                "1"
+              ],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "1"
+          }
+        }
       }
     },
-    "responseLabel": ""
+    "responseLabel": "Garath"
   }
 }
