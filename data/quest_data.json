@@ -9,19 +9,39 @@
       "path_0": {
         "title": "🛡️execution squad",
         "description": "\"Drill Line\"\nThe recruits stand in a crooked line, barely holding formation. Mismatched armor, half-fastened buckles, eyes full of nerves.\n\nRonald doesn’t bark. He just nods toward them and speaks low.\n“Fix them,” he says. “Or we all bleed later.”\n\nYou step into the yard. The morning dew hasn’t even burned off, but already the dirt feels like a battlefield.",
-        "requires": { "titles": [], "items": [], "status": [] },
-        "excludes": { "titles": [], "items": [], "status": [] },
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
         "resolution": "dice",
         "fixedOutcome": "",
         "midweek": {
           "high": {
             "text": "\"The Shift\"...",
-            "requires": { "titles": [], "items": [], "status": "" },
-            "excludes": { "titles": [], "items": [], "status": "" },
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
             "effects": {
-              "grant_items": ["Honor Tag"],
+              "grant_items": [
+                "Honor Tag"
+              ],
               "grant_titles": [],
-              "grant_status": ["Military Respect"],
+              "grant_status": [
+                "Military Respect"
+              ],
               "remove_items": [],
               "remove_titles": [],
               "remove_status": []
@@ -30,12 +50,24 @@
           },
           "low": {
             "text": "\"The Break\"...",
-            "requires": { "titles": [], "items": [], "status": "" },
-            "excludes": { "titles": [], "items": [], "status": "" },
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
             "effects": {
               "grant_items": [],
-              "grant_titles": ["Untrustworthy"],
-              "grant_status": ["Guilt"],
+              "grant_titles": [
+                "Untrustworthy"
+              ],
+              "grant_status": [
+                "Guilt"
+              ],
               "remove_items": [],
               "remove_titles": [],
               "remove_status": []
@@ -46,34 +78,80 @@
         "final": {
           "high": {
             "text": "\"Field-Tested\"...",
-            "requires": { "titles": [], "items": [], "status": "" },
-            "excludes": { "titles": [], "items": [], "status": "" },
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
             "effects": {
-              "grant_items": ["Battlefield Drill Manual", "3 Loyal Recruits"],
-              "grant_titles": ["Ronald’s Second"],
+              "grant_items": [
+                "Battlefield Drill Manual",
+                "3 Loyal Recruits"
+              ],
+              "grant_titles": [
+                "Ronald’s Second"
+              ],
               "grant_status": [],
               "remove_items": [],
               "remove_titles": [],
-              "remove_status": ["Guilt"]
+              "remove_status": [
+                "Guilt"
+              ]
             },
             "response": "“They’re not recruits anymore. They’re yours now — and they know it.”"
           },
           "low": {
             "text": "\"The Report\"...",
-            "requires": { "titles": [], "items": [], "status": "" },
-            "excludes": { "titles": [], "items": [], "status": "" },
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
             "effects": {
               "grant_items": [],
               "grant_titles": [],
-              "grant_status": ["Garath’s Distrust"],
-              "remove_items": ["Honor Tag"],
+              "grant_status": [
+                "Garath’s Distrust"
+              ],
+              "remove_items": [
+                "Honor Tag"
+              ],
               "remove_titles": [],
-              "remove_status": ["Military Respect"]
+              "remove_status": [
+                "Military Respect"
+              ]
             },
             "response": "“I gave you the yard. You gave it back broken.”"
           }
         }
+      },
+      "path_1": {
+        "title": "",
+        "description": "",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "bo1",
+        "fixedOutcome": ""
       }
-    }
+    },
+    "responseLabel": ""
   }
 }
