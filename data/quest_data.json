@@ -135,58 +135,120 @@
           }
         }
       },
-     "path_1": {
-  "title": "💼Smuggler’s Run",
-  "description": "“Tools of the Enemy”\nGarath stands at the war table, brushing aside a scatter of old campaign markers. He unfurls a creased, dirt-smudged map and taps a spot near the southern underworks of the city.\n\n“Smugglers’ve been running gear through these tunnels for weeks now.”\nHe doesn’t look up as he speaks. Just keeps tracing lines on the parchment with a gloved hand.\n“We’ve been watching. Bronze Belly gang. Loose morals, tight timing. Weapons. Powder. Some city guard paid to look the other way.”\n\nHe looks to you now.\n“Gold’s not what we need. We need gear. Get in, get what you can, and get out before someone lights the wrong fuse.”\n\nHe leans in, voice low but direct.\n“This isn’t a crusade. It’s inventory control.”\n\nBy nightfall, you’re lowered into a runoff canal behind the market quarter. You land on slick stone beside a rusted access grate. From here, it’s torches, tunnels, and tension.\n\nYou hear boots echoing ahead. You smell oil and mold. You’re not alone down here.",
-  "requires": {
-    "titles": [],
-    "items": [],
-    "status": []
-  },
-  "excludes": {
-    "titles": [],
-    "items": [],
-    "status": []
-  },
-  "resolution": "bo1",
-  "fixedOutcome": "",
-  "midweek": {
-    "high": {
-      "text": "“Thread in the Dust”\nYou and one other head into the village just after Garath’s briefing. The air’s damp. The sky bruised. You don’t wear armor — just quiet steps and a question on your tongue.\n\nYou both arrive at the tavern. Something feels off.\n\nThe barkeep pours drinks too fast. No joy in the room. A trader in the corner grumbles about missing stock. A woman mutters about a child who wandered too far and didn’t come back.\n\nYou settle into a corner booth. Good vantage. Eyes on every exit. One ale between you. No conversation.\n\nHours pass. You’re barely awake.\n\nThen — the man.\nShort cloak. Pale boots.\n\nEYES OPEN.\n\nYou’re up in a heartbeat, slipping outside into the cold.\n\nHe’s walking — quiet but purposeful — behind the forge, past the root-split stones, down toward the dry creek bed.\n\nHe stops once. Looks your way.\n\nYou duck fast. Hold your breath.\n\nThen you hear something… wrong.\nWet. Crunching. Deliberate.\n\nWhen you look again, he’s gone.\n\nYou return in the morning. Where he stood, nestled in the roots of a twisted tree:\n\nA real rat. Tail split. A small dagger beside it.\n\nYou don’t touch either. You don’t have to.\n\nBack at the tavern, your third companion — the one searching for the girl — tells you they saw the same thing at the smithy.\n\nIt’s not a clue. It’s a message.",
-      "response": "“You tracked it. Good. That stash better be worth the risk.”"
-    },
-    "low": {
-      "text": "“Watched”\nYou and one other leave the camp just after dusk. The sky’s gone black. Not cloudy. Not moonless. Just heavy.\n\nYou slip through the village under cover of quiet. The tavern’s lanterns glow like teeth in the dark. Inside, you blend in — or try to.\n\nYou take a seat in the back. Say nothing. Order nothing.\nYou watch. And wait.\n\nPeople speak softer after midnight. Someone slips out the side door — fast, low, cloaked. You don’t get a look. Just a feeling.\n\nYou follow.\n\nOut the rear, past the forge, down the narrow slope behind the barn — a footpath locals stopped using years ago. It curls past a dry well and ends near the edge of the old woodline.\n\nYou’re nearly there. You don’t even breathe.\n\nAnd then it happens.\n\nA glint — just a flick of brass — to your left.\n\nYou snap your head around.\nA guard.\n\nYou don’t think. You just move.\nBackpedal. Duck. Run.\n\n“Damn village curfew.”\n\nYou don’t wait for a shout. Don’t give him time to speak.\n\nBecause curfew means detention — and you really wouldn’t want that.\n\nYou make it back to the tavern.\nOrder a bed.\nAnd you go into a deep, exhausted sleep.",
-      "response": "“You missed it. Now someone else arms up while we wait.”"
-    }
-  },
-  "final": {
-    "high": {
-      "text": "“More Than Steel”\nYou leave at dawn with one companion — the one who’s been chasing whispers of the missing girl.\n\nNeither of you speak much.\n\nThe trail leads far — back to the place you spotted the cloaked man days ago. Past the forge. Through the root-split path. Over the ridgeline.\n\nYou travel deep into the forest, then into rock.\nThe air thins. Vines thicken.\n\nYou move quiet.\n\nThe path opens up to a dug-out entrance — half-covered, almost collapsed, but marked.\n\nThe rat.\nSplit-tailed. Fresh.\n\nYou descend.\n\nInside, the tunnels breathe.\n\nYou and your companion split — only briefly — following signs scratched into damp stone. You pass crates — broken. Some sealed. Some too heavy to move alone.\n\nYou trace your steps back. You plan on returning.",
-      "response": "“Good haul. But that’s not why your eyes look like that.”",
-      "effects": {
-        "grant_items": ["Scribbled Path"],
-        "grant_titles": [],
-        "grant_status": [],
-        "remove_items": [],
-        "remove_titles": [],
-        "remove_status": []
-      }
-    },
-    "low": {
-      "text": "“Rude Awakening”\nYou're deep in a nightmare.\n\nFloating in darkness.\nYour hands ache — freezing, like ice is biting into the bone.\nNo voice. No ground. Just cold.\n\nYour eyes crack open.\n\nThe room spins.\nYour arms won’t move — shackled. Steel cuffs locked at the wrists.\n\nAnd then —\nA sharp shot to the ribs.\n\nYou gasp, pain blooming up your side.\n\n“Get up.”\n\nThree guards grab at once — manhandling you.\n\nYou’re yanked upright, boots dragging against the floorboards as they half-haul you from the bed.\n\nIt’s morning.\n\nThe tavern door swings open. Daylight cuts through your vision.\nThe village is awake — market stalls, morning voices, and people.\n\nYour companions are in the crowd.\nThey see everything.\n\n“What the hell is this!?” you shout.\n“Say something!”\n\nOne of them meets your eyes.\nAnd turns away.\n\nYou twist in their grip. A guard slams a knee into your spine.\n\nAnother leans in — close enough to smell his breath, voice low and venomous:\n\n“Aww, are we hurting you, pretty boy?”\n“Wait till we make you talk.”\n“That’s the fun part — watching you squirm.”\n\nYou're thrown into the cell.\nNo questions.\nNo chance to explain.\nJust stone, and silence.",
-      "response": "“You sleep on a mission, you wake in a cage. Hope your mouth holds out.”",
-      "effects": {
-        "grant_items": [],
-        "grant_titles": [],
-        "grant_status": ["Branded", "Bruised"],
-        "remove_items": [],
-        "remove_titles": [],
-        "remove_status": []
-            }
+      "path_1": {
+        "title": "💼Smuggler’s Run",
+        "description": "“Tools of the Enemy”\nGarath stands at the war table, brushing aside a scatter of old campaign markers. He unfurls a creased, dirt-smudged map and taps a spot near the southern underworks of the city.\n\n“Smugglers’ve been running gear through these tunnels for weeks now.”\nHe doesn’t look up as he speaks. Just keeps tracing lines on the parchment with a gloved hand.\n“We’ve been watching. Bronze Belly gang. Loose morals, tight timing. Weapons. Powder. Some city guard paid to look the other way.”\n\nHe looks to you now.\n“Gold’s not what we need. We need gear. Get in, get what you can, and get out before someone lights the wrong fuse.”\n\nHe leans in, voice low but direct.\n“This isn’t a crusade. It’s inventory control.”\n\nBy nightfall, you’re lowered into a runoff canal behind the market quarter. You land on slick stone beside a rusted access grate. From here, it’s torches, tunnels, and tension.\n\nYou hear boots echoing ahead. You smell oil and mold. You’re not alone down here.",
+        "requires": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "excludes": {
+          "titles": [],
+          "items": [],
+          "status": []
+        },
+        "resolution": "dice",
+        "fixedOutcome": "",
+        "midweek": {
+          "high": {
+            "text": "“Thread in the Dust”\nYou and one other head into the village just after Garath’s briefing. The air’s damp. The sky bruised. You don’t wear armor — just quiet steps and a question on your tongue.\n\nYou both arrive at the tavern. Something feels off.\n\nThe barkeep pours drinks too fast. No joy in the room. A trader in the corner grumbles about missing stock. A woman mutters about a child who wandered too far and didn’t come back.\n\nYou settle into a corner booth. Good vantage. Eyes on every exit. One ale between you. No conversation.\n\nHours pass. You’re barely awake.\n\nThen — the man.\nShort cloak. Pale boots.\n\nEYES OPEN.\n\nYou’re up in a heartbeat, slipping outside into the cold.\n\nHe’s walking — quiet but purposeful — behind the forge, past the root-split stones, down toward the dry creek bed.\n\nHe stops once. Looks your way.\n\nYou duck fast. Hold your breath.\n\nThen you hear something… wrong.\nWet. Crunching. Deliberate.\n\nWhen you look again, he’s gone.\n\nYou return in the morning. Where he stood, nestled in the roots of a twisted tree:\n\nA real rat. Tail split. A small dagger beside it.\n\nYou don’t touch either. You don’t have to.\n\nBack at the tavern, your third companion — the one searching for the girl — tells you they saw the same thing at the smithy.\n\nIt’s not a clue. It’s a message.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“You tracked it. Good. That stash better be worth the risk.”"
+          },
+          "low": {
+            "text": "“Watched”\nYou and one other leave the camp just after dusk. The sky’s gone black. Not cloudy. Not moonless. Just heavy.\n\nYou slip through the village under cover of quiet. The tavern’s lanterns glow like teeth in the dark. Inside, you blend in — or try to.\n\nYou take a seat in the back. Say nothing. Order nothing.\nYou watch. And wait.\n\nPeople speak softer after midnight. Someone slips out the side door — fast, low, cloaked. You don’t get a look. Just a feeling.\n\nYou follow.\n\nOut the rear, past the forge, down the narrow slope behind the barn — a footpath locals stopped using years ago. It curls past a dry well and ends near the edge of the old woodline.\n\nYou’re nearly there. You don’t even breathe.\n\nAnd then it happens.\n\nA glint — just a flick of brass — to your left.\n\nYou snap your head around.\nA guard.\n\nYou don’t think. You just move.\nBackpedal. Duck. Run.\n\n“Damn village curfew.”\n\nYou don’t wait for a shout. Don’t give him time to speak.\n\nBecause curfew means detention — and you really wouldn’t want that.\n\nYou make it back to the tavern.\nOrder a bed.\nAnd you go into a deep, exhausted sleep.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“You missed it. Now someone else arms up while we wait.”"
+          }
+        },
+        "final": {
+          "high": {
+            "text": "“More Than Steel”\nYou leave at dawn with one companion — the one who’s been chasing whispers of the missing girl.\n\nNeither of you speak much.\n\nThe trail leads far — back to the place you spotted the cloaked man days ago. Past the forge. Through the root-split path. Over the ridgeline.\n\nYou travel deep into the forest, then into rock.\nThe air thins. Vines thicken.\n\nYou move quiet.\n\nThe path opens up to a dug-out entrance — half-covered, almost collapsed, but marked.\n\nThe rat.\nSplit-tailed. Fresh.\n\nYou descend.\n\nInside, the tunnels breathe.\n\nYou and your companion split — only briefly — following signs scratched into damp stone. You pass crates — broken. Some sealed. Some too heavy to move alone.\n\nYou trace your steps back. You plan on returning.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [
+                "Scribbled Path"
+              ],
+              "grant_titles": [],
+              "grant_status": [],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“Good haul. But that’s not why your eyes look like that.”"
+          },
+          "low": {
+            "text": "“Rude Awakening”\nYou're deep in a nightmare.\n\nFloating in darkness.\nYour hands ache — freezing, like ice is biting into the bone.\nNo voice. No ground. Just cold.\n\nYour eyes crack open.\n\nThe room spins.\nYour arms won’t move — shackled. Steel cuffs locked at the wrists.\n\nAnd then —\nA sharp shot to the ribs.\n\nYou gasp, pain blooming up your side.\n\n“Get up.”\n\nThree guards grab at once — manhandling you.\n\nYou’re yanked upright, boots dragging against the floorboards as they half-haul you from the bed.\n\nIt’s morning.\n\nThe tavern door swings open. Daylight cuts through your vision.\nThe village is awake — market stalls, morning voices, and people.\n\nYour companions are in the crowd.\nThey see everything.\n\n“What the hell is this!?” you shout.\n“Say something!”\n\nOne of them meets your eyes.\nAnd turns away.\n\nYou twist in their grip. A guard slams a knee into your spine.\n\nAnother leans in — close enough to smell his breath, voice low and venomous:\n\n“Aww, are we hurting you, pretty boy?”\n“Wait till we make you talk.”\n“That’s the fun part — watching you squirm.”\n\nYou're thrown into the cell.\nNo questions.\nNo chance to explain.\nJust stone, and silence.",
+            "requires": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "excludes": {
+              "titles": [],
+              "items": [],
+              "status": ""
+            },
+            "effects": {
+              "grant_items": [],
+              "grant_titles": [],
+              "grant_status": [
+                "Branded",
+                "Bruised"
+              ],
+              "remove_items": [],
+              "remove_titles": [],
+              "remove_status": []
+            },
+            "response": "“You sleep on a mission, you wake in a cage. Hope your mouth holds out.”"
           }
         }
       }
-    }
+    },
+    "responseLabel": "Garath"
   }
 }
